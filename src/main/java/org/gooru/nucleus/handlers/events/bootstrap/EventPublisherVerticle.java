@@ -60,15 +60,8 @@ public class EventPublisherVerticle extends AbstractVerticle {
                                 LOGGER.debug("***********************************************");
 
                                 String eventName = result.getString(EventResponseConstants.EVENT_NAME);
-                                //Generate Watson API handler message as well as existing message                       
-                                if(MessageDispatcher.getInstance().isWatsonTaggable(result)){
-                                  MessageDispatcher.getInstance().sendMessage2KafkaWatson(eventName, result);
-                                  MessageDispatcher.getInstance().sendMessage2Kafka(eventName, result);
-                                }else{
-                                  MessageDispatcher.getInstance().sendMessage2Kafka(eventName, result);
-                                }
-                                LOGGER.debug("Dispatched Event ID: {}",
-                                    result.getString(EventResponseConstants.EVENT_ID));
+                                MessageDispatcher.getInstance().sendMessage2Kafka(eventName, result);
+                                LOGGER.debug("Dispatched Event ID: {}", result.getString(EventResponseConstants.EVENT_ID));
                                 LOGGER.info("Message dispatched successfully for event: {}", eventName);
 
                                 // Forward the call to email processor
@@ -82,8 +75,7 @@ public class EventPublisherVerticle extends AbstractVerticle {
                                     }
                                 }
                             } else {    
-                                LOGGER.warn(
-                                    "No data received from database interaction for this. So, no message being relayed to Kafka.");
+                                LOGGER.warn("No data received from database interaction for this. So, no message being relayed to Kafka.");
                             }
                         } else {
                             LOGGER.error("Error processing the database interactions!!");
@@ -95,8 +87,7 @@ public class EventPublisherVerticle extends AbstractVerticle {
                         LOGGER.info("EventPublish handler end point ready to listen");
                         voidFuture.complete();
                     } else {
-                        LOGGER.error(
-                            "Error registering the EventPublish handler. Halting the EventPublish Handler machinery");
+                        LOGGER.error("Error registering the EventPublish handler. Halting the EventPublish Handler machinery");
                         voidFuture.fail(result.cause());
                         Runtime.getRuntime().halt(1);
                     }

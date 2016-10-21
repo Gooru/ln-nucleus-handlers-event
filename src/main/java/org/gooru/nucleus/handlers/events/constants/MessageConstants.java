@@ -68,8 +68,6 @@ public final class MessageConstants {
     public static final String MSG_OP_EVT_CLASS_CONTENT_VISIBLE = "event.class.content.visible";
     public static final String MSG_OP_EVT_CLASS_STUDENT_REMOVAL = "event.class.student.remove";
     
-    public static final String MSG_OP_EVT_WATSON_COURSE_TAG = "event.watson.course.tag";
-
     public static final String MSG_OP_EVT_PROFILE_FOLLOW = "event.profile.follow";
     public static final String MSG_OP_EVT_PROFILE_UNFOLLOW = "event.profile.unfollow";
 

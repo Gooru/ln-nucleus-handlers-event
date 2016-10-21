@@ -98,9 +98,6 @@ public final class EventResponseConstants {
   public static final String EVENT_DUMP = "event.dump";
   public static final String ID = "id";
   
-  //topic for watson api verticle to listen
-  public static final String WATSON_TAG_TOPIC = "watson.tag.entity";
-
   private EventResponseConstants() {
     throw new AssertionError();
   }
