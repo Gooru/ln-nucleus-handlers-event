@@ -8,6 +8,7 @@ import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.errors.InterruptException;
 import org.apache.kafka.common.errors.SerializationException;
 import org.gooru.nucleus.handlers.events.app.components.KafkaRegistry;
+import org.gooru.nucleus.handlers.events.constants.EventResponseConstants;
 import org.gooru.nucleus.handlers.events.constants.MessageConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,9 +34,9 @@ public final class MessageDispatcher {
       
       sendMessageToKafka(KafkaRegistry.getInstance().getKafkaTopic(), eventName, eventBody);
       String enricherTopic = KafkaRegistry.getInstance().getContentEnricherTopic();
-      
       if ((enricherTopic != null) && !enricherTopic.isEmpty()) {
         // need to check if this message needs to go on enricher topic as well
+        eventName = eventBody.getJsonObject(EventResponseConstants.PAYLOAD_OBJECT).getString(EventResponseConstants.SUB_EVENT_NAME);
         if (isEventOfInterestForTagging(eventName)) {
           LOGGER.debug("Found an event of interest for tagging handler. Will post this on enricherTopic.");
           sendMessageToKafka(KafkaRegistry.getInstance().getContentEnricherTopic(), eventName, eventBody);
