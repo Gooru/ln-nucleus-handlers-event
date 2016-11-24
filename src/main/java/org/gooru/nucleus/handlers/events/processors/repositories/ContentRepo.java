@@ -18,7 +18,9 @@ public interface ContentRepo {
 
     JsonObject deletedQuestionEvent();
     
-    JsonObject getResource(String resourceId);
+    JsonObject getReferenceResource(String resourceId);
+    
+    JsonObject getOriginalResource(String resourceId);
     
     JsonObject getQuestion(String questionId);
     
