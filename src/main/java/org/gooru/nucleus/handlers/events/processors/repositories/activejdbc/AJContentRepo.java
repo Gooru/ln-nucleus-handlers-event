@@ -6,6 +6,7 @@ import org.gooru.nucleus.handlers.events.constants.EventResponseConstants;
 import org.gooru.nucleus.handlers.events.processors.ProcessorContext;
 import org.gooru.nucleus.handlers.events.processors.repositories.ContentRepo;
 import org.gooru.nucleus.handlers.events.processors.repositories.activejdbc.entities.AJEntityContent;
+import org.gooru.nucleus.handlers.events.processors.repositories.activejdbc.entities.AJEntityOriginalResource;
 import org.gooru.nucleus.handlers.events.processors.repositories.activejdbc.formatter.JsonFormatterBuilder;
 import org.javalite.activejdbc.Base;
 import org.javalite.activejdbc.LazyList;
@@ -36,7 +37,7 @@ public class AJContentRepo implements ContentRepo {
     public JsonObject copyResourceEvent() {
         JsonObject response = new JsonObject();
         String targetContentId = context.eventBody().getString(EventRequestConstants.ID);
-        JsonObject targetContent = getResource(targetContentId);
+        JsonObject targetContent = getReferenceResource(targetContentId);
         response.put(EventResponseConstants.TARGET, targetContent);
 
         String sourceContentId = targetContent.getString(AJEntityContent.ORIGINAL_CONTENT_ID);
@@ -81,7 +82,7 @@ public class AJContentRepo implements ContentRepo {
     }
 
     @Override
-    public JsonObject getResource(String contentId) {
+    public JsonObject getReferenceResource(String contentId) {
         Base.open(DataSourceRegistry.getInstance().getDefaultDataSource());
         LOGGER.debug("getting resource for id {}", contentId);
 
@@ -123,6 +124,40 @@ public class AJContentRepo implements ContentRepo {
         }
         Base.close();
         return contentFormat;
+    }
+
+    @Override
+    public JsonObject getOriginalResource(String resourceId) {
+        Base.open(DataSourceRegistry.getInstance().getDefaultDataSource());
+        LOGGER.debug("getting original resource for id {}", resourceId);
+
+        JsonObject result = null;
+        LazyList<AJEntityOriginalResource> resources = AJEntityOriginalResource.findBySQL(AJEntityOriginalResource.SELECT_ORIGINAL_RESOURCE, resourceId);
+        if (!resources.isEmpty()) {
+            result = new JsonObject(new JsonFormatterBuilder()
+                .buildSimpleJsonFormatter(false, AJEntityOriginalResource.ORIGINAL_RESOURCE_FIELDS).toJson(resources.get(0)));
+            String VALUE_NULL = null;
+            result.put(AJEntityContent.ORIGINAL_CREATOR_ID, VALUE_NULL);
+            result.put(AJEntityContent.ORIGINAL_CONTENT_ID, VALUE_NULL);
+            result.put(AJEntityContent.PARENT_CONTENT_ID, VALUE_NULL);
+            result.put(AJEntityContent.COURSE_ID, VALUE_NULL);
+            result.put(AJEntityContent.UNIT_ID, VALUE_NULL);
+            result.put(AJEntityContent.LESSON_ID, VALUE_NULL);
+            result.put(AJEntityContent.COLLECTION_ID, VALUE_NULL);
+            result.put(AJEntityContent.CONTENT_FORMAT, "resource");
+        }
+
+        Base.close();
+        return result;
+    }
+    
+    private JsonObject getResource(String id) {
+        JsonObject result = getOriginalResource(id);
+        if (result == null || result.isEmpty()) {
+            result = getReferenceResource(id);
+        }
+        
+        return result;
     }
 
 }
