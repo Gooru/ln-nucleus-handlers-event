@@ -90,6 +90,10 @@ public final class KafkaRegistry implements Initializer, Finalizer {
                 this.KAFKA_TOPIC = entry.getValue().toString();
                 LOGGER.debug("KAFKA_TOPIC : " + this.KAFKA_TOPIC);
                 break;
+            case ProducerConfig.REQUEST_TIMEOUT_MS_CONFIG:
+                properties.setProperty(ProducerConfig.REQUEST_TIMEOUT_MS_CONFIG, String.valueOf(entry.getValue()));
+                LOGGER.debug("REQUEST_TIMEOUT_MS_CONFIG : " + entry.getValue());
+                break;
             case "testEnvironmentWithoutKafkaServer":
                 this.testWithoutKafkaServer = (boolean) entry.getValue();
                 LOGGER.debug("KAFKA_TOPIC : " + this.KAFKA_TOPIC);

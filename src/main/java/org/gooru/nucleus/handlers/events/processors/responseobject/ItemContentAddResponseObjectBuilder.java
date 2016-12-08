@@ -50,7 +50,7 @@ public class ItemContentAddResponseObjectBuilder extends ResponseObject {
         targetStructure.put(EventResponseConstants.PARENT_GOORU_ID, parentGooruId);
         JsonObject content = null;
         if (contentFormat.equalsIgnoreCase(EventResponseConstants.FORMAT_RESOUCE)) {
-            content = RepoBuilder.buildContentRepo(null).getResource(contentId);
+            content = RepoBuilder.buildContentRepo(null).getReferenceResource(contentId);
         } else {
             content = RepoBuilder.buildContentRepo(null).getQuestion(contentId);
         }

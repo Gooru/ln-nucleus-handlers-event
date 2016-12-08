@@ -195,7 +195,7 @@ public final class EmailDataBuilder {
             JsonObject data = getData();
             String resourceId = data.getString(EventRequestConstants.ID);
     
-            JsonObject resource = RepoBuilder.buildContentRepo(null).getResource(resourceId);
+            JsonObject resource = RepoBuilder.buildContentRepo(null).getOriginalResource(resourceId);
             String username = RepoBuilder.buildUserRepo(null).getUsername(getUserId());
             JsonArray emailDataArray = new JsonArray();
     
