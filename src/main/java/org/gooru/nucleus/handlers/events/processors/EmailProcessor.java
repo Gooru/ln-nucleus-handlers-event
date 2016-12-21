@@ -48,6 +48,12 @@ public class EmailProcessor implements Processor {
 
             JsonObject payloadObject = result.getJsonObject(EventResponseConstants.PAYLOAD_OBJECT);
             eventName = payloadObject.getString(EventResponseConstants.SUB_EVENT_NAME);
+            if (eventName == null || eventName.isEmpty()) {
+                LOGGER.info("No event name found in payload");
+                return new JsonObject().put(EmailConstants.EMAIL_SENT, false).put(EmailConstants.STATUS,
+                    EmailConstants.STATUS_SUCCESS);
+            }
+            
             switch (eventName) {
             case MessageConstants.MSG_OP_EVT_RESOURCE_DELETE:
                 emailData = processEmailForResourceDelete();
