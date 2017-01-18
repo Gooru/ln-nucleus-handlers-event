@@ -32,7 +32,7 @@ public final class RepoBuilder {
         return AJRepoBuilder.buildClassRepo(context);
     }
 
-    public static UserRepo buildUserRepo(ProcessorContext context) {
+    public static UsersRepo buildUserRepo(ProcessorContext context) {
         return AJRepoBuilder.buildUserRepo(context);
     }
 

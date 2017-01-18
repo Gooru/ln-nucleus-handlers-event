@@ -32,8 +32,8 @@ public final class AJRepoBuilder {
         return new AJClassRepo(context);
     }
 
-    public static UserRepo buildUserRepo(ProcessorContext context) {
-        return new AJUserRepo(context);
+    public static UsersRepo buildUserRepo(ProcessorContext context) {
+        return new AJUsersRepo(context);
     }
 
     public static ProfileRepo buildProfileRepo(ProcessorContext context) {
