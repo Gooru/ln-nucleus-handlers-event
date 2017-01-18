@@ -45,14 +45,14 @@ public class AJEntityCollection extends Model {
     public static final String EDITORIAL_TAGS = "editorial_tags";
     public static final String LICENSE = "license";
     public static final String CREATOR_SYSTEM = "creator_system";
-    public static final String TENANT_ID = "tenant_id";
+    public static final String TENANT = "tenant";
     public static final String TENANT_ROOT = "tenant_root";
 
     public static final String SELECT_COLLECTION =
         "SELECT id, course_id, unit_id, lesson_id, title, created_at, updated_at, owner_id, creator_id, modifier_id, original_creator_id,"
             + " original_collection_id, parent_collection_id, sequence_id, publish_date, publish_status, format, thumbnail, learning_objective,"
             + " collaborator, metadata, taxonomy, url, login_required, setting, grading, visible_on_profile, is_deleted, editorial_tags, creator_system,"
-            + " license, tenant_id, tenant_root FROM collection WHERE id = ?::uuid AND format = 'collection'::content_container_type";
+            + " license, tenant, tenant_root FROM collection WHERE id = ?::uuid AND format = 'collection'::content_container_type";
 
     public static final String SELECT_COLLABORATOR = "SELECT collaborator FROM collection WHERE id = ?::uuid";
 
@@ -60,19 +60,19 @@ public class AJEntityCollection extends Model {
         Arrays.asList(ID, COURSE_ID, UNIT_ID, LESSON_ID, TITLE, CREATED_AT, UPDATED_AT, OWNER_ID, CREATOR_ID,
             MODIFIER_ID, ORIGINAL_CREATOR_ID, ORIGINAL_COLLECTION_ID, PARENT_COLLECTION_ID, SEQUENCE_ID, PUBLISH_DATE,
             PUBLISH_STATUS, FORMAT, THUMBNAIL, LEARNING_OBJECTIVE, COLLABORATOR, METADATA, TAXONOMY, URL,
-            LOGIN_REQUIRED, SETTING, GRADING, VISIBLE_ON_PROFILE, IS_DELETED, EDITORIAL_TAGS, CREATOR_SYSTEM, LICENSE, TENANT_ID, TENANT_ROOT);
+            LOGIN_REQUIRED, SETTING, GRADING, VISIBLE_ON_PROFILE, IS_DELETED, EDITORIAL_TAGS, CREATOR_SYSTEM, LICENSE, TENANT, TENANT_ROOT);
 
     public static final String SELECT_ASSESSMENT =
         "SELECT id, course_id, unit_id, lesson_id, title, created_at, updated_at, owner_id, creator_id, modifier_id, original_creator_id,"
             + " original_collection_id, parent_collection_id, sequence_id, publish_date, publish_status, format, thumbnail, learning_objective,"
             + " collaborator, metadata, taxonomy, url, login_required, setting, grading, visible_on_profile, is_deleted, editorial_tags, creator_system,"
-            + " license, tenant_id, tenant_root FROM collection WHERE id = ?::uuid AND format = 'assessment'::content_container_type";
+            + " license, tenant, tenant_root FROM collection WHERE id = ?::uuid AND format = 'assessment'::content_container_type";
 
     public static final List<String> ASSESSMENT_FIELDS =
         Arrays.asList(ID, COURSE_ID, UNIT_ID, LESSON_ID, TITLE, CREATED_AT, UPDATED_AT, OWNER_ID, CREATOR_ID,
             MODIFIER_ID, ORIGINAL_CREATOR_ID, ORIGINAL_COLLECTION_ID, PARENT_COLLECTION_ID, SEQUENCE_ID, PUBLISH_DATE,
             PUBLISH_STATUS, FORMAT, THUMBNAIL, LEARNING_OBJECTIVE, COLLABORATOR, METADATA, TAXONOMY, URL,
-            LOGIN_REQUIRED, SETTING, GRADING, VISIBLE_ON_PROFILE, IS_DELETED, EDITORIAL_TAGS, CREATOR_SYSTEM, LICENSE, TENANT_ID, TENANT_ROOT);
+            LOGIN_REQUIRED, SETTING, GRADING, VISIBLE_ON_PROFILE, IS_DELETED, EDITORIAL_TAGS, CREATOR_SYSTEM, LICENSE, TENANT, TENANT_ROOT);
 
     public static final String SELECT_OWNER_CREATOR =
         "SELECT owner_id, creator_id FROM collection where id = ANY(?::uuid[])";
@@ -81,5 +81,5 @@ public class AJEntityCollection extends Model {
         "SELECT id, course_id, unit_id, lesson_id, title, created_at, updated_at, owner_id, creator_id, modifier_id, original_creator_id,"
             + " original_collection_id, parent_collection_id, sequence_id, publish_date, publish_status, format, thumbnail, learning_objective,"
             + " collaborator, metadata, taxonomy, url, login_required, setting, grading, visible_on_profile, is_deleted, editorial_tags, creator_system,"
-            + " license, tenant_id, tenant_root FROM collection WHERE id = ?::uuid";
+            + " license, tenant, tenant_root FROM collection WHERE id = ?::uuid";
 }

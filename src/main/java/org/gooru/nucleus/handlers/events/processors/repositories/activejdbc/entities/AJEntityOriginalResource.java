@@ -30,16 +30,16 @@ public class AJEntityOriginalResource extends Model {
     public static final String ACCESSIBILITY = "accessibility";
     public static final String IS_DELETED = "is_deleted";
     public static final String MODIFIER_ID = "modifier_id";
-    public static final String TENANT_ID = "tenant_id";
+    public static final String TENANT = "tenant";
     public static final String TENANT_ROOT = "tenant_root";
 
     public static final String SELECT_ORIGINAL_RESOURCE =
         "SELECT id, title, url, creator_id, modifier_id, publish_date, publish_status, narration, description, content_subformat, metadata,"
             + " taxonomy, thumbnail, is_copyright_owner, copyright_owner, info, visible_on_profile, display_guide, accessibility, is_deleted,"
-            + " tenant_id, tenant_root FROM original_resource WHERE id = ?::uuid";
+            + " tenant, tenant_root FROM original_resource WHERE id = ?::uuid";
 
     public static final List<String> ORIGINAL_RESOURCE_FIELDS =
         Arrays.asList(ID, TITLE, URL, CREATOR_ID, MODIFIER_ID, PUBLISH_DATE, PUBLIH_STATUS, NARRATION, DESCRIPTION,
             CONTENT_SUBFORMAT, METADATA, TAXONOMY, THUMBNAIL, IS_COPYRIGHT_OWNER, COPYRIGHT_OWNER,
-            RESOURCE_INFO, VISIBLE_ON_PROFILE, DISPLAY_GUIDE, ACCESSIBILITY, IS_DELETED, TENANT_ID, TENANT_ROOT);
+            RESOURCE_INFO, VISIBLE_ON_PROFILE, DISPLAY_GUIDE, ACCESSIBILITY, IS_DELETED, TENANT, TENANT_ROOT);
 }

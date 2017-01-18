@@ -30,7 +30,7 @@ public class AJEntityClass extends Model {
     public static final String IS_DELETED = "is_deleted";
     public static final String CREATOR_ID = "creator_id";
     public static final String MODIFIER_ID = "modifier_id";
-    public static final String TENANT_ID = "tenant_id";
+    public static final String TENANT = "tenant";
     public static final String TENANT_ROOT = "tenant_root";
 
     public static final String SELECT_QUERY = "id = ?::uuid";
@@ -39,7 +39,7 @@ public class AJEntityClass extends Model {
 
     public static final List<String> ALL_FIELDS =
         Arrays.asList(ID, CREATOR_ID, TITLE, DESCRIPTION, GREETING, GRADE, CLASS_SHARING, COVER_IMAGE, GRADE, CODE,
-            MIN_SCORE, END_DATE, COURSE_ID, COLLABORATOR, GOORU_VERSION, CONTENT_VISIBILITY, IS_ARCHIVED, TENANT_ID, TENANT_ROOT);
+            MIN_SCORE, END_DATE, COURSE_ID, COLLABORATOR, GOORU_VERSION, CONTENT_VISIBILITY, IS_ARCHIVED, TENANT, TENANT_ROOT);
     public static final String SELECT_CLASSID_FOR_COURSE = "SELECT id FROM class WHERE course_id = ?::uuid";
 
     public static final String SELECT_CONTENT_VISIBILITY = "SELECT content_visibility FROM class WHERE id = ?::uuid";

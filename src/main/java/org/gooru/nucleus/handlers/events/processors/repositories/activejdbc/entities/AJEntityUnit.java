@@ -28,15 +28,15 @@ public class AJEntityUnit extends Model {
     public static final String SEQUENCE_ID = "sequence_id";
     public static final String IS_DELETED = "is_deleted";
     public static final String CREATOR_SYSTEM = "creator_system";
-    public static final String TENANT_ID = "tenant_id";
+    public static final String TENANT = "tenant";
     public static final String TENANT_ROOT = "tenant_root";
 
     public static final String SELECT_UNIT =
         "SELECT course_id, unit_id, title, created_at, updated_at, owner_id, creator_id, modifier_id, original_creator_id, original_unit_id,"
-            + " big_ideas, essential_questions, metadata, taxonomy, sequence_id, is_deleted, creator_system, tenant_id, tenant_root FROM unit"
+            + " big_ideas, essential_questions, metadata, taxonomy, sequence_id, is_deleted, creator_system, tenant, tenant_root FROM unit"
             + " WHERE unit_id = ?::uuid";
 
     public static final List<String> ALL_FIELDS = Arrays.asList(UNIT_ID, COURSE_ID, TITLE, CREATED_AT, UPDATED_AT,
         OWNER_ID, CREATOR_ID, MODIFIER_ID, ORIGINAL_CREATOR_ID, ORIGINAL_UNIT_ID, BIG_IDEAS, ESSENTIAL_QUESTIONS,
-        METADATA, TAXONOMY, SEQUENCE_ID, IS_DELETED, CREATOR_SYSTEM, TENANT_ID, TENANT_ROOT);
+        METADATA, TAXONOMY, SEQUENCE_ID, IS_DELETED, CREATOR_SYSTEM, TENANT, TENANT_ROOT);
 }
