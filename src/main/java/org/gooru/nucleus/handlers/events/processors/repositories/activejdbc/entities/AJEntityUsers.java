@@ -47,6 +47,6 @@ public class AJEntityUsers extends Model {
 
     public final static String SELECT_MULTIPLE_EMAILIDS = "SELECT email FROM users WHERE id = ANY (?::uuid[])";
     public final static String SELECT_FIRST_LAST_NAME = "SELECT first_name, last_name FROM users WHERE id = ?::uuid";
-    public static final String SELECT_USERNAME = "SELECT username FROM user_identity WHERE user_id = ?::uuid";
+    public static final String SELECT_USERNAME = "SELECT username FROM users WHERE id = ?::uuid";
 
 }
