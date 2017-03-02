@@ -36,7 +36,7 @@ public class ItemMoveResponseObjectBuilder extends ResponseObject {
         JsonObject payloadStructure = new JsonObject();
         payloadStructure.put(EventResponseConstants.SOURCE, getSourceStructure());
         payloadStructure.put(EventResponseConstants.TARGET, getTargetStructure());
-        payloadStructure.put(EventResponseConstants.CONTENT_FORMAT, getContentFormatFromResponse());
+        payloadStructure.put(EventResponseConstants.CONTENT_FORMAT, body.getJsonObject(EventRequestConstants.EVENT_BODY).getJsonObject(EventResponseConstants.SOURCE).getString(EventResponseConstants.TYPE));
         payloadStructure.put(EventResponseConstants.SUB_EVENT_NAME, getSubEventName());
         return payloadStructure;
     }

@@ -623,6 +623,8 @@ class MessageProcessor implements Processor {
             JsonObject result = RepoBuilder.buildCollectionRepo(context).moveCollectionEvent();
             if (result != null) {
                 LOGGER.debug("result returned: {}", result);
+                LOGGER.debug("Request returned: {}", request);
+
                 return ResponseFactory.generateItemMoveResponse(request, result);
             }
         } catch (Throwable t) {
