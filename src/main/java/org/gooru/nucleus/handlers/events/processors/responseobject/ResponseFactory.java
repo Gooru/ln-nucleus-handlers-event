@@ -97,4 +97,8 @@ public final class ResponseFactory {
         return new ResponseObjectBuilder().setBody(body).setResponse(response)
             .setEventType(MessageConstants.EST_ITEM_REMOVE).build();
     }
+    
+    public static JsonObject generateResponse(JsonObject body, JsonObject response, int eventType) {
+        return new ResponseObjectBuilder().setBody(body).setResponse(response).setEventType(eventType).build();
+    }
 }

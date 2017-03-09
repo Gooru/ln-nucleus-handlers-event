@@ -231,7 +231,39 @@ class MessageProcessor implements Processor {
             case MessageConstants.MSG_OP_EVT_PROFILE_UNFOLLOW:
                 result = processEventProfileFollowUnfollow();
                 break;
-
+                
+            case MessageConstants.MSG_OP_EVT_ANONYMOUS_SIGNIN:
+                result = processEventAnonymousSingin();
+                break;
+                
+            case MessageConstants.MSG_OP_EVT_USER_SIGNIN:
+                result = processEventUserSignin();
+                break;
+                
+            case MessageConstants.MSG_OP_EVT_USER_SIGNOUT:
+                result = processEventUserSignout();
+                break;
+                
+            case MessageConstants.MSG_OP_EVT_USER_SIGNUP:
+                result = processEventUserSignup();
+                break;
+                
+            case MessageConstants.MSG_OP_EVT_USER_UPDATE:
+                result = processEventUserUpdate();
+                break;
+                
+            case MessageConstants.MSG_OP_EVT_USER_PASSWORD_RESET_TRIGGER:
+                result = processEventUserPasswordResetTrigger();
+                break;
+                
+            case MessageConstants.MSG_OP_EVT_USER_PASSWORD_RESET:
+                result = processEventUserPasswordReset();
+                break;
+                
+            case MessageConstants.MSG_OP_EVT_USER_PASSWORD_CHANGE:
+                result = processEventUserPasswordChange();
+                break;
+                
             default:
                 LOGGER.error("Invalid operation type passed in, not able to handle");
                 throw new InvalidRequestException();
@@ -242,6 +274,130 @@ class MessageProcessor implements Processor {
                 .generateErrorResponse((JsonObject) (message != null ? message.body() : null)).toString());
         }
         return result;
+    }
+
+    private JsonObject processEventUserPasswordChange() {
+        try {
+            ProcessorContext context = createContext();
+            JsonObject result = RepoBuilder.buildUserRepo(context).userChangePassword();
+            if (result != null) {
+                LOGGER.debug("result returned: {}", result);
+                return ResponseFactory.generateResponse(request, result, MessageConstants.EST_USER_PASSWORD_CHANGE);
+            }
+            
+        } catch (Throwable t) {
+            LOGGER.error("Error while getting user details from DB", t);
+        }
+        LOGGER.error("Failed to generate event. Input data received {}", request);
+        TRANSMIT_FAIL_LOGGER.error(ResponseFactory.generateErrorResponse(request).toString());
+        return null;
+    }
+
+    private JsonObject processEventUserPasswordReset() {
+        try {
+            ProcessorContext context = createContext();
+            JsonObject result = RepoBuilder.buildUserRepo(context).userResetPassword();
+            if (result != null) {
+                LOGGER.debug("result returned: {}", result);
+                return ResponseFactory.generateResponse(request, result, MessageConstants.EST_USER_PASSWORD_RESET);
+            }
+            
+        } catch (Throwable t) {
+            LOGGER.error("Error while getting user details from DB", t);
+        }
+        LOGGER.error("Failed to generate event. Input data received {}", request);
+        TRANSMIT_FAIL_LOGGER.error(ResponseFactory.generateErrorResponse(request).toString());
+        return null;
+    }
+
+    private JsonObject processEventUserPasswordResetTrigger() {
+        try {
+            ProcessorContext context = createContext();
+            JsonObject result = RepoBuilder.buildUserRepo(context).userResetPasswordTrigger();
+            if (result != null) {
+                LOGGER.debug("result returned: {}", result);
+                return ResponseFactory.generateResponse(request, result, MessageConstants.EST_USER_PASSWORD_RESET_TRG);
+            }
+            
+        } catch (Throwable t) {
+            LOGGER.error("Error while getting user details from DB", t);
+        }
+        LOGGER.error("Failed to generate event. Input data received {}", request);
+        TRANSMIT_FAIL_LOGGER.error(ResponseFactory.generateErrorResponse(request).toString());
+        return null;
+    }
+
+    private JsonObject processEventUserUpdate() {
+        try {
+            ProcessorContext context = createContext();
+            JsonObject result = RepoBuilder.buildUserRepo(context).userUpdate();
+            if (result != null) {
+                LOGGER.debug("result returned: {}", result);
+                return ResponseFactory.generateResponse(request, result, MessageConstants.EST_USER_UPDATE);
+            }
+            
+        } catch (Throwable t) {
+            LOGGER.error("Error while getting user details from DB", t);
+        }
+        LOGGER.error("Failed to generate event. Input data received {}", request);
+        TRANSMIT_FAIL_LOGGER.error(ResponseFactory.generateErrorResponse(request).toString());
+        return null;
+    }
+
+    private JsonObject processEventUserSignup() {
+        try {
+            ProcessorContext context = createContext();
+            JsonObject result = RepoBuilder.buildUserRepo(context).userSignup();
+            if (result != null) {
+                LOGGER.debug("result returned: {}", result);
+                return ResponseFactory.generateResponse(request, result, MessageConstants.EST_USER_SIGNUP);
+            }
+            
+        } catch (Throwable t) {
+            LOGGER.error("Error while getting user details from DB", t);
+        }
+        LOGGER.error("Failed to generate event. Input data received {}", request);
+        TRANSMIT_FAIL_LOGGER.error(ResponseFactory.generateErrorResponse(request).toString());
+        return null;
+    }
+
+    private JsonObject processEventUserSignout() {
+        try {
+            ProcessorContext context = createContext();
+            JsonObject result = RepoBuilder.buildUserRepo(context).userSignout();
+            if (result != null) {
+                LOGGER.debug("result returned: {}", result);
+                return ResponseFactory.generateResponse(request, result, MessageConstants.EST_USER_SIGNOUT);
+            }
+            
+        } catch (Throwable t) {
+            LOGGER.error("Error while getting user details from DB", t);
+        }
+        LOGGER.error("Failed to generate event. Input data received {}", request);
+        TRANSMIT_FAIL_LOGGER.error(ResponseFactory.generateErrorResponse(request).toString());
+        return null;
+    }
+
+    private JsonObject processEventUserSignin() {
+        try {
+            ProcessorContext context = createContext();
+            JsonObject result = RepoBuilder.buildUserRepo(context).userSignin();
+            if (result != null) {
+                LOGGER.debug("result returned: {}", result);
+                return ResponseFactory.generateResponse(request, result, MessageConstants.EST_USER_SIGNIN);
+            }
+            
+        } catch (Throwable t) {
+            LOGGER.error("Error while getting user details from DB", t);
+        }
+        LOGGER.error("Failed to generate event. Input data received {}", request);
+        TRANSMIT_FAIL_LOGGER.error(ResponseFactory.generateErrorResponse(request).toString());
+        return null;
+    }
+
+    private JsonObject processEventAnonymousSingin() {
+        // TODO Auto-generated method stub
+        return null;
     }
 
     private JsonObject processEventCollectionRemove() {

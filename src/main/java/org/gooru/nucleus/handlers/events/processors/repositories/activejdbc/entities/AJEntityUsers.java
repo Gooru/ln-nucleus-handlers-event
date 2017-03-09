@@ -1,5 +1,8 @@
 package org.gooru.nucleus.handlers.events.processors.repositories.activejdbc.entities;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.javalite.activejdbc.Model;
 import org.javalite.activejdbc.annotations.Table;
 
@@ -48,5 +51,9 @@ public class AJEntityUsers extends Model {
     public final static String SELECT_MULTIPLE_EMAILIDS = "SELECT email FROM users WHERE id = ANY (?::uuid[])";
     public final static String SELECT_FIRST_LAST_NAME = "SELECT first_name, last_name FROM users WHERE id = ?::uuid";
     public static final String SELECT_USERNAME = "SELECT username FROM users WHERE id = ?::uuid";
+
+    public static final List<String> ALL_FIELDS = Arrays.asList(ID, USERNAME, REFERENCE_ID, EMAIL, LOGIN_TYPE,
+        FIRST_NAME, LAST_NAME, USER_CATEGORY, BIRTH_DATE, GENDER, SCHOOL, SCHOOL_ID, SCHOOL_DISTRICT,
+        SCHOOL_DISTRICT_ID, COUNTRY, COUNTRY_ID, STATE, STATE_ID, TENANT_ID, TENANT_ROOT);
 
 }

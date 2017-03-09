@@ -70,6 +70,21 @@ public final class MessageConstants {
     
     public static final String MSG_OP_EVT_PROFILE_FOLLOW = "event.profile.follow";
     public static final String MSG_OP_EVT_PROFILE_UNFOLLOW = "event.profile.unfollow";
+    
+    public static final String MSG_OP_EVT_ANONYMOUS_SIGNIN = "event.anonymous.signin";
+    public static final String MSG_OP_EVT_USER_SIGNIN = "event.user.signin";
+    public static final String MSG_OP_EVT_USER_SIGNOUT = "event.user.signout";
+    //private static final String EVT_USER_TOKEN_CHECK = "event.user.token.check";
+    //private static final String EVT_USER_TOKEN_DETAILS = "event.user.token.details";
+    //private static final String EVT_USER_AUTHORIZE = "event.user.authorize";
+    public static final String MSG_OP_EVT_USER_SIGNUP = "event.user.signup";
+    public static final String MSG_OP_EVT_USER_UPDATE = "event.user.update";
+    public static final String MSG_OP_EVT_USER_PASSWORD_RESET_TRIGGER = "event.user.password.reset.trigger";
+    public static final String MSG_OP_EVT_USER_PASSWORD_RESET = "event.user.password.reset";
+    public static final String MSG_OP_EVT_USER_PASSWORD_CHANGE = "event.user.password.change";
+    //private static final String EVT_INTERNAL_AUTHENTICATE = "event.internal.authenticate";
+    //private static final String EVT_INTERNAL_IMPERSONATE = "event.internal.impersonate";
+    //private static final String EVT_INTERNAL_LTI_SSO = "event.internal.lti.sso";
 
     // Event Structure Type
     public static final int EST_ERROR = -1;
@@ -89,6 +104,14 @@ public final class MessageConstants {
     public static final int EST_CLASS_CONTENT_VISIBILITY = 13;
     public static final int EST_REMOVE_STUDENT = 14;
     public static final int EST_ITEM_REMOVE = 15;
+    
+    public static final int EST_USER_SIGNIN = 16;
+    public static final int EST_USER_SIGNOUT = 17;
+    public static final int EST_USER_SIGNUP = 18;
+    public static final int EST_USER_UPDATE = 19;
+    public static final int EST_USER_PASSWORD_RESET_TRG = 20;
+    public static final int EST_USER_PASSWORD_RESET = 21;
+    public static final int EST_USER_PASSWORD_CHANGE = 22;
 
     private MessageConstants() {
         throw new AssertionError();

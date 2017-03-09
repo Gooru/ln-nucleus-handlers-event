@@ -13,6 +13,7 @@ import org.gooru.nucleus.handlers.events.processors.repositories.activejdbc.enti
 import org.gooru.nucleus.handlers.events.processors.repositories.activejdbc.entities.AJEntityCollection;
 import org.gooru.nucleus.handlers.events.processors.repositories.activejdbc.entities.AJEntityContent;
 import org.gooru.nucleus.handlers.events.processors.repositories.activejdbc.entities.AJEntityCourse;
+import org.gooru.nucleus.handlers.events.processors.repositories.activejdbc.entities.AJEntityUsers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -82,12 +83,91 @@ public final class EmailDataBuilder {
         case EmailConstants.TEMPLATE_PROFILE_FOLLOW:
             emailData = buildProfileFollowEmailData();
             break;
+            
+        case EmailConstants.TEMPLATE_USER_SIGNUP:
+            emailData = buildUserSignupEmailData();
+            break;
+            
+        case EmailConstants.TEMPLATE_RESET_PASSWORD_TRG:
+            emailData = buildUserResetPasswordTriggerEmailData();
+            break;
+            
+        case EmailConstants.TEMPLATE_RESET_PASSWORD:
+            emailData = buildUserResetPasswordEmailData();
+            break;
 
         default:
             LOGGER.warn("no matching email template found to build email data");
         }
 
         return emailData;
+    }
+
+    private JsonArray buildUserResetPasswordEmailData() {
+        JsonArray emailDataArray = new JsonArray();
+        JsonObject data = getData();
+        JsonObject eventBody = getEventBody();
+
+        List<String> emailIds = new ArrayList<>(1);
+        emailIds.add(data.getString(AJEntityUsers.EMAIL));
+
+        emailIds.stream().forEach(email -> {
+            JsonObject emailData = new JsonObject();
+            emailData.put(EmailConstants.MAIL_TEMPLATE_NAME, emailTemplate);
+            emailData.put(EmailConstants.TO_ADDRESSES, new JsonArray().add(email));
+
+            JsonObject emailContextData = eventBody.getJsonObject(EmailConstants.EMAIL_CONTEXT)
+                .getJsonObject(EmailConstants.EMAIL_TEMPLATE_CONTEXT);
+            emailData.put(EmailConstants.MAIL_TEMPLATE_CONTEXT, emailContextData);
+
+            emailDataArray.add(emailData);
+        });
+
+        return emailDataArray;
+    }
+
+    private JsonArray buildUserResetPasswordTriggerEmailData() {
+        JsonArray emailDataArray = new JsonArray();
+        JsonObject data = getData();
+        JsonObject eventBody = getEventBody();
+
+        List<String> emailIds = new ArrayList<>(1);
+        emailIds.add(data.getString(AJEntityUsers.EMAIL));
+
+        emailIds.stream().forEach(email -> {
+            JsonObject emailData = new JsonObject();
+            emailData.put(EmailConstants.MAIL_TEMPLATE_NAME, emailTemplate);
+            emailData.put(EmailConstants.TO_ADDRESSES, new JsonArray().add(email));
+
+            JsonObject emailContextData = eventBody.getJsonObject(EmailConstants.EMAIL_CONTEXT)
+                .getJsonObject(EmailConstants.EMAIL_TEMPLATE_CONTEXT);
+            emailData.put(EmailConstants.MAIL_TEMPLATE_CONTEXT, emailContextData);
+
+            emailDataArray.add(emailData);
+        });
+
+        return emailDataArray;
+    }
+
+    private JsonArray buildUserSignupEmailData() {
+        JsonArray emailDataArray = new JsonArray();
+        JsonObject data = getData();
+        
+        List<String> emailIds = new ArrayList<>(1);
+        emailIds.add(data.getString(AJEntityUsers.EMAIL));
+        
+        emailIds.stream().forEach(email -> {
+            JsonObject emailData = new JsonObject();
+            emailData.put(EmailConstants.MAIL_TEMPLATE_NAME, emailTemplate);
+            emailData.put(EmailConstants.TO_ADDRESSES, new JsonArray().add(email));
+
+            JsonObject emailContextData = new JsonObject();
+            emailData.put(EmailConstants.MAIL_TEMPLATE_CONTEXT, emailContextData);
+
+            emailDataArray.add(emailData);
+        });
+        
+        return emailDataArray;
     }
 
     private JsonArray buildCollectionCollaboratorUpdateEmailData() {
@@ -306,7 +386,7 @@ public final class EmailDataBuilder {
     private JsonObject getData() {
         JsonObject payloadObject = result.getJsonObject(EventResponseConstants.PAYLOAD_OBJECT);
         JsonObject data = payloadObject.getJsonObject(EventResponseConstants.DATA);
-        if (data.isEmpty()) {
+        if (data == null || data.isEmpty()) {
             LOGGER.warn("no data found in payload object");
             throw new InvalidRequestException();
         }

@@ -9,6 +9,9 @@ public final class EmailConstants {
     public static final String TEMPLATE_USER_INVITE_CLASS = "user_invite_class";
     public static final String TEMPLATE_USER_INVITE_OPEN_CLASS = "user_invite_open_class";
     public static final String TEMPLATE_PROFILE_FOLLOW = "profile_follow";
+    public static final String TEMPLATE_USER_SIGNUP = "welcome_mail";
+    public static final String TEMPLATE_RESET_PASSWORD_TRG = "password_change_request";
+    public static final String TEMPLATE_RESET_PASSWORD = "password_changed";
 
     public static final String MAIL_TEMPLATE_NAME = "mail_template_name";
     public static final String MAIL_TEMPLATE_CONTEXT = "mail_template_context";
@@ -31,6 +34,8 @@ public final class EmailConstants {
     public static final String CLASS_CODE = "class_code";
     public static final String EMAIL_ID = "email_id";
     public static final String FOLLOW_ON_USERNAME = "follow_on_username";
+    public static final String EMAIL_CONTEXT= "email_context";
+    public static final String EMAIL_TEMPLATE_CONTEXT = "mail_template_context";
     
     private EmailConstants() {
         throw new AssertionError();
