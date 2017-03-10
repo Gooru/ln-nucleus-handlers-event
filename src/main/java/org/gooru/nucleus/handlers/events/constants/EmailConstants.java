@@ -1,4 +1,4 @@
-package org.gooru.nucleus.handlers.events.constants;
+    package org.gooru.nucleus.handlers.events.constants;
 
 public final class EmailConstants {
 
@@ -11,7 +11,7 @@ public final class EmailConstants {
     public static final String TEMPLATE_PROFILE_FOLLOW = "profile_follow";
     public static final String TEMPLATE_USER_SIGNUP = "welcome_mail";
     public static final String TEMPLATE_RESET_PASSWORD_TRG = "password_change_request";
-    public static final String TEMPLATE_RESET_PASSWORD = "password_changed";
+    public static final String TEMPLATE_RESET_PASSWORD = "password_changed_confirmation";
 
     public static final String MAIL_TEMPLATE_NAME = "mail_template_name";
     public static final String MAIL_TEMPLATE_CONTEXT = "mail_template_context";
