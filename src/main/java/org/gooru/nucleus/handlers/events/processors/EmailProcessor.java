@@ -27,6 +27,7 @@ public class EmailProcessor implements Processor {
     private String eventName = null;
 
     private static final String KEY_ENDPOINT = "api.endpoint";
+    private static final String KEY_PORT = "api.port";
     private static final String KEY_HOST = "api.host";
     private static final String KEY_EMAIL_SETTINGS = "emailSettings";
 
@@ -192,12 +193,17 @@ public class EmailProcessor implements Processor {
     // every time
     // as there will multiple email to send in single request.
     private HttpClient getHttpClient() {
-        return vertx.createHttpClient(new HttpClientOptions().setDefaultHost(getAPIHost()));
+        return vertx.createHttpClient(new HttpClientOptions().setDefaultHost(getAPIHost()).setDefaultPort(getAPIPort()));
     }
 
     private String getAPIHost() {
         JsonObject emailSettings = config.getJsonObject(KEY_EMAIL_SETTINGS);
         return emailSettings.getString(KEY_HOST);
+    }
+    
+    private Integer getAPIPort() {
+        JsonObject emailSettings = config.getJsonObject(KEY_EMAIL_SETTINGS);
+        return emailSettings.getInteger(KEY_PORT);
     }
 
     private String getAPIEndPoint() {

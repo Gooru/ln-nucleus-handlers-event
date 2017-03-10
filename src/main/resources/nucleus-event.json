@@ -22,6 +22,7 @@
   },
   "emailSettings" : {
     "api.host" : "nucleus.gooru.org",
+    "api.port" : 8084,
     "api.endpoint" : "/api/nucleus-utils/v1/emails"
   }
 }
