@@ -22,9 +22,17 @@ public final class EventResponseConstants {
   public static final String EVENT_PROFILE_UNFOLLOW = "profile.unfollow";
   public static final String EVENT_COURSE_REORDER = "course.reorder";
   public static final String EVENT_CLASS_COURSE_ASSIGNED = "class.course.assigned";
-  public static final String EVEBT_CLASS_CONTENT_VISIBLE = "class.content.visible";
-  public static final String EVEBT_CLASS_REMOVE_STUDENT = "class.student.remove";
-  public static final String EVEBT_ITEM_REMOVE = "item.remove";
+  public static final String EVENT_CLASS_CONTENT_VISIBLE = "class.content.visible";
+  public static final String EVENT_CLASS_REMOVE_STUDENT = "class.student.remove";
+  public static final String EVENT_ITEM_REMOVE = "item.remove";
+  public static final String EVENT_ANONYMOUS_SIGNIN = "event.anonymous.signin";
+  public static final String EVENT_USER_SIGNIN = "event.user.signin";
+  public static final String EVENT_USER_SIGNOUT = "event.user.signout";
+  public static final String EVENT_USER_SIGNUP = "event.user.signup";
+  public static final String EVENT_USER_UPDATE = "event.user.update";
+  public static final String EVENT_USER_PASSWORD_RESET_TRIGGER = "event.user.password.reset.trigger";
+  public static final String EVENT_USER_PASSWORD_RESET = "event.user.password.reset";
+  public static final String EVENT_USER_PASSWORD_CHANGE = "event.user.password.change";
 
   public static final String METRICS = "metrics";
 

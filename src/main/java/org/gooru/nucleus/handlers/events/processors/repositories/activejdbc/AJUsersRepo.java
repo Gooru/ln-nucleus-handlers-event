@@ -3,20 +3,22 @@ package org.gooru.nucleus.handlers.events.processors.repositories.activejdbc;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
 
 import org.gooru.nucleus.handlers.events.app.components.DataSourceRegistry;
+import org.gooru.nucleus.handlers.events.constants.EventRequestConstants;
 import org.gooru.nucleus.handlers.events.processors.ProcessorContext;
 import org.gooru.nucleus.handlers.events.processors.repositories.UsersRepo;
 import org.gooru.nucleus.handlers.events.processors.repositories.activejdbc.entities.AJEntityUsers;
+import org.gooru.nucleus.handlers.events.processors.repositories.activejdbc.formatter.JsonFormatterBuilder;
 import org.javalite.activejdbc.Base;
 import org.javalite.activejdbc.LazyList;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import io.vertx.core.json.JsonObject;
 
 public class AJUsersRepo implements UsersRepo {
 
     private final ProcessorContext context;
-    private static final Logger LOGGER = LoggerFactory.getLogger(AJUsersRepo.class);
 
     public AJUsersRepo(ProcessorContext context) {
         this.context = context;
@@ -79,5 +81,58 @@ public class AJUsersRepo implements UsersRepo {
         }
     }
 
+    @Override
+    public JsonObject userSignin() {
+        String userId = context.eventBody().getString(EventRequestConstants.ID);
+        return getUser(userId);
+    }
 
+    @Override
+    public JsonObject userSignup() {
+        String userId = context.eventBody().getString(EventRequestConstants.ID);
+        return getUser(userId);
+    }
+
+    @Override
+    public JsonObject userSignout() {
+        String userId = context.eventBody().getString(EventRequestConstants.ID);
+        return getUser(userId);
+    }
+
+    @Override
+    public JsonObject userUpdate() {
+        String userId = context.eventBody().getString(EventRequestConstants.ID);
+        return getUser(userId);
+    }
+
+    @Override
+    public JsonObject userResetPasswordTrigger() {
+        String userId = context.eventBody().getString(EventRequestConstants.ID);
+        return getUser(userId);
+    }
+
+    @Override
+    public JsonObject userResetPassword() {
+        String userId = context.eventBody().getString(EventRequestConstants.ID);
+        return getUser(userId);
+    }
+
+    @Override
+    public JsonObject userChangePassword() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+
+    private JsonObject getUser(String id) {
+        Base.open(DataSourceRegistry.getInstance().getDefaultDataSource());
+        AJEntityUsers user = AJEntityUsers.findById(UUID.fromString(id));
+        JsonObject result = null;
+        if (user != null) {
+            result = new JsonObject(new JsonFormatterBuilder().buildSimpleJsonFormatter(false, AJEntityUsers.ALL_FIELDS)
+                .toJson(user));
+        }
+        Base.close();
+        return result;
+    }
 }

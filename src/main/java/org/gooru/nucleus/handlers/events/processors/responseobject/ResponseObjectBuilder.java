@@ -94,6 +94,16 @@ public final class ResponseObjectBuilder {
             case MessageConstants.EST_ITEM_REMOVE:
                 result = buildItemRemoveResponseObject();
                 break;
+            case MessageConstants.EST_USER_SIGNIN:
+            case MessageConstants.EST_USER_SIGNOUT:
+            case MessageConstants.EST_USER_SIGNUP:
+            case MessageConstants.EST_USER_UPDATE:
+            case MessageConstants.EST_USER_PASSWORD_RESET_TRG:
+            case MessageConstants.EST_USER_PASSWORD_RESET:
+            case MessageConstants.EST_USER_PASSWORD_CHANGE:
+                result = buildUserEventResponseObject();
+                break;
+
             default:
                 LOGGER.error("Invalid event type seen. Do not know how to handle. Will return failure object.");
                 result = buildFailureResponseObject();
@@ -102,6 +112,10 @@ public final class ResponseObjectBuilder {
         }
 
         return result;
+    }
+
+    private JsonObject buildUserEventResponseObject() {
+        return new UserEventResponseObjectBuilder(body, response).build();
     }
 
     private JsonObject buildItemRemoveResponseObject() {

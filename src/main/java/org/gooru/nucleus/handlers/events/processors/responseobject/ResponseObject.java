@@ -188,17 +188,49 @@ public class ResponseObject {
             break;
 
         case MessageConstants.MSG_OP_EVT_CLASS_CONTENT_VISIBLE:
-            retVal = EventResponseConstants.EVEBT_CLASS_CONTENT_VISIBLE;
+            retVal = EventResponseConstants.EVENT_CLASS_CONTENT_VISIBLE;
             break;
             
         case MessageConstants.MSG_OP_EVT_CLASS_STUDENT_REMOVAL:
-            retVal = EventResponseConstants.EVEBT_CLASS_REMOVE_STUDENT;
+            retVal = EventResponseConstants.EVENT_CLASS_REMOVE_STUDENT;
             break;
             
         case MessageConstants.MSG_OP_EVT_COLLECTION_REMOVE:
-            retVal = EventResponseConstants.EVEBT_ITEM_REMOVE;
+            retVal = EventResponseConstants.EVENT_ITEM_REMOVE;
             break;
-
+            
+        case MessageConstants.MSG_OP_EVT_ANONYMOUS_SIGNIN:
+            retVal = EventResponseConstants.EVENT_ANONYMOUS_SIGNIN;
+            break;
+            
+        case MessageConstants.MSG_OP_EVT_USER_SIGNIN:
+            retVal = EventResponseConstants.EVENT_USER_SIGNIN;
+            break;
+            
+        case MessageConstants.MSG_OP_EVT_USER_SIGNOUT:
+            retVal = EventResponseConstants.EVENT_USER_SIGNOUT;
+            break;
+            
+        case MessageConstants.MSG_OP_EVT_USER_SIGNUP:
+            retVal = EventResponseConstants.EVENT_USER_SIGNUP;
+            break;
+            
+        case MessageConstants.MSG_OP_EVT_USER_UPDATE:
+            retVal = EventResponseConstants.EVENT_USER_UPDATE;
+            break;
+            
+        case MessageConstants.MSG_OP_EVT_USER_PASSWORD_RESET_TRIGGER:
+            retVal = EventResponseConstants.EVENT_USER_PASSWORD_RESET_TRIGGER;
+            break;
+            
+        case MessageConstants.MSG_OP_EVT_USER_PASSWORD_RESET:
+            retVal = EventResponseConstants.EVENT_USER_PASSWORD_RESET;
+            break;
+            
+        case MessageConstants.MSG_OP_EVT_USER_PASSWORD_CHANGE:
+            retVal = EventResponseConstants.EVENT_USER_PASSWORD_CHANGE;
+            break;
+            
         default:
             break;
         }

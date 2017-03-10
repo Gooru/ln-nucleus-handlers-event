@@ -78,7 +78,19 @@ public class EmailProcessor implements Processor {
             case MessageConstants.MSG_OP_EVT_PROFILE_FOLLOW:
                 emailData = processEmailToFollowProfile();
                 break;
+                
+            case MessageConstants.MSG_OP_EVT_USER_SIGNUP:
+                emailData = processEmailForUserSignup();
+                break;
 
+            case MessageConstants.MSG_OP_EVT_USER_PASSWORD_RESET_TRIGGER:
+                emailData = processEmailForResetPasswordTrigger();
+                break;
+                
+            case MessageConstants.MSG_OP_EVT_USER_PASSWORD_RESET:
+                emailData = processEmailForResetPassword();
+                break;
+                
             default:
                 LOGGER.info("event {} does not require to send email", eventName);
                 return new JsonObject().put(EmailConstants.EMAIL_SENT, false).put(EmailConstants.STATUS,
@@ -119,6 +131,21 @@ public class EmailProcessor implements Processor {
             EmailConstants.STATUS_SUCCESS);
     }
     
+    private JsonArray processEmailForResetPassword() {
+        return new EmailDataBuilder().setEmailTemplate(EmailConstants.TEMPLATE_RESET_PASSWORD).setResultData(result)
+            .setEventData(message).build();
+    }
+
+    private JsonArray processEmailForResetPasswordTrigger() {
+        return new EmailDataBuilder().setEmailTemplate(EmailConstants.TEMPLATE_RESET_PASSWORD_TRG).setResultData(result)
+            .setEventData(message).build();
+    }
+
+    private JsonArray processEmailForUserSignup() {
+        return new EmailDataBuilder().setEmailTemplate(EmailConstants.TEMPLATE_USER_SIGNUP).setResultData(result)
+            .build();
+    }
+
     private JsonArray processEmailForResourceDelete() {
         return new EmailDataBuilder().setEmailTemplate(EmailConstants.TEMPLATE_RESOURCE_DELETE).setResultData(result)
             .build();
