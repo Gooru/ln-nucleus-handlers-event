@@ -3,6 +3,7 @@ package org.gooru.nucleus.handlers.events.constants;
 public final class MessageConstants {
     
     public static final String MSG_HEADER_OP = "mb.operation";
+    public static final String ANONYMOUS_USER = "anonymous";
 
     // Operation names: Also need to be updated in corresponding handlers
     public static final String MSG_OP_EVENT_PUBLISH = "event.publish";

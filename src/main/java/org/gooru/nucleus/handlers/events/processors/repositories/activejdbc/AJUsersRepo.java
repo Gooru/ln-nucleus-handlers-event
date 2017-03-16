@@ -7,18 +7,22 @@ import java.util.UUID;
 
 import org.gooru.nucleus.handlers.events.app.components.DataSourceRegistry;
 import org.gooru.nucleus.handlers.events.constants.EventRequestConstants;
+import org.gooru.nucleus.handlers.events.constants.MessageConstants;
 import org.gooru.nucleus.handlers.events.processors.ProcessorContext;
 import org.gooru.nucleus.handlers.events.processors.repositories.UsersRepo;
 import org.gooru.nucleus.handlers.events.processors.repositories.activejdbc.entities.AJEntityUsers;
 import org.gooru.nucleus.handlers.events.processors.repositories.activejdbc.formatter.JsonFormatterBuilder;
 import org.javalite.activejdbc.Base;
 import org.javalite.activejdbc.LazyList;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import io.vertx.core.json.JsonObject;
 
 public class AJUsersRepo implements UsersRepo {
 
     private final ProcessorContext context;
+    private static final Logger LOGGER = LoggerFactory.getLogger(AJUsersRepo.class);
 
     public AJUsersRepo(ProcessorContext context) {
         this.context = context;
@@ -96,6 +100,9 @@ public class AJUsersRepo implements UsersRepo {
     @Override
     public JsonObject userSignout() {
         String userId = context.eventBody().getString(EventRequestConstants.ID);
+        if (userId.equalsIgnoreCase(MessageConstants.ANONYMOUS_USER)) {
+            return null;
+        }
         return getUser(userId);
     }
 
@@ -126,13 +133,19 @@ public class AJUsersRepo implements UsersRepo {
 
     private JsonObject getUser(String id) {
         Base.open(DataSourceRegistry.getInstance().getDefaultDataSource());
-        AJEntityUsers user = AJEntityUsers.findById(UUID.fromString(id));
         JsonObject result = null;
-        if (user != null) {
-            result = new JsonObject(new JsonFormatterBuilder().buildSimpleJsonFormatter(false, AJEntityUsers.ALL_FIELDS)
-                .toJson(user));
+        try {
+            AJEntityUsers user = AJEntityUsers.findById(UUID.fromString(id));
+            if (user != null) {
+                result = new JsonObject(
+                    new JsonFormatterBuilder().buildSimpleJsonFormatter(false, AJEntityUsers.ALL_FIELDS).toJson(user));
+            }
+        } catch (IllegalArgumentException iae) {
+            LOGGER.error("error while getting user from DB", iae);
+            return result;
+        } finally {
+            Base.close();
         }
-        Base.close();
         return result;
     }
 }
