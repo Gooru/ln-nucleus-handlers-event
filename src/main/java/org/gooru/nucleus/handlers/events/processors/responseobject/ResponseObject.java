@@ -80,7 +80,18 @@ public class ResponseObject {
     private String getDecodedUserIDFromSession(String sessionToken) {
         try {
             String decoded = new String(Base64.getDecoder().decode(sessionToken));
-            return decoded.split(":")[1];
+            String[] decodedToken = decoded.split(":");
+            try {
+                Integer version = Integer.parseInt(decodedToken[0]);
+                if (version == 2) {
+                    return decodedToken[2];
+                }
+                
+                return decodedToken[1];
+                
+            } catch (NumberFormatException nfe) {
+                return decodedToken[1];
+            }
         } catch (IllegalArgumentException e) {
             LOGGER.error(e.getMessage());
             return null;
