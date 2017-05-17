@@ -103,6 +103,10 @@ public final class ResponseObjectBuilder {
             case MessageConstants.EST_USER_PASSWORD_CHANGE:
                 result = buildUserEventResponseObject();
                 break;
+                
+            case MessageConstants.EST_CLASS_ARCHIVE:
+                result = buildClassArchiveResponseObject();
+                break;
 
             default:
                 LOGGER.error("Invalid event type seen. Do not know how to handle. Will return failure object.");
@@ -112,6 +116,10 @@ public final class ResponseObjectBuilder {
         }
 
         return result;
+    }
+
+    private JsonObject buildClassArchiveResponseObject() {
+        return new ClassArchiveResponseObject(body, response).build();
     }
 
     private JsonObject buildUserEventResponseObject() {

@@ -68,6 +68,7 @@ public final class MessageConstants {
     public static final String MSG_OP_EVT_CLASS_COURSE_ASSIGNED = "event.class.course.assigned";
     public static final String MSG_OP_EVT_CLASS_CONTENT_VISIBLE = "event.class.content.visible";
     public static final String MSG_OP_EVT_CLASS_STUDENT_REMOVAL = "event.class.student.remove";
+    public static final String MSG_OP_EVT_CLASS_ARCHIVE = "event.class.archive";
     
     public static final String MSG_OP_EVT_PROFILE_FOLLOW = "event.profile.follow";
     public static final String MSG_OP_EVT_PROFILE_UNFOLLOW = "event.profile.unfollow";
@@ -114,6 +115,8 @@ public final class MessageConstants {
     public static final int EST_USER_PASSWORD_RESET = 21;
     public static final int EST_USER_PASSWORD_CHANGE = 22;
 
+    public static final int EST_CLASS_ARCHIVE = 23;
+    
     private MessageConstants() {
         throw new AssertionError();
     }

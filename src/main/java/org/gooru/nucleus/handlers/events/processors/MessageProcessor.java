@@ -226,6 +226,10 @@ class MessageProcessor implements Processor {
             case MessageConstants.MSG_OP_EVT_CLASS_STUDENT_REMOVAL:
                 result = processEventClassStudentRemove();
                 break;
+                
+            case MessageConstants.MSG_OP_EVT_CLASS_ARCHIVE:
+                result = processEventClassArchive();
+                break;
 
             case MessageConstants.MSG_OP_EVT_PROFILE_FOLLOW:
             case MessageConstants.MSG_OP_EVT_PROFILE_UNFOLLOW:
@@ -1118,6 +1122,22 @@ class MessageProcessor implements Processor {
             if (result != null) {
                 LOGGER.debug("result returned: {}", result);
                 return ResponseFactory.generateClassStudentRemoveResponse(request, result);
+            }
+        } catch (Throwable t) {
+            LOGGER.error("Error while getting content from database:", t);
+        }
+        LOGGER.error("Failed to generate event. Input data received {}", request);
+        TRANSMIT_FAIL_LOGGER.error(ResponseFactory.generateErrorResponse(request).toString());
+        return null;
+    }
+    
+    private JsonObject processEventClassArchive() {
+        try {
+            ProcessorContext context = createContext();
+            JsonObject result = RepoBuilder.buildClassRepo(context).archiveClass();
+            if (result != null) {
+                LOGGER.debug("result returned: {}", result);
+                return ResponseFactory.generateClassArchiveResponse(request, result);
             }
         } catch (Throwable t) {
             LOGGER.error("Error while getting content from database:", t);
