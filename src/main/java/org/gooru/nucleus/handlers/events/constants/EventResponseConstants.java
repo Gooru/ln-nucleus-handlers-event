@@ -24,6 +24,7 @@ public final class EventResponseConstants {
   public static final String EVENT_CLASS_COURSE_ASSIGNED = "class.course.assigned";
   public static final String EVENT_CLASS_CONTENT_VISIBLE = "class.content.visible";
   public static final String EVENT_CLASS_REMOVE_STUDENT = "class.student.remove";
+  public static final String EVENT_CLASS_ARCHIVE = "class.archive";
   public static final String EVENT_ITEM_REMOVE = "item.remove";
   public static final String EVENT_ANONYMOUS_SIGNIN = "event.anonymous.signin";
   public static final String EVENT_USER_SIGNIN = "event.user.signin";

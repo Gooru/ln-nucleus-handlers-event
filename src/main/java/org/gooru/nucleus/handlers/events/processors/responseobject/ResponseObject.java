@@ -210,6 +210,10 @@ public class ResponseObject {
             retVal = EventResponseConstants.EVENT_ITEM_REMOVE;
             break;
             
+        case MessageConstants.MSG_OP_EVT_CLASS_ARCHIVE:
+            retVal = EventResponseConstants.EVENT_CLASS_ARCHIVE;
+            break;
+            
         case MessageConstants.MSG_OP_EVT_ANONYMOUS_SIGNIN:
             retVal = EventResponseConstants.EVENT_ANONYMOUS_SIGNIN;
             break;
@@ -460,6 +464,7 @@ public class ResponseObject {
         case MessageConstants.MSG_OP_EVT_CLASS_STUDENT_INVITE:
         case MessageConstants.MSG_OP_EVT_CLASS_STUDENT_JOIN:
         case MessageConstants.MSG_OP_EVT_CLASS_STUDENT_REMOVAL:
+        case MessageConstants.MSG_OP_EVT_CLASS_ARCHIVE:
             retVal = EventResponseConstants.FORMAT_CLASS;
 
         default:

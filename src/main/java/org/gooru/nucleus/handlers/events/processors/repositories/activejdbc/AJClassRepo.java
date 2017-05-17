@@ -122,4 +122,10 @@ public class AJClassRepo implements ClassRepo {
         return context.eventBody();
     }
 
+    @Override
+    public JsonObject archiveClass() {
+        String classId = context.eventBody().getString(EventRequestConstants.ID);
+        return getClassById(classId);
+    }
+
 }
