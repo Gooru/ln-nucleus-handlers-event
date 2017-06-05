@@ -73,6 +73,12 @@ public final class MessageConstants {
     public static final String MSG_OP_EVT_PROFILE_FOLLOW = "event.profile.follow";
     public static final String MSG_OP_EVT_PROFILE_UNFOLLOW = "event.profile.unfollow";
     
+    public static final String MSG_OP_EVT_RUBRIC_CREATE = "event.rubric.create";
+    public static final String MSG_OP_EVT_RUBRIC_UPDATE = "event.rubric.update";
+    public static final String MSG_OP_EVT_RUBRIC_DELETE = "event.rubric.delete";
+    public static final String MSG_OP_EVT_RUBRIC_COPY = "event.rubric.copy";
+    public static final String MSG_OP_EVT_QUESTION_RUBRIC_ASSOCIATE = "question.rubirc.association";
+    
     public static final String MSG_OP_EVT_ANONYMOUS_SIGNIN = "event.anonymous.signin";
     public static final String MSG_OP_EVT_USER_SIGNIN = "event.user.signin";
     public static final String MSG_OP_EVT_USER_SIGNOUT = "event.user.signout";
@@ -116,6 +122,7 @@ public final class MessageConstants {
     public static final int EST_USER_PASSWORD_CHANGE = 22;
 
     public static final int EST_CLASS_ARCHIVE = 23;
+    public static final int EST_ASSOCIATE_RUBRIC_QUESTION = 24;
     
     private MessageConstants() {
         throw new AssertionError();

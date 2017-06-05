@@ -34,6 +34,7 @@ public final class EventResponseConstants {
   public static final String EVENT_USER_PASSWORD_RESET_TRIGGER = "event.user.password.reset.trigger";
   public static final String EVENT_USER_PASSWORD_RESET = "event.user.password.reset";
   public static final String EVENT_USER_PASSWORD_CHANGE = "event.user.password.change";
+  public static final String EVENT_QUESTION_RUBRIC_ASSOCIATION = "question.rubirc.association";
 
   public static final String METRICS = "metrics";
 
@@ -89,6 +90,7 @@ public final class EventResponseConstants {
   public static final String FORMAT_UNIT = "unit";
   public static final String FORMAT_COURSE = "course";
   public static final String FORMAT_CLASS = "class";
+  public static final String FORMAT_RUBRIC = "rubric";
 
   public static final String ITEM_TYPE_COLLECTION_RESOURCE = "collection.resource";
   public static final String ITEM_TYPE_COLLECTION_QUESTION = "collection.question";
