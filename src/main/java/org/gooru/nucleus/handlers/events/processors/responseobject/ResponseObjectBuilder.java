@@ -107,6 +107,10 @@ public final class ResponseObjectBuilder {
             case MessageConstants.EST_CLASS_ARCHIVE:
                 result = buildClassArchiveResponseObject();
                 break;
+                
+            case MessageConstants.EST_ASSOCIATE_RUBRIC_QUESTION:
+                result = buildAssociateRubricToQuestionResponse();
+                break;
 
             default:
                 LOGGER.error("Invalid event type seen. Do not know how to handle. Will return failure object.");
@@ -116,6 +120,10 @@ public final class ResponseObjectBuilder {
         }
 
         return result;
+    }
+
+    private JsonObject buildAssociateRubricToQuestionResponse() {
+        return new AssociateRubricToQuestionResponseObject(body, response).build();
     }
 
     private JsonObject buildClassArchiveResponseObject() {

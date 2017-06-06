@@ -193,7 +193,23 @@ class MessageProcessor implements Processor {
             case MessageConstants.MSG_OP_EVT_QUESTION_DELETE:
                 result = processEventQuestionDelete();
                 break;
-
+            case MessageConstants.MSG_OP_EVT_RUBRIC_CREATE:
+            case MessageConstants.MSG_OP_EVT_RUBRIC_UPDATE:
+                result = processEventRubricCreateUpdate();
+                break;
+                
+            case MessageConstants.MSG_OP_EVT_RUBRIC_COPY:
+                result = processEventRubricCopy();
+                break;
+                
+            case MessageConstants.MSG_OP_EVT_RUBRIC_DELETE:
+                result = processEventRubricDelete();
+                break;
+                
+            case MessageConstants.MSG_OP_EVT_QUESTION_RUBRIC_ASSOCIATE:
+                result = processEventQuestionRubricAssociation();
+                break;
+            
             case MessageConstants.MSG_OP_EVT_CLASS_CREATE:
             case MessageConstants.MSG_OP_EVT_CLASS_UPDATE:
                 result = processEventClassCreateUpdate();
@@ -278,6 +294,70 @@ class MessageProcessor implements Processor {
                 .generateErrorResponse((JsonObject) (message != null ? message.body() : null)).toString());
         }
         return result;
+    }
+
+    private JsonObject processEventRubricCreateUpdate() {
+        try {
+            ProcessorContext context = createContext();
+            JsonObject result = RepoBuilder.buildRubricRepo(context).createUpdateRubricEvent();
+            if (result != null) {
+                LOGGER.debug("result returned: {}", result);
+                return ResponseFactory.generateItemCreateResponse(request, result);
+            }
+        } catch (Throwable t) {
+            LOGGER.error("Error while getting content from database:", t);
+        }
+        LOGGER.error("Failed to generate event. Input data received {}", request);
+        TRANSMIT_FAIL_LOGGER.error(ResponseFactory.generateErrorResponse(request).toString());
+        return null;
+    }
+
+    private JsonObject processEventRubricCopy() {
+        try {
+            ProcessorContext context = createContext();
+            JsonObject result = RepoBuilder.buildRubricRepo(context).copyRubricEvent();
+            if (result != null) {
+                LOGGER.debug("result returned: {}", result);
+                return ResponseFactory.generateItemCopyResponse(request, result);
+            }
+        } catch (Throwable t) {
+            LOGGER.error("Error while getting content from database:", t);
+        }
+        LOGGER.error("Failed to generate event. Input data received {}", request);
+        TRANSMIT_FAIL_LOGGER.error(ResponseFactory.generateErrorResponse(request).toString());
+        return null;
+    }
+
+    private JsonObject processEventRubricDelete() {
+        try {
+            ProcessorContext context = createContext();
+            JsonObject result = RepoBuilder.buildRubricRepo(context).deleteRubricEvent();
+            if (result != null) {
+                LOGGER.debug("result returned: {}", result);
+                return ResponseFactory.generateItemDeleteResponse(request, result);
+            }
+        } catch (Throwable t) {
+            LOGGER.error("Error while getting content from database:", t);
+        }
+        LOGGER.error("Failed to generate event. Input data received {}", request);
+        TRANSMIT_FAIL_LOGGER.error(ResponseFactory.generateErrorResponse(request).toString());
+        return null;
+    }
+
+    private JsonObject processEventQuestionRubricAssociation() {
+        try {
+            ProcessorContext context = createContext();
+            JsonObject result = RepoBuilder.buildRubricRepo(context).associateRubricToQuestionEvent();
+            if (result != null) {
+                LOGGER.debug("result returned: {}", result);
+                return ResponseFactory.generateAssociateRubricToQuestionResponse(request, result);
+            }
+        } catch (Throwable t) {
+            LOGGER.error("Error while getting content from database:", t);
+        }
+        LOGGER.error("Failed to generate event. Input data received {}", request);
+        TRANSMIT_FAIL_LOGGER.error(ResponseFactory.generateErrorResponse(request).toString());
+        return null;
     }
 
     private JsonObject processEventUserPasswordChange() {

@@ -15,6 +15,7 @@ public final class EntityConstants {
     public static final String ORIGINAL_LESSON_ID = "original_lesson_id";
     public static final String ORIGINAL_UNIT_ID = "original_unit_id";
     public static final String ORIGINAL_COURSE_ID = "original_course_id";
+    public static final String ORIGINAL_RUBRIC_ID = "original_rubric_id";
     public static final String ID = "id";
 
     public static final String PARENT_CONTENT_ID = "parent_content_id";
@@ -22,6 +23,7 @@ public final class EntityConstants {
     public static final String PARENT_LESSON_ID = "parent_lesson_id";
     public static final String PARENT_UNIT_ID = "parent_unit_id";
     public static final String PARENT_COURSE_ID = "parent_course_id";
+    public static final String PARENT_RUBRIC_ID = "parent_rubric_id";
 
     private EntityConstants() {
         throw new AssertionError();

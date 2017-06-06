@@ -92,7 +92,7 @@ public final class ResponseFactory {
         return new ResponseObjectBuilder().setBody(body).setResponse(response)
             .setEventType(MessageConstants.EST_REMOVE_STUDENT).build();
     }
-    
+
     public static JsonObject generateClassArchiveResponse(JsonObject body, JsonObject response) {
         return new ResponseObjectBuilder().setBody(body).setResponse(response)
             .setEventType(MessageConstants.EST_CLASS_ARCHIVE).build();
@@ -102,8 +102,13 @@ public final class ResponseFactory {
         return new ResponseObjectBuilder().setBody(body).setResponse(response)
             .setEventType(MessageConstants.EST_ITEM_REMOVE).build();
     }
-    
+
     public static JsonObject generateResponse(JsonObject body, JsonObject response, int eventType) {
         return new ResponseObjectBuilder().setBody(body).setResponse(response).setEventType(eventType).build();
+    }
+
+    public static JsonObject generateAssociateRubricToQuestionResponse(JsonObject body, JsonObject response) {
+        return new ResponseObjectBuilder().setBody(body).setResponse(response)
+            .setEventType(MessageConstants.EST_ASSOCIATE_RUBRIC_QUESTION).build();
     }
 }

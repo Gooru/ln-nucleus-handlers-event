@@ -39,6 +39,10 @@ public final class AJRepoBuilder {
     public static ProfileRepo buildProfileRepo(ProcessorContext context) {
         return new AJProfileRepo(context);
     }
+    
+    public static RubricRepo buildRubricRepo(ProcessorContext context) {
+        return new AJRubricRepo(context);
+    }
 
     private AJRepoBuilder() {
         throw new AssertionError();

@@ -11,6 +11,7 @@ import org.gooru.nucleus.handlers.events.processors.repositories.activejdbc.enti
 import org.gooru.nucleus.handlers.events.processors.repositories.activejdbc.entities.AJEntityContent;
 import org.gooru.nucleus.handlers.events.processors.repositories.activejdbc.entities.AJEntityCourse;
 import org.gooru.nucleus.handlers.events.processors.repositories.activejdbc.entities.AJEntityLesson;
+import org.gooru.nucleus.handlers.events.processors.repositories.activejdbc.entities.AJEntityRubric;
 import org.gooru.nucleus.handlers.events.processors.repositories.activejdbc.entities.AJEntityUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -113,6 +114,7 @@ public class ResponseObject {
         case MessageConstants.MSG_OP_EVT_UNIT_CREATE:
         case MessageConstants.MSG_OP_EVT_COURSE_CREATE:
         case MessageConstants.MSG_OP_EVT_CLASS_CREATE:
+        case MessageConstants.MSG_OP_EVT_RUBRIC_CREATE:
             retVal = EventResponseConstants.EVENT_ITEM_CREATE;
             break;
 
@@ -124,6 +126,7 @@ public class ResponseObject {
         case MessageConstants.MSG_OP_EVT_UNIT_UPDATE:
         case MessageConstants.MSG_OP_EVT_COURSE_UPDATE:
         case MessageConstants.MSG_OP_EVT_CLASS_UPDATE:
+        case MessageConstants.MSG_OP_EVT_RUBRIC_UPDATE:
             retVal = EventResponseConstants.EVENT_ITEM_UPDATE;
             break;
 
@@ -134,6 +137,7 @@ public class ResponseObject {
         case MessageConstants.MSG_OP_EVT_LESSON_COPY:
         case MessageConstants.MSG_OP_EVT_UNIT_COPY:
         case MessageConstants.MSG_OP_EVT_COURSE_COPY:
+        case MessageConstants.MSG_OP_EVT_RUBRIC_COPY:
             retVal = EventResponseConstants.EVENT_ITEM_COPY;
             break;
 
@@ -145,9 +149,14 @@ public class ResponseObject {
         case MessageConstants.MSG_OP_EVT_UNIT_DELETE:
         case MessageConstants.MSG_OP_EVT_COURSE_DELETE:
         case MessageConstants.MSG_OP_EVT_CLASS_DELETE:
+        case MessageConstants.MSG_OP_EVT_RUBRIC_DELETE:
             retVal = EventResponseConstants.EVENT_ITEM_DELETE;
             break;
-
+            
+        case MessageConstants.MSG_OP_EVT_QUESTION_RUBRIC_ASSOCIATE:
+            retVal = EventResponseConstants.EVENT_QUESTION_RUBRIC_ASSOCIATION;
+            break;
+            
         case MessageConstants.MSG_OP_EVT_COLLECTION_MOVE:
         case MessageConstants.MSG_OP_EVT_LESSON_MOVE:
         case MessageConstants.MSG_OP_EVT_UNIT_MOVE:
@@ -263,6 +272,7 @@ public class ResponseObject {
         case MessageConstants.MSG_OP_EVT_UNIT_CREATE:
         case MessageConstants.MSG_OP_EVT_COURSE_CREATE:
         case MessageConstants.MSG_OP_EVT_CLASS_CREATE:
+        case MessageConstants.MSG_OP_EVT_RUBRIC_CREATE:
             retVal = EventResponseConstants.MODE_CREATE;
             break;
 
@@ -274,6 +284,7 @@ public class ResponseObject {
         case MessageConstants.MSG_OP_EVT_UNIT_UPDATE:
         case MessageConstants.MSG_OP_EVT_COURSE_UPDATE:
         case MessageConstants.MSG_OP_EVT_CLASS_UPDATE:
+        case MessageConstants.MSG_OP_EVT_RUBRIC_UPDATE:
             retVal = EventResponseConstants.MODE_UPDATE;
             break;
 
@@ -284,6 +295,7 @@ public class ResponseObject {
         case MessageConstants.MSG_OP_EVT_LESSON_COPY:
         case MessageConstants.MSG_OP_EVT_UNIT_COPY:
         case MessageConstants.MSG_OP_EVT_COURSE_COPY:
+        case MessageConstants.MSG_OP_EVT_RUBRIC_COPY:
             retVal = EventResponseConstants.MODE_COPY;
             break;
 
@@ -295,6 +307,7 @@ public class ResponseObject {
         case MessageConstants.MSG_OP_EVT_UNIT_DELETE:
         case MessageConstants.MSG_OP_EVT_COURSE_DELETE:
         case MessageConstants.MSG_OP_EVT_CLASS_DELETE:
+        case MessageConstants.MSG_OP_EVT_RUBRIC_DELETE:
             retVal = EventResponseConstants.MODE_DELETE;
             break;
 
@@ -466,7 +479,16 @@ public class ResponseObject {
         case MessageConstants.MSG_OP_EVT_CLASS_STUDENT_REMOVAL:
         case MessageConstants.MSG_OP_EVT_CLASS_ARCHIVE:
             retVal = EventResponseConstants.FORMAT_CLASS;
-
+            break;
+            
+        case MessageConstants.MSG_OP_EVT_RUBRIC_CREATE:
+        case MessageConstants.MSG_OP_EVT_RUBRIC_UPDATE:
+        case MessageConstants.MSG_OP_EVT_RUBRIC_COPY:
+        case MessageConstants.MSG_OP_EVT_RUBRIC_DELETE:
+        case MessageConstants.MSG_OP_EVT_QUESTION_RUBRIC_ASSOCIATE:
+            retVal = EventResponseConstants.FORMAT_RUBRIC;
+            break;
+            
         default:
             break;
         }
@@ -532,7 +554,14 @@ public class ResponseObject {
         case MessageConstants.MSG_OP_EVT_COURSE_COPY:
             retVal = this.response.getString(EntityConstants.ORIGINAL_COURSE_ID);
             break;
-
+            
+        case MessageConstants.MSG_OP_EVT_RUBRIC_CREATE:
+        case MessageConstants.MSG_OP_EVT_RUBRIC_UPDATE:
+        case MessageConstants.MSG_OP_EVT_RUBRIC_DELETE:
+        case MessageConstants.MSG_OP_EVT_RUBRIC_COPY:
+            retVal = this.response.getString(EntityConstants.ORIGINAL_RUBRIC_ID);
+            break;
+            
         default:
             break;
         }
@@ -650,6 +679,13 @@ public class ResponseObject {
         case MessageConstants.MSG_OP_EVT_COURSE_REORDER:
             parentContentId = content.getString(EntityConstants.PARENT_COURSE_ID);
             break;
+            
+        case MessageConstants.MSG_OP_EVT_RUBRIC_CREATE:
+        case MessageConstants.MSG_OP_EVT_RUBRIC_UPDATE:
+        case MessageConstants.MSG_OP_EVT_RUBRIC_DELETE:
+        case MessageConstants.MSG_OP_EVT_RUBRIC_COPY:
+            parentContentId = content.getString(EntityConstants.PARENT_RUBRIC_ID);
+            break;
 
         default:
             break;
@@ -754,6 +790,10 @@ public class ResponseObject {
         case MessageConstants.MSG_OP_EVT_COURSE_COPY:
             contentGooruId = content.getString(AJEntityCourse.ID);
             break;
+            
+        case MessageConstants.MSG_OP_EVT_RUBRIC_COPY:
+            contentGooruId = content.getString(AJEntityRubric.ID);
+            break;
 
         default:
             break;
@@ -792,6 +832,10 @@ public class ResponseObject {
 
         case MessageConstants.MSG_OP_EVT_COURSE_COPY:
             originalContentGooruId = content.getString(AJEntityCourse.ORIGINAL_COURSE_ID);
+            break;
+            
+        case MessageConstants.MSG_OP_EVT_RUBRIC_COPY:
+            originalContentGooruId = content.getString(AJEntityRubric.ORIGINAL_RUBRIC_ID);
             break;
 
         default:
