@@ -110,7 +110,7 @@ public final class EventResponseConstants {
   public static final String ID = "id";
   
   public static final String CLIENT_SOURCE_CORE = "core";
-  public static final String CLIENT_SOURCE_COREAUTH = "core-auth";
+  public static final String CLIENT_SOURCE_COREAUTH = "auth";
   
   private EventResponseConstants() {
     throw new AssertionError();
