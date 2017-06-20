@@ -27,7 +27,7 @@ public class ProfileFollowUnfollowResponseObjectBuilder extends ResponseObject {
         String contentId =
             this.body.getJsonObject(EventRequestConstants.EVENT_BODY).getString(EventRequestConstants.USER_ID);
         contextStructure.put(EventResponseConstants.CONTENT_GOORU_ID, contentId);
-        contextStructure.put(EventResponseConstants.CLIENT_SOURCE, (Object) null);
+        contextStructure.put(EventResponseConstants.CLIENT_SOURCE, EventResponseConstants.CLIENT_SOURCE_CORE);
         return contextStructure;
     }
 

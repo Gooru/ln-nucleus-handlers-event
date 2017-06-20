@@ -40,7 +40,7 @@ public class ItemDeleteResponseObjectBuilder extends ResponseObject {
             classIds = RepoBuilder.buildClassRepo(null).getClassIdsForCourse(courseId);
         }
         contextStructure.put(EventResponseConstants.CLASS_GOORU_ID, classIds);
-        contextStructure.put(EventResponseConstants.CLIENT_SOURCE, (Object) null);
+        contextStructure.put(EventResponseConstants.CLIENT_SOURCE, EventResponseConstants.CLIENT_SOURCE_CORE);
         return contextStructure;
     }
 

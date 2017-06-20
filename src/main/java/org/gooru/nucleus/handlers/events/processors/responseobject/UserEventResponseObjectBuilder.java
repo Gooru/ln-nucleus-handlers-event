@@ -20,9 +20,15 @@ public class UserEventResponseObjectBuilder extends ResponseObject {
         eventStructure.put(EventResponseConstants.SESSION, createSessionStructure());
         eventStructure.put(EventResponseConstants.USER, createUserStructure());
         eventStructure.put(EventResponseConstants.VERSION, createVersionStructure());
-        //eventStructure.put(EventResponseConstants.CONTEXT, createContextStructure());
+        eventStructure.put(EventResponseConstants.CONTEXT, createContextStructure());
         eventStructure.put(EventResponseConstants.PAYLOAD_OBJECT, createPayLoadObjectStructure());
         return eventStructure;
+    }
+    
+    private JsonObject createContextStructure() {
+        JsonObject contextStructure = new JsonObject();
+        contextStructure.put(EventResponseConstants.CLIENT_SOURCE, EventResponseConstants.CLIENT_SOURCE_COREAUTH);
+        return contextStructure;
     }
 
     private JsonObject createPayLoadObjectStructure() {
