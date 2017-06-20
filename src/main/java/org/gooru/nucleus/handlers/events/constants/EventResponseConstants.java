@@ -78,7 +78,7 @@ public final class EventResponseConstants {
 
   public static final String VERSION = "version";
   public static final String LOG_API = "logApi";
-  public static final String API_VERSION = "0.1";
+  public static final String API_VERSION = "4.0";
 
   public static final String EMAIL = "email_id";
 
@@ -108,6 +108,9 @@ public final class EventResponseConstants {
   public static final String EVENT_TIMESTAMP = "event.timestamp";
   public static final String EVENT_DUMP = "event.dump";
   public static final String ID = "id";
+  
+  public static final String CLIENT_SOURCE_CORE = "core";
+  public static final String CLIENT_SOURCE_COREAUTH = "core-auth";
   
   private EventResponseConstants() {
     throw new AssertionError();
