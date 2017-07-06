@@ -284,6 +284,14 @@ class MessageProcessor implements Processor {
                 result = processEventUserPasswordChange();
                 break;
                 
+            case MessageConstants.MSG_OP_EVT_BOOKMARK_CREATE:
+                result = processEventBookmarkCreate();
+                break;
+                
+            case MessageConstants.MSG_OP_EVT_BOOKMARK_DELETE:
+                result = processEventBookmarkDelete();
+                break;
+                
             default:
                 LOGGER.error("Invalid operation type passed in, not able to handle");
                 throw new InvalidRequestException();
@@ -294,6 +302,38 @@ class MessageProcessor implements Processor {
                 .generateErrorResponse((JsonObject) (message != null ? message.body() : null)).toString());
         }
         return result;
+    }
+
+    private JsonObject processEventBookmarkCreate() {
+        try {
+            ProcessorContext context = createContext();
+            JsonObject result = RepoBuilder.buildBookmarkRepo(context).createBookmarkEvent();
+            if (result != null) {
+                LOGGER.debug("result returned: {}", result);
+                return ResponseFactory.generateItemCreateResponse(request, result);
+            }
+        } catch (Throwable t) {
+            LOGGER.error("Error while getting content from database:", t);
+        }
+        LOGGER.error("Failed to generate event. Input data received {}", request);
+        TRANSMIT_FAIL_LOGGER.error(ResponseFactory.generateErrorResponse(request).toString());
+        return null;
+    }
+
+    private JsonObject processEventBookmarkDelete() {
+        try {
+            ProcessorContext context = createContext();
+            JsonObject result = RepoBuilder.buildBookmarkRepo(context).deleteBookmarkEvent();
+            if (result != null) {
+                LOGGER.debug("result returned: {}", result);
+                return ResponseFactory.generateItemDeleteResponse(request, result);
+            }
+        } catch (Throwable t) {
+            LOGGER.error("Error while getting content from database:", t);
+        }
+        LOGGER.error("Failed to generate event. Input data received {}", request);
+        TRANSMIT_FAIL_LOGGER.error(ResponseFactory.generateErrorResponse(request).toString());
+        return null;
     }
 
     private JsonObject processEventRubricCreateUpdate() {

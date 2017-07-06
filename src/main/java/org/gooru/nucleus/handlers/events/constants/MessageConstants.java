@@ -93,6 +93,9 @@ public final class MessageConstants {
     //private static final String EVT_INTERNAL_AUTHENTICATE = "event.internal.authenticate";
     //private static final String EVT_INTERNAL_IMPERSONATE = "event.internal.impersonate";
     //private static final String EVT_INTERNAL_LTI_SSO = "event.internal.lti.sso";
+    
+    public static final String MSG_OP_EVT_BOOKMARK_CREATE = "event.bookmark.create";
+    public static final String MSG_OP_EVT_BOOKMARK_DELETE = "event.bookmark.delete";
 
     // Event Structure Type
     public static final int EST_ERROR = -1;

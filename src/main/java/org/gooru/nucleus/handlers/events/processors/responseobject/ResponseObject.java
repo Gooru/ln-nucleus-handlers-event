@@ -115,6 +115,7 @@ public class ResponseObject {
         case MessageConstants.MSG_OP_EVT_COURSE_CREATE:
         case MessageConstants.MSG_OP_EVT_CLASS_CREATE:
         case MessageConstants.MSG_OP_EVT_RUBRIC_CREATE:
+        case MessageConstants.MSG_OP_EVT_BOOKMARK_CREATE:
             retVal = EventResponseConstants.EVENT_ITEM_CREATE;
             break;
 
@@ -150,6 +151,7 @@ public class ResponseObject {
         case MessageConstants.MSG_OP_EVT_COURSE_DELETE:
         case MessageConstants.MSG_OP_EVT_CLASS_DELETE:
         case MessageConstants.MSG_OP_EVT_RUBRIC_DELETE:
+        case MessageConstants.MSG_OP_EVT_BOOKMARK_DELETE:
             retVal = EventResponseConstants.EVENT_ITEM_DELETE;
             break;
             
@@ -273,6 +275,7 @@ public class ResponseObject {
         case MessageConstants.MSG_OP_EVT_COURSE_CREATE:
         case MessageConstants.MSG_OP_EVT_CLASS_CREATE:
         case MessageConstants.MSG_OP_EVT_RUBRIC_CREATE:
+        case MessageConstants.MSG_OP_EVT_BOOKMARK_CREATE:
             retVal = EventResponseConstants.MODE_CREATE;
             break;
 
@@ -308,6 +311,7 @@ public class ResponseObject {
         case MessageConstants.MSG_OP_EVT_COURSE_DELETE:
         case MessageConstants.MSG_OP_EVT_CLASS_DELETE:
         case MessageConstants.MSG_OP_EVT_RUBRIC_DELETE:
+        case MessageConstants.MSG_OP_EVT_BOOKMARK_DELETE:
             retVal = EventResponseConstants.MODE_DELETE;
             break;
 
@@ -487,6 +491,11 @@ public class ResponseObject {
         case MessageConstants.MSG_OP_EVT_RUBRIC_DELETE:
         case MessageConstants.MSG_OP_EVT_QUESTION_RUBRIC_ASSOCIATE:
             retVal = EventResponseConstants.FORMAT_RUBRIC;
+            break;
+            
+        case MessageConstants.MSG_OP_EVT_BOOKMARK_CREATE:
+        case MessageConstants.MSG_OP_EVT_BOOKMARK_DELETE:
+            retVal = EventResponseConstants.FORMAT_BOOKMARK;
             break;
             
         default:

@@ -43,6 +43,10 @@ public final class AJRepoBuilder {
     public static RubricRepo buildRubricRepo(ProcessorContext context) {
         return new AJRubricRepo(context);
     }
+    
+    public static BookmarkRepo buildBookmarkRepo(ProcessorContext context) {
+        return new AJBookmarkRepo(context);
+    }
 
     private AJRepoBuilder() {
         throw new AssertionError();

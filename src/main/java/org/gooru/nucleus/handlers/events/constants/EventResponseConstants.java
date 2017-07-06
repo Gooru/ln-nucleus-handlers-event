@@ -91,6 +91,7 @@ public final class EventResponseConstants {
   public static final String FORMAT_COURSE = "course";
   public static final String FORMAT_CLASS = "class";
   public static final String FORMAT_RUBRIC = "rubric";
+  public static final String FORMAT_BOOKMARK = "bookmark";
 
   public static final String ITEM_TYPE_COLLECTION_RESOURCE = "collection.resource";
   public static final String ITEM_TYPE_COLLECTION_QUESTION = "collection.question";
