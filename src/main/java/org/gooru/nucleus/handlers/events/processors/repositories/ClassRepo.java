@@ -23,4 +23,6 @@ public interface ClassRepo {
     String getClassIdsForCourse(String courseId);
 
     JsonObject classRemoveStudentEvent();
+    
+    JsonObject archiveClass();
 }

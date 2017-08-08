@@ -61,8 +61,7 @@ public class EventPublisherVerticle extends AbstractVerticle {
 
                                 String eventName = result.getString(EventResponseConstants.EVENT_NAME);
                                 MessageDispatcher.getInstance().sendMessage2Kafka(eventName, result);
-                                LOGGER.debug("Dispatched Event ID: {}",
-                                    result.getString(EventResponseConstants.EVENT_ID));
+                                LOGGER.debug("Dispatched Event ID: {}", result.getString(EventResponseConstants.EVENT_ID));
                                 LOGGER.info("Message dispatched successfully for event: {}", eventName);
 
                                 // Forward the call to email processor
@@ -76,8 +75,7 @@ public class EventPublisherVerticle extends AbstractVerticle {
                                     }
                                 }
                             } else {    
-                                LOGGER.warn(
-                                    "No data received from database interaction for this. So, no message being relayed to Kafka.");
+                                LOGGER.warn("No data received from database interaction for this. So, no message being relayed to Kafka.");
                             }
                         } else {
                             LOGGER.error("Error processing the database interactions!!");
@@ -89,8 +87,7 @@ public class EventPublisherVerticle extends AbstractVerticle {
                         LOGGER.info("EventPublish handler end point ready to listen");
                         voidFuture.complete();
                     } else {
-                        LOGGER.error(
-                            "Error registering the EventPublish handler. Halting the EventPublish Handler machinery");
+                        LOGGER.error("Error registering the EventPublish handler. Halting the EventPublish Handler machinery");
                         voidFuture.fail(result.cause());
                         Runtime.getRuntime().halt(1);
                     }

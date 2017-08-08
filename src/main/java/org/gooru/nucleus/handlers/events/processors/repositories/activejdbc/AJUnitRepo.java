@@ -59,17 +59,17 @@ public class AJUnitRepo implements UnitRepo {
             LOGGER.error("no target exists in move unit event");
             return response;
         }
-        
+
         String targetCourseId = target.getString(EventRequestConstants.COURSE_ID);
         JsonObject targetCourse = RepoBuilder.buildCourseRepo(null).getCourse(targetCourseId);
         response.put(EventResponseConstants.TARGET, targetCourse);
-        
+
         JsonObject source = context.eventBody().getJsonObject(EventRequestConstants.SOURCE);
         if (source == null || source.isEmpty()) {
             LOGGER.error("no source exists in move unit event");
             return response;
         }
-        
+
         String sourceCourseId = source.getString(EventRequestConstants.COURSE_ID);
         JsonObject sourceCourse = RepoBuilder.buildCourseRepo(null).getCourse(sourceCourseId);
         response.put(EventResponseConstants.SOURCE, sourceCourse);

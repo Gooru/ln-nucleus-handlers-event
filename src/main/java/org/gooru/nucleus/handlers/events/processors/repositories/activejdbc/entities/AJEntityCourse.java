@@ -30,16 +30,18 @@ public class AJEntityCourse extends Model {
     public static final String SEQUENCE_ID = "sequence_id";
     public static final String SUBJECT_BUCKET = "subject_bucket";
     public static final String CREATOR_SYSTEM = "creator_system";
+    public static final String TENANT = "tenant";
+    public static final String TENANT_ROOT = "tenant_root";
 
     public static final String SELECT_COURSE =
         "SELECT id, title, description, created_at, updated_at, owner_id, creator_id, modifier_id, original_creator_id, original_course_id,"
             + " parent_course_id, publish_date, publish_status, thumbnail, metadata, taxonomy, collaborator, visible_on_profile, is_deleted,"
-            + " sequence_id, subject_bucket, creator_system FROM course WHERE id = ?::uuid";
-    
+            + " sequence_id, subject_bucket, creator_system, tenant, tenant_root FROM course WHERE id = ?::uuid";
+
     public static final String SELECT_COLLABORATOR = "SELECT collaborator FROM course where  id = ?::uuid";
 
-    public static final List<String> ALL_FIELDS =
-        Arrays.asList(ID, TITLE, DESCRIPTION, OWNER_ID, CREATOR_ID, ORIGINAL_CREATOR_ID, MODIFIER_ID,
-            ORIGINAL_COURSE_ID, PUBLISH_STATUS, PUBLISH_DATE, THUMBNAIL, METADATA, TAXONOMY, COLLABORATOR,
-            VISIBLE_ON_PROFILE, IS_DELETED, CREATED_AT, UPDATED_AT, SEQUENCE_ID, SUBJECT_BUCKET, CREATOR_SYSTEM);
+    public static final List<String> ALL_FIELDS = Arrays.asList(ID, TITLE, DESCRIPTION, OWNER_ID, CREATOR_ID,
+        ORIGINAL_CREATOR_ID, MODIFIER_ID, ORIGINAL_COURSE_ID, PUBLISH_STATUS, PUBLISH_DATE, THUMBNAIL, METADATA,
+        TAXONOMY, COLLABORATOR, VISIBLE_ON_PROFILE, IS_DELETED, CREATED_AT, UPDATED_AT, SEQUENCE_ID, SUBJECT_BUCKET,
+        CREATOR_SYSTEM, TENANT, TENANT_ROOT);
 }
