@@ -5,12 +5,16 @@ import org.gooru.nucleus.handlers.events.constants.EventResponseConstants;
 
 import io.vertx.core.json.JsonObject;
 
-public class JoinClassResponseObjectBuilder extends ResponseObject {
+/**
+ * @author szgooru
+ * Created On: 17-May-2017
+ */
+public class ClassArchiveResponseObject extends ResponseObject {
 
-    public JoinClassResponseObjectBuilder(JsonObject body, JsonObject response) {
+    public ClassArchiveResponseObject(JsonObject body, JsonObject response) {
         super(body, response);
     }
-
+    
     public JsonObject build() {
         JsonObject eventStructure = createGenericStructure();
         eventStructure.put(EventResponseConstants.METRICS, createMetricsStructure());
@@ -32,8 +36,7 @@ public class JoinClassResponseObjectBuilder extends ResponseObject {
     }
 
     private JsonObject createPayLoadObjectStructure() {
-        JsonObject payloadStructure = new JsonObject();
-        payloadStructure.put(EventResponseConstants.DATA, this.response);
+        JsonObject payloadStructure = response;
         payloadStructure.put(EventResponseConstants.CONTENT_FORMAT, getContentFormatFromResponse());
         payloadStructure.put(EventResponseConstants.SUB_EVENT_NAME, getSubEventName());
         return payloadStructure;

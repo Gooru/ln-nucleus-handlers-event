@@ -15,12 +15,14 @@
    	"batch.size" : 10,
    	"retries" : 2,
    	"linger.ms" : 1,
-	  "buffer.memory" : 33554432,
-	  "topic" : "prodContentLog",
-	  "testEnvironmentWithoutKafkaServer" : true
+	"buffer.memory" : 33554432,
+	"topic" : "prodContentLog",
+	"contentEnricherTopic" : "watson.tag.entity",
+	"testEnvironmentWithoutKafkaServer" : true
   },
   "emailSettings" : {
     "api.host" : "nucleus.gooru.org",
+    "api.port" : 8084,
     "api.endpoint" : "/api/nucleus-utils/v1/emails"
   }
 }

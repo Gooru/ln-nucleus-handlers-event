@@ -1,13 +1,16 @@
 package org.gooru.nucleus.handlers.events.processors.responseobject;
 
-import org.gooru.nucleus.handlers.events.constants.EventRequestConstants;
 import org.gooru.nucleus.handlers.events.constants.EventResponseConstants;
 
 import io.vertx.core.json.JsonObject;
 
-public class JoinClassResponseObjectBuilder extends ResponseObject {
+/**
+ * @author szgooru
+ * Created On: 03-Mar-2017
+ */
+public class UserEventResponseObjectBuilder extends ResponseObject {
 
-    public JoinClassResponseObjectBuilder(JsonObject body, JsonObject response) {
+    public UserEventResponseObjectBuilder(JsonObject body, JsonObject response) {
         super(body, response);
     }
 
@@ -21,22 +24,17 @@ public class JoinClassResponseObjectBuilder extends ResponseObject {
         eventStructure.put(EventResponseConstants.PAYLOAD_OBJECT, createPayLoadObjectStructure());
         return eventStructure;
     }
-
+    
     private JsonObject createContextStructure() {
         JsonObject contextStructure = new JsonObject();
-        String contentId =
-            this.body.getJsonObject(EventRequestConstants.EVENT_BODY).getString(EventRequestConstants.ID);
-        contextStructure.put(EventResponseConstants.CONTENT_GOORU_ID, contentId);
-        contextStructure.put(EventResponseConstants.CLIENT_SOURCE, EventResponseConstants.CLIENT_SOURCE_CORE);
+        contextStructure.put(EventResponseConstants.CLIENT_SOURCE, EventResponseConstants.CLIENT_SOURCE_COREAUTH);
         return contextStructure;
     }
 
     private JsonObject createPayLoadObjectStructure() {
         JsonObject payloadStructure = new JsonObject();
         payloadStructure.put(EventResponseConstants.DATA, this.response);
-        payloadStructure.put(EventResponseConstants.CONTENT_FORMAT, getContentFormatFromResponse());
         payloadStructure.put(EventResponseConstants.SUB_EVENT_NAME, getSubEventName());
         return payloadStructure;
     }
-
 }

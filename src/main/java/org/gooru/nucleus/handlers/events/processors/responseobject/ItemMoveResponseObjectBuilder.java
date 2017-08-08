@@ -28,7 +28,7 @@ public class ItemMoveResponseObjectBuilder extends ResponseObject {
         String contentId =
             this.body.getJsonObject(EventRequestConstants.EVENT_BODY).getString(EventRequestConstants.ID);
         contextStructure.put(EventResponseConstants.CONTENT_GOORU_ID, contentId);
-        contextStructure.put(EventResponseConstants.CLIENT_SOURCE, (Object) null);
+        contextStructure.put(EventResponseConstants.CLIENT_SOURCE, EventResponseConstants.CLIENT_SOURCE_CORE);
         return contextStructure;
     }
 
@@ -36,7 +36,7 @@ public class ItemMoveResponseObjectBuilder extends ResponseObject {
         JsonObject payloadStructure = new JsonObject();
         payloadStructure.put(EventResponseConstants.SOURCE, getSourceStructure());
         payloadStructure.put(EventResponseConstants.TARGET, getTargetStructure());
-        payloadStructure.put(EventResponseConstants.CONTENT_FORMAT, getContentFormatFromResponse());
+        payloadStructure.put(EventResponseConstants.CONTENT_FORMAT, body.getJsonObject(EventRequestConstants.EVENT_BODY).getJsonObject(EventResponseConstants.SOURCE).getString(EventResponseConstants.TYPE));
         payloadStructure.put(EventResponseConstants.SUB_EVENT_NAME, getSubEventName());
         return payloadStructure;
     }

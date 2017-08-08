@@ -5,9 +5,12 @@ import org.gooru.nucleus.handlers.events.constants.EventResponseConstants;
 
 import io.vertx.core.json.JsonObject;
 
-public class JoinClassResponseObjectBuilder extends ResponseObject {
+/**
+ * @author szgooru Created On: 05-Jun-2017
+ */
+public class AssociateRubricToQuestionResponseObject extends ResponseObject {
 
-    public JoinClassResponseObjectBuilder(JsonObject body, JsonObject response) {
+    protected AssociateRubricToQuestionResponseObject(JsonObject body, JsonObject response) {
         super(body, response);
     }
 

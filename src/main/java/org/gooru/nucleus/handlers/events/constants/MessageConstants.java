@@ -3,6 +3,7 @@ package org.gooru.nucleus.handlers.events.constants;
 public final class MessageConstants {
     
     public static final String MSG_HEADER_OP = "mb.operation";
+    public static final String ANONYMOUS_USER = "anonymous";
 
     // Operation names: Also need to be updated in corresponding handlers
     public static final String MSG_OP_EVENT_PUBLISH = "event.publish";
@@ -67,9 +68,34 @@ public final class MessageConstants {
     public static final String MSG_OP_EVT_CLASS_COURSE_ASSIGNED = "event.class.course.assigned";
     public static final String MSG_OP_EVT_CLASS_CONTENT_VISIBLE = "event.class.content.visible";
     public static final String MSG_OP_EVT_CLASS_STUDENT_REMOVAL = "event.class.student.remove";
-
+    public static final String MSG_OP_EVT_CLASS_ARCHIVE = "event.class.archive";
+    
     public static final String MSG_OP_EVT_PROFILE_FOLLOW = "event.profile.follow";
     public static final String MSG_OP_EVT_PROFILE_UNFOLLOW = "event.profile.unfollow";
+    
+    public static final String MSG_OP_EVT_RUBRIC_CREATE = "event.rubric.create";
+    public static final String MSG_OP_EVT_RUBRIC_UPDATE = "event.rubric.update";
+    public static final String MSG_OP_EVT_RUBRIC_DELETE = "event.rubric.delete";
+    public static final String MSG_OP_EVT_RUBRIC_COPY = "event.rubric.copy";
+    public static final String MSG_OP_EVT_QUESTION_RUBRIC_ASSOCIATE = "question.rubirc.association";
+    
+    public static final String MSG_OP_EVT_ANONYMOUS_SIGNIN = "event.anonymous.signin";
+    public static final String MSG_OP_EVT_USER_SIGNIN = "event.user.signin";
+    public static final String MSG_OP_EVT_USER_SIGNOUT = "event.user.signout";
+    //private static final String EVT_USER_TOKEN_CHECK = "event.user.token.check";
+    //private static final String EVT_USER_TOKEN_DETAILS = "event.user.token.details";
+    //private static final String EVT_USER_AUTHORIZE = "event.user.authorize";
+    public static final String MSG_OP_EVT_USER_SIGNUP = "event.user.signup";
+    public static final String MSG_OP_EVT_USER_UPDATE = "event.user.update";
+    public static final String MSG_OP_EVT_USER_PASSWORD_RESET_TRIGGER = "event.user.password.reset.trigger";
+    public static final String MSG_OP_EVT_USER_PASSWORD_RESET = "event.user.password.reset";
+    public static final String MSG_OP_EVT_USER_PASSWORD_CHANGE = "event.user.password.change";
+    //private static final String EVT_INTERNAL_AUTHENTICATE = "event.internal.authenticate";
+    //private static final String EVT_INTERNAL_IMPERSONATE = "event.internal.impersonate";
+    //private static final String EVT_INTERNAL_LTI_SSO = "event.internal.lti.sso";
+    
+    public static final String MSG_OP_EVT_BOOKMARK_CREATE = "event.bookmark.create";
+    public static final String MSG_OP_EVT_BOOKMARK_DELETE = "event.bookmark.delete";
 
     // Event Structure Type
     public static final int EST_ERROR = -1;
@@ -89,7 +115,18 @@ public final class MessageConstants {
     public static final int EST_CLASS_CONTENT_VISIBILITY = 13;
     public static final int EST_REMOVE_STUDENT = 14;
     public static final int EST_ITEM_REMOVE = 15;
+    
+    public static final int EST_USER_SIGNIN = 16;
+    public static final int EST_USER_SIGNOUT = 17;
+    public static final int EST_USER_SIGNUP = 18;
+    public static final int EST_USER_UPDATE = 19;
+    public static final int EST_USER_PASSWORD_RESET_TRG = 20;
+    public static final int EST_USER_PASSWORD_RESET = 21;
+    public static final int EST_USER_PASSWORD_CHANGE = 22;
 
+    public static final int EST_CLASS_ARCHIVE = 23;
+    public static final int EST_ASSOCIATE_RUBRIC_QUESTION = 24;
+    
     private MessageConstants() {
         throw new AssertionError();
     }

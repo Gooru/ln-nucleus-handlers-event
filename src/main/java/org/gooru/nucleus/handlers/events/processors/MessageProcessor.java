@@ -193,7 +193,23 @@ class MessageProcessor implements Processor {
             case MessageConstants.MSG_OP_EVT_QUESTION_DELETE:
                 result = processEventQuestionDelete();
                 break;
-
+            case MessageConstants.MSG_OP_EVT_RUBRIC_CREATE:
+            case MessageConstants.MSG_OP_EVT_RUBRIC_UPDATE:
+                result = processEventRubricCreateUpdate();
+                break;
+                
+            case MessageConstants.MSG_OP_EVT_RUBRIC_COPY:
+                result = processEventRubricCopy();
+                break;
+                
+            case MessageConstants.MSG_OP_EVT_RUBRIC_DELETE:
+                result = processEventRubricDelete();
+                break;
+                
+            case MessageConstants.MSG_OP_EVT_QUESTION_RUBRIC_ASSOCIATE:
+                result = processEventQuestionRubricAssociation();
+                break;
+            
             case MessageConstants.MSG_OP_EVT_CLASS_CREATE:
             case MessageConstants.MSG_OP_EVT_CLASS_UPDATE:
                 result = processEventClassCreateUpdate();
@@ -226,12 +242,56 @@ class MessageProcessor implements Processor {
             case MessageConstants.MSG_OP_EVT_CLASS_STUDENT_REMOVAL:
                 result = processEventClassStudentRemove();
                 break;
+                
+            case MessageConstants.MSG_OP_EVT_CLASS_ARCHIVE:
+                result = processEventClassArchive();
+                break;
 
             case MessageConstants.MSG_OP_EVT_PROFILE_FOLLOW:
             case MessageConstants.MSG_OP_EVT_PROFILE_UNFOLLOW:
                 result = processEventProfileFollowUnfollow();
                 break;
-
+                
+            case MessageConstants.MSG_OP_EVT_ANONYMOUS_SIGNIN:
+                result = processEventAnonymousSingin();
+                break;
+                
+            case MessageConstants.MSG_OP_EVT_USER_SIGNIN:
+                result = processEventUserSignin();
+                break;
+                
+            case MessageConstants.MSG_OP_EVT_USER_SIGNOUT:
+                result = processEventUserSignout();
+                break;
+                
+            case MessageConstants.MSG_OP_EVT_USER_SIGNUP:
+                result = processEventUserSignup();
+                break;
+                
+            case MessageConstants.MSG_OP_EVT_USER_UPDATE:
+                result = processEventUserUpdate();
+                break;
+                
+            case MessageConstants.MSG_OP_EVT_USER_PASSWORD_RESET_TRIGGER:
+                result = processEventUserPasswordResetTrigger();
+                break;
+                
+            case MessageConstants.MSG_OP_EVT_USER_PASSWORD_RESET:
+                result = processEventUserPasswordReset();
+                break;
+                
+            case MessageConstants.MSG_OP_EVT_USER_PASSWORD_CHANGE:
+                result = processEventUserPasswordChange();
+                break;
+                
+            case MessageConstants.MSG_OP_EVT_BOOKMARK_CREATE:
+                result = processEventBookmarkCreate();
+                break;
+                
+            case MessageConstants.MSG_OP_EVT_BOOKMARK_DELETE:
+                result = processEventBookmarkDelete();
+                break;
+                
             default:
                 LOGGER.error("Invalid operation type passed in, not able to handle");
                 throw new InvalidRequestException();
@@ -242,6 +302,226 @@ class MessageProcessor implements Processor {
                 .generateErrorResponse((JsonObject) (message != null ? message.body() : null)).toString());
         }
         return result;
+    }
+
+    private JsonObject processEventBookmarkCreate() {
+        try {
+            ProcessorContext context = createContext();
+            JsonObject result = RepoBuilder.buildBookmarkRepo(context).createBookmarkEvent();
+            if (result != null) {
+                LOGGER.debug("result returned: {}", result);
+                return ResponseFactory.generateItemCreateResponse(request, result);
+            }
+        } catch (Throwable t) {
+            LOGGER.error("Error while getting content from database:", t);
+        }
+        LOGGER.error("Failed to generate event. Input data received {}", request);
+        TRANSMIT_FAIL_LOGGER.error(ResponseFactory.generateErrorResponse(request).toString());
+        return null;
+    }
+
+    private JsonObject processEventBookmarkDelete() {
+        try {
+            ProcessorContext context = createContext();
+            JsonObject result = RepoBuilder.buildBookmarkRepo(context).deleteBookmarkEvent();
+            if (result != null) {
+                LOGGER.debug("result returned: {}", result);
+                return ResponseFactory.generateItemDeleteResponse(request, result);
+            }
+        } catch (Throwable t) {
+            LOGGER.error("Error while getting content from database:", t);
+        }
+        LOGGER.error("Failed to generate event. Input data received {}", request);
+        TRANSMIT_FAIL_LOGGER.error(ResponseFactory.generateErrorResponse(request).toString());
+        return null;
+    }
+
+    private JsonObject processEventRubricCreateUpdate() {
+        try {
+            ProcessorContext context = createContext();
+            JsonObject result = RepoBuilder.buildRubricRepo(context).createUpdateRubricEvent();
+            if (result != null) {
+                LOGGER.debug("result returned: {}", result);
+                return ResponseFactory.generateItemCreateResponse(request, result);
+            }
+        } catch (Throwable t) {
+            LOGGER.error("Error while getting content from database:", t);
+        }
+        LOGGER.error("Failed to generate event. Input data received {}", request);
+        TRANSMIT_FAIL_LOGGER.error(ResponseFactory.generateErrorResponse(request).toString());
+        return null;
+    }
+
+    private JsonObject processEventRubricCopy() {
+        try {
+            ProcessorContext context = createContext();
+            JsonObject result = RepoBuilder.buildRubricRepo(context).copyRubricEvent();
+            if (result != null) {
+                LOGGER.debug("result returned: {}", result);
+                return ResponseFactory.generateItemCopyResponse(request, result);
+            }
+        } catch (Throwable t) {
+            LOGGER.error("Error while getting content from database:", t);
+        }
+        LOGGER.error("Failed to generate event. Input data received {}", request);
+        TRANSMIT_FAIL_LOGGER.error(ResponseFactory.generateErrorResponse(request).toString());
+        return null;
+    }
+
+    private JsonObject processEventRubricDelete() {
+        try {
+            ProcessorContext context = createContext();
+            JsonObject result = RepoBuilder.buildRubricRepo(context).deleteRubricEvent();
+            if (result != null) {
+                LOGGER.debug("result returned: {}", result);
+                return ResponseFactory.generateItemDeleteResponse(request, result);
+            }
+        } catch (Throwable t) {
+            LOGGER.error("Error while getting content from database:", t);
+        }
+        LOGGER.error("Failed to generate event. Input data received {}", request);
+        TRANSMIT_FAIL_LOGGER.error(ResponseFactory.generateErrorResponse(request).toString());
+        return null;
+    }
+
+    private JsonObject processEventQuestionRubricAssociation() {
+        try {
+            ProcessorContext context = createContext();
+            JsonObject result = RepoBuilder.buildRubricRepo(context).associateRubricToQuestionEvent();
+            if (result != null) {
+                LOGGER.debug("result returned: {}", result);
+                return ResponseFactory.generateAssociateRubricToQuestionResponse(request, result);
+            }
+        } catch (Throwable t) {
+            LOGGER.error("Error while getting content from database:", t);
+        }
+        LOGGER.error("Failed to generate event. Input data received {}", request);
+        TRANSMIT_FAIL_LOGGER.error(ResponseFactory.generateErrorResponse(request).toString());
+        return null;
+    }
+
+    private JsonObject processEventUserPasswordChange() {
+        try {
+            ProcessorContext context = createContext();
+            JsonObject result = RepoBuilder.buildUserRepo(context).userChangePassword();
+            if (result != null) {
+                LOGGER.debug("result returned: {}", result);
+                return ResponseFactory.generateResponse(request, result, MessageConstants.EST_USER_PASSWORD_CHANGE);
+            }
+            
+        } catch (Throwable t) {
+            LOGGER.error("Error while getting user details from DB", t);
+        }
+        LOGGER.error("Failed to generate event. Input data received {}", request);
+        TRANSMIT_FAIL_LOGGER.error(ResponseFactory.generateErrorResponse(request).toString());
+        return null;
+    }
+
+    private JsonObject processEventUserPasswordReset() {
+        try {
+            ProcessorContext context = createContext();
+            JsonObject result = RepoBuilder.buildUserRepo(context).userResetPassword();
+            if (result != null) {
+                LOGGER.debug("result returned: {}", result);
+                return ResponseFactory.generateResponse(request, result, MessageConstants.EST_USER_PASSWORD_RESET);
+            }
+            
+        } catch (Throwable t) {
+            LOGGER.error("Error while getting user details from DB", t);
+        }
+        LOGGER.error("Failed to generate event. Input data received {}", request);
+        TRANSMIT_FAIL_LOGGER.error(ResponseFactory.generateErrorResponse(request).toString());
+        return null;
+    }
+
+    private JsonObject processEventUserPasswordResetTrigger() {
+        try {
+            ProcessorContext context = createContext();
+            JsonObject result = RepoBuilder.buildUserRepo(context).userResetPasswordTrigger();
+            if (result != null) {
+                LOGGER.debug("result returned: {}", result);
+                return ResponseFactory.generateResponse(request, result, MessageConstants.EST_USER_PASSWORD_RESET_TRG);
+            }
+            
+        } catch (Throwable t) {
+            LOGGER.error("Error while getting user details from DB", t);
+        }
+        LOGGER.error("Failed to generate event. Input data received {}", request);
+        TRANSMIT_FAIL_LOGGER.error(ResponseFactory.generateErrorResponse(request).toString());
+        return null;
+    }
+
+    private JsonObject processEventUserUpdate() {
+        try {
+            ProcessorContext context = createContext();
+            JsonObject result = RepoBuilder.buildUserRepo(context).userUpdate();
+            if (result != null) {
+                LOGGER.debug("result returned: {}", result);
+                return ResponseFactory.generateResponse(request, result, MessageConstants.EST_USER_UPDATE);
+            }
+            
+        } catch (Throwable t) {
+            LOGGER.error("Error while getting user details from DB", t);
+        }
+        LOGGER.error("Failed to generate event. Input data received {}", request);
+        TRANSMIT_FAIL_LOGGER.error(ResponseFactory.generateErrorResponse(request).toString());
+        return null;
+    }
+
+    private JsonObject processEventUserSignup() {
+        try {
+            ProcessorContext context = createContext();
+            JsonObject result = RepoBuilder.buildUserRepo(context).userSignup();
+            if (result != null) {
+                LOGGER.debug("result returned: {}", result);
+                return ResponseFactory.generateResponse(request, result, MessageConstants.EST_USER_SIGNUP);
+            }
+            
+        } catch (Throwable t) {
+            LOGGER.error("Error while getting user details from DB", t);
+        }
+        LOGGER.error("Failed to generate event. Input data received {}", request);
+        TRANSMIT_FAIL_LOGGER.error(ResponseFactory.generateErrorResponse(request).toString());
+        return null;
+    }
+
+    private JsonObject processEventUserSignout() {
+        try {
+            ProcessorContext context = createContext();
+            JsonObject result = RepoBuilder.buildUserRepo(context).userSignout();
+            if (result != null) {
+                LOGGER.debug("result returned: {}", result);
+                return ResponseFactory.generateResponse(request, result, MessageConstants.EST_USER_SIGNOUT);
+            }
+            
+        } catch (Throwable t) {
+            LOGGER.error("Error while getting user details from DB", t);
+        }
+        LOGGER.error("Failed to generate event. Input data received {}", request);
+        TRANSMIT_FAIL_LOGGER.error(ResponseFactory.generateErrorResponse(request).toString());
+        return null;
+    }
+
+    private JsonObject processEventUserSignin() {
+        try {
+            ProcessorContext context = createContext();
+            JsonObject result = RepoBuilder.buildUserRepo(context).userSignin();
+            if (result != null) {
+                LOGGER.debug("result returned: {}", result);
+                return ResponseFactory.generateResponse(request, result, MessageConstants.EST_USER_SIGNIN);
+            }
+            
+        } catch (Throwable t) {
+            LOGGER.error("Error while getting user details from DB", t);
+        }
+        LOGGER.error("Failed to generate event. Input data received {}", request);
+        TRANSMIT_FAIL_LOGGER.error(ResponseFactory.generateErrorResponse(request).toString());
+        return null;
+    }
+
+    private JsonObject processEventAnonymousSingin() {
+        // TODO Auto-generated method stub
+        return null;
     }
 
     private JsonObject processEventCollectionRemove() {
@@ -623,6 +903,8 @@ class MessageProcessor implements Processor {
             JsonObject result = RepoBuilder.buildCollectionRepo(context).moveCollectionEvent();
             if (result != null) {
                 LOGGER.debug("result returned: {}", result);
+                LOGGER.debug("Request returned: {}", request);
+
                 return ResponseFactory.generateItemMoveResponse(request, result);
             }
         } catch (Throwable t) {
@@ -960,6 +1242,22 @@ class MessageProcessor implements Processor {
             if (result != null) {
                 LOGGER.debug("result returned: {}", result);
                 return ResponseFactory.generateClassStudentRemoveResponse(request, result);
+            }
+        } catch (Throwable t) {
+            LOGGER.error("Error while getting content from database:", t);
+        }
+        LOGGER.error("Failed to generate event. Input data received {}", request);
+        TRANSMIT_FAIL_LOGGER.error(ResponseFactory.generateErrorResponse(request).toString());
+        return null;
+    }
+    
+    private JsonObject processEventClassArchive() {
+        try {
+            ProcessorContext context = createContext();
+            JsonObject result = RepoBuilder.buildClassRepo(context).archiveClass();
+            if (result != null) {
+                LOGGER.debug("result returned: {}", result);
+                return ResponseFactory.generateClassArchiveResponse(request, result);
             }
         } catch (Throwable t) {
             LOGGER.error("Error while getting content from database:", t);

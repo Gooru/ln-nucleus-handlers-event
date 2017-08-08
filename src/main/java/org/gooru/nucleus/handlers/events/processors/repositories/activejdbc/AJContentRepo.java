@@ -132,31 +132,32 @@ public class AJContentRepo implements ContentRepo {
         LOGGER.debug("getting original resource for id {}", resourceId);
 
         JsonObject result = null;
-        LazyList<AJEntityOriginalResource> resources = AJEntityOriginalResource.findBySQL(AJEntityOriginalResource.SELECT_ORIGINAL_RESOURCE, resourceId);
+        LazyList<AJEntityOriginalResource> resources =
+            AJEntityOriginalResource.findBySQL(AJEntityOriginalResource.SELECT_ORIGINAL_RESOURCE, resourceId);
         if (!resources.isEmpty()) {
             result = new JsonObject(new JsonFormatterBuilder()
-                .buildSimpleJsonFormatter(false, AJEntityOriginalResource.ORIGINAL_RESOURCE_FIELDS).toJson(resources.get(0)));
-            String VALUE_NULL = null;
-            result.put(AJEntityContent.ORIGINAL_CREATOR_ID, VALUE_NULL);
-            result.put(AJEntityContent.ORIGINAL_CONTENT_ID, VALUE_NULL);
-            result.put(AJEntityContent.PARENT_CONTENT_ID, VALUE_NULL);
-            result.put(AJEntityContent.COURSE_ID, VALUE_NULL);
-            result.put(AJEntityContent.UNIT_ID, VALUE_NULL);
-            result.put(AJEntityContent.LESSON_ID, VALUE_NULL);
-            result.put(AJEntityContent.COLLECTION_ID, VALUE_NULL);
+                .buildSimpleJsonFormatter(false, AJEntityOriginalResource.ORIGINAL_RESOURCE_FIELDS)
+                .toJson(resources.get(0)));
+            result.putNull(AJEntityContent.ORIGINAL_CREATOR_ID);
+            result.putNull(AJEntityContent.ORIGINAL_CONTENT_ID);
+            result.putNull(AJEntityContent.PARENT_CONTENT_ID);
+            result.putNull(AJEntityContent.COURSE_ID);
+            result.putNull(AJEntityContent.UNIT_ID);
+            result.putNull(AJEntityContent.LESSON_ID);
+            result.putNull(AJEntityContent.COLLECTION_ID);
             result.put(AJEntityContent.CONTENT_FORMAT, "resource");
         }
 
         Base.close();
         return result;
     }
-    
+
     private JsonObject getResource(String id) {
         JsonObject result = getOriginalResource(id);
         if (result == null || result.isEmpty()) {
             result = getReferenceResource(id);
         }
-        
+
         return result;
     }
 

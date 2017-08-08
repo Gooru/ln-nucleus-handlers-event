@@ -32,12 +32,20 @@ public final class RepoBuilder {
         return AJRepoBuilder.buildClassRepo(context);
     }
 
-    public static UserRepo buildUserRepo(ProcessorContext context) {
+    public static UsersRepo buildUserRepo(ProcessorContext context) {
         return AJRepoBuilder.buildUserRepo(context);
     }
 
     public static ProfileRepo buildProfileRepo(ProcessorContext context) {
         return AJRepoBuilder.buildProfileRepo(context);
+    }
+    
+    public static RubricRepo buildRubricRepo(ProcessorContext context) {
+        return AJRepoBuilder.buildRubricRepo(context);
+    }
+    
+    public static BookmarkRepo buildBookmarkRepo(ProcessorContext context) {
+        return AJRepoBuilder.buildBookmarkRepo(context);
     }
 
     private RepoBuilder() {
