@@ -1,7 +1,8 @@
 package org.gooru.nucleus.handlers.events.app.components;
 
-import io.vertx.core.Vertx;
-import io.vertx.core.json.JsonObject;
+import java.util.Map;
+import java.util.Properties;
+
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -10,8 +11,8 @@ import org.gooru.nucleus.handlers.events.bootstrap.startup.Initializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Map;
-import java.util.Properties;
+import io.vertx.core.Vertx;
+import io.vertx.core.json.JsonObject;
 
 public final class KafkaRegistry implements Initializer, Finalizer {
 
@@ -20,7 +21,7 @@ public final class KafkaRegistry implements Initializer, Finalizer {
     private Producer<String, String> kafkaProducer;
 
     private String KAFKA_TOPIC = "prodContentLog";
-    private String CONTENT_ENRICHER_TOPIC = null; // null in case this is not needed
+
     private boolean testWithoutKafkaServer = false;
 
     private volatile boolean initialized = false;
@@ -91,10 +92,7 @@ public final class KafkaRegistry implements Initializer, Finalizer {
                 this.KAFKA_TOPIC = entry.getValue().toString();
                 LOGGER.debug("KAFKA_TOPIC : " + this.KAFKA_TOPIC);
                 break;
-            case "contentEnricherTopic" :
-                this.CONTENT_ENRICHER_TOPIC = entry.getValue().toString();
-                LOGGER.debug("CONTENT_ENRICHER_TOPIC : " + this.CONTENT_ENRICHER_TOPIC);
-                break;
+
             case ProducerConfig.REQUEST_TIMEOUT_MS_CONFIG:
                 properties.setProperty(ProducerConfig.REQUEST_TIMEOUT_MS_CONFIG, String.valueOf(entry.getValue()));
                 LOGGER.debug("REQUEST_TIMEOUT_MS_CONFIG : " + entry.getValue());
@@ -139,10 +137,6 @@ public final class KafkaRegistry implements Initializer, Finalizer {
 
     public String getKafkaTopic() {
         return this.KAFKA_TOPIC;
-    }
-    
-    public String getContentEnricherTopic() {
-      return this.CONTENT_ENRICHER_TOPIC;
     }
 
     public static KafkaRegistry getInstance() {
