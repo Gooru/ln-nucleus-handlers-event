@@ -20,8 +20,9 @@
 	"testEnvironmentWithoutKafkaServer" : true
   },
   "emailSettings" : {
-    "api.host" : "nucleus.gooru.org",
+    "api.host" : "localhost",
     "api.port" : 8084,
-    "api.endpoint" : "/api/nucleus-utils/v1/emails"
+    "api.endpoint" : "/api/nucleus-utils/v1/emails",
+    "http.conn.poolsize" : 20
   }
 }
