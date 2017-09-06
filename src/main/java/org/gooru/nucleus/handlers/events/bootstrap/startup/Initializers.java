@@ -1,5 +1,6 @@
 package org.gooru.nucleus.handlers.events.bootstrap.startup;
 
+import org.gooru.nucleus.handlers.events.app.components.AppHttpClient;
 import org.gooru.nucleus.handlers.events.app.components.DataSourceRegistry;
 import org.gooru.nucleus.handlers.events.app.components.KafkaRegistry;
 
@@ -32,6 +33,7 @@ public class Initializers implements Iterable<Initializer> {
         List<Initializer> initializers = new ArrayList<>();
         initializers.add(DataSourceRegistry.getInstance());
         initializers.add(KafkaRegistry.getInstance());
+        initializers.add(AppHttpClient.getInstance());
         internalIterator = initializers.iterator();
     }
 

@@ -1,5 +1,6 @@
 package org.gooru.nucleus.handlers.events.processors;
 
+import org.gooru.nucleus.handlers.events.app.components.AppHttpClient;
 import org.gooru.nucleus.handlers.events.constants.EmailConstants;
 import org.gooru.nucleus.handlers.events.constants.EventResponseConstants;
 import org.gooru.nucleus.handlers.events.constants.HttpConstants;
@@ -10,8 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.vertx.core.Vertx;
-import io.vertx.core.http.HttpClient;
-import io.vertx.core.http.HttpClientOptions;
 import io.vertx.core.http.HttpClientRequest;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
@@ -20,20 +19,11 @@ public class EmailProcessor implements Processor {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EmailProcessor.class);
 
-    private final Vertx vertx;
-    private final JsonObject config;
     private final JsonObject result;
     private final JsonObject message;
     private String eventName = null;
 
-    private static final String KEY_ENDPOINT = "api.endpoint";
-    private static final String KEY_PORT = "api.port";
-    private static final String KEY_HOST = "api.host";
-    private static final String KEY_EMAIL_SETTINGS = "emailSettings";
-
     public EmailProcessor(Vertx vertx, JsonObject config, JsonObject result, JsonObject message) {
-        this.vertx = vertx;
-        this.config = config;
         this.result = result;
         this.message = message;
     }
@@ -54,7 +44,7 @@ public class EmailProcessor implements Processor {
                 return new JsonObject().put(EmailConstants.EMAIL_SENT, false).put(EmailConstants.STATUS,
                     EmailConstants.STATUS_SUCCESS);
             }
-            
+
             switch (eventName) {
             case MessageConstants.MSG_OP_EVT_RESOURCE_DELETE:
                 emailData = processEmailForResourceDelete();
@@ -63,11 +53,11 @@ public class EmailProcessor implements Processor {
             case MessageConstants.MSG_OP_EVT_COLLECTION_COLLABORATOR_UPDATE:
                 emailData = processEmailForCollectionCollaboratorUpdate();
                 break;
-            
+
             case MessageConstants.MSG_OP_EVT_COURSE_COLLABORATOR_UPDATE:
                 emailData = processEmailForCourseCollaboratorUpdate();
                 break;
-                
+
             case MessageConstants.MSG_OP_EVT_CLASS_COLLABORATOR_UPDATE:
                 emailData = processEmailForClassCollaboratorUpate();
                 break;
@@ -79,7 +69,7 @@ public class EmailProcessor implements Processor {
             case MessageConstants.MSG_OP_EVT_PROFILE_FOLLOW:
                 emailData = processEmailToFollowProfile();
                 break;
-                
+
             case MessageConstants.MSG_OP_EVT_USER_SIGNUP:
                 emailData = processEmailForUserSignup();
                 break;
@@ -87,11 +77,11 @@ public class EmailProcessor implements Processor {
             case MessageConstants.MSG_OP_EVT_USER_PASSWORD_RESET_TRIGGER:
                 emailData = processEmailForResetPasswordTrigger();
                 break;
-                
+
             case MessageConstants.MSG_OP_EVT_USER_PASSWORD_RESET:
                 emailData = processEmailForResetPassword();
                 break;
-                
+
             default:
                 LOGGER.info("event {} does not require to send email", eventName);
                 return new JsonObject().put(EmailConstants.EMAIL_SENT, false).put(EmailConstants.STATUS,
@@ -108,8 +98,9 @@ public class EmailProcessor implements Processor {
                 EmailConstants.STATUS_SUCCESS);
         }
 
+        AppHttpClient httpClient = AppHttpClient.getInstance();
         emailData.stream().forEach(data -> {
-            HttpClientRequest emailRequest = getHttpClient().post(getAPIEndPoint(), responseHandler -> {
+            HttpClientRequest emailRequest = httpClient.getHttpClient().post(httpClient.endpoint(), responseHandler -> {
                 if (responseHandler.statusCode() == HttpConstants.HttpStatus.SUCCESS.getCode()) {
                     LOGGER.info("email sent to '{}' for event: {}", data, eventName);
                 } else {
@@ -131,7 +122,7 @@ public class EmailProcessor implements Processor {
         return new JsonObject().put(EmailConstants.EMAIL_SENT, true).put(EmailConstants.STATUS,
             EmailConstants.STATUS_SUCCESS);
     }
-    
+
     private JsonArray processEmailForResetPassword() {
         return new EmailDataBuilder().setEmailTemplate(EmailConstants.TEMPLATE_RESET_PASSWORD).setResultData(result)
             .setEventData(message).build();
@@ -156,24 +147,24 @@ public class EmailProcessor implements Processor {
         return new EmailDataBuilder().setEmailTemplate(EmailConstants.TEMPLATE_COLLECTION_COLLABORATOR_INVITE)
             .setResultData(result).setEventData(message).build();
     }
-    
+
     private JsonArray processEmailForCourseCollaboratorUpdate() {
         return new EmailDataBuilder().setEmailTemplate(EmailConstants.TEMPLATE_COURSE_COLLABORATOR_INVITE)
             .setResultData(result).setEventData(message).build();
     }
-    
+
     private JsonArray processEmailForClassCollaboratorUpate() {
         return new EmailDataBuilder().setEmailTemplate(EmailConstants.TEMPLATE_CLASS_COLLABORATOR_INVITE)
             .setResultData(result).setEventData(message).build();
     }
-    
+
     private JsonArray processEmailToInviteStudent() {
         // TODO: check class sharing and call email builder for open or
         // restricted class invite
         return new EmailDataBuilder().setEmailTemplate(EmailConstants.TEMPLATE_USER_INVITE_CLASS).setResultData(result)
             .build();
     }
-    
+
     private JsonArray processEmailToFollowProfile() {
         return new EmailDataBuilder().setEmailTemplate(EmailConstants.TEMPLATE_PROFILE_FOLLOW).setResultData(result)
             .build();
@@ -187,28 +178,6 @@ public class EmailProcessor implements Processor {
         }
 
         return true;
-    }
-
-    // TODO: Not sure whether we can make it singleton or return new instance
-    // every time
-    // as there will multiple email to send in single request.
-    private HttpClient getHttpClient() {
-        return vertx.createHttpClient(new HttpClientOptions().setDefaultHost(getAPIHost()).setDefaultPort(getAPIPort()));
-    }
-
-    private String getAPIHost() {
-        JsonObject emailSettings = config.getJsonObject(KEY_EMAIL_SETTINGS);
-        return emailSettings.getString(KEY_HOST);
-    }
-    
-    private Integer getAPIPort() {
-        JsonObject emailSettings = config.getJsonObject(KEY_EMAIL_SETTINGS);
-        return emailSettings.getInteger(KEY_PORT);
-    }
-
-    private String getAPIEndPoint() {
-        JsonObject emailSettings = config.getJsonObject(KEY_EMAIL_SETTINGS);
-        return emailSettings.getString(KEY_ENDPOINT);
     }
 
     private String getAuthorizationHeader(JsonObject result) {
