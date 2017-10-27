@@ -27,7 +27,7 @@ public class ItemCollaboratorUpdateResponseObjectBuilder extends ResponseObject 
         String contentId =
             this.body.getJsonObject(EventRequestConstants.EVENT_BODY).getString(EventRequestConstants.ID);
         contextStructure.put(EventResponseConstants.CONTENT_GOORU_ID, contentId);
-        contextStructure.put(EventResponseConstants.CLIENT_SOURCE, EventResponseConstants.CLIENT_SOURCE_CORE);
+        contextStructure.put(EventResponseConstants.CLIENT_SOURCE, populateClientSource());
         return contextStructure;
     }
 
@@ -41,5 +41,14 @@ public class ItemCollaboratorUpdateResponseObjectBuilder extends ResponseObject 
         payloadStructure.put(EventResponseConstants.CONTENT_FORMAT, getContentFormatFromResponse());
         payloadStructure.put(EventResponseConstants.SUB_EVENT_NAME, getSubEventName());
         return payloadStructure;
+    }
+    
+    private String populateClientSource() {
+        String subEvent = getSubEventName();
+        if (subEvent.contains(EventResponseConstants.CLIENT_SOURCE_ROSTER)) {
+            return EventResponseConstants.CLIENT_SOURCE_ROSTER;
+        }
+
+        return EventResponseConstants.CLIENT_SOURCE_CORE;
     }
 }
