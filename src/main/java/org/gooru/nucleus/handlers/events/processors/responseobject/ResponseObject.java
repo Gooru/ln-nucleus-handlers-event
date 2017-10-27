@@ -16,6 +16,8 @@ import org.gooru.nucleus.handlers.events.processors.repositories.activejdbc.enti
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.hazelcast.core.Message;
+
 import io.vertx.core.json.JsonObject;
 
 public class ResponseObject {
@@ -63,7 +65,8 @@ public class ResponseObject {
         if (decodedVal != null) {
             userId = decodedVal;
         } else {
-            userId = sessionToken;
+            String rosterUserId = this.body.getString(EventRequestConstants.ROSTER_USER_ID);
+            userId = rosterUserId != null ? rosterUserId : null;
         }
 
         userStructure.put(EventResponseConstants.USER_IP, (Object) null);
@@ -93,10 +96,10 @@ public class ResponseObject {
             } catch (NumberFormatException nfe) {
                 return decodedToken[1];
             }
-        } catch (IllegalArgumentException e) {
-            LOGGER.error(e.getMessage());
+        } catch (Throwable e) {
+            LOGGER.warn("no user id found in session: {}", e.getLocalizedMessage());
             return null;
-        }
+        } 
     }
 
     protected String getSubEventName() {
@@ -116,6 +119,7 @@ public class ResponseObject {
         case MessageConstants.MSG_OP_EVT_CLASS_CREATE:
         case MessageConstants.MSG_OP_EVT_RUBRIC_CREATE:
         case MessageConstants.MSG_OP_EVT_BOOKMARK_CREATE:
+        case MessageConstants.MSG_OP_EVT_ROSTER_CLASS_CREATE:
             retVal = EventResponseConstants.EVENT_ITEM_CREATE;
             break;
 
@@ -128,6 +132,7 @@ public class ResponseObject {
         case MessageConstants.MSG_OP_EVT_COURSE_UPDATE:
         case MessageConstants.MSG_OP_EVT_CLASS_UPDATE:
         case MessageConstants.MSG_OP_EVT_RUBRIC_UPDATE:
+        case MessageConstants.MSG_OP_EVT_ROSTER_CLASS_UPDATE:
             retVal = EventResponseConstants.EVENT_ITEM_UPDATE;
             break;
 
@@ -174,6 +179,7 @@ public class ResponseObject {
         case MessageConstants.MSG_OP_EVT_ASSESSMENT_COLLABORATOR_UPDATE:
         case MessageConstants.MSG_OP_EVT_COURSE_COLLABORATOR_UPDATE:
         case MessageConstants.MSG_OP_EVT_CLASS_COLLABORATOR_UPDATE:
+        case MessageConstants.MSG_OP_EVT_ROSTER_CLASS_COLLABORATOR_UPDATE:
             retVal = EventResponseConstants.EVENT_COLLABORATOR_UPDATE;
             break;
 
@@ -186,6 +192,7 @@ public class ResponseObject {
             break;
 
         case MessageConstants.MSG_OP_EVT_CLASS_STUDENT_JOIN:
+        case MessageConstants.MSG_OP_EVT_ROSTER_CLASS_STUDENT_JOIN:
             retVal = EventResponseConstants.EVENT_CLASS_JOIN;
             break;
 
@@ -238,10 +245,12 @@ public class ResponseObject {
             break;
             
         case MessageConstants.MSG_OP_EVT_USER_SIGNUP:
+        case MessageConstants.MSG_OP_EVT_ROSTER_USER_CREATE:
             retVal = EventResponseConstants.EVENT_USER_SIGNUP;
             break;
             
         case MessageConstants.MSG_OP_EVT_USER_UPDATE:
+        case MessageConstants.MSG_OP_EVT_ROSTER_USER_UPDATE:
             retVal = EventResponseConstants.EVENT_USER_UPDATE;
             break;
             
@@ -276,6 +285,7 @@ public class ResponseObject {
         case MessageConstants.MSG_OP_EVT_CLASS_CREATE:
         case MessageConstants.MSG_OP_EVT_RUBRIC_CREATE:
         case MessageConstants.MSG_OP_EVT_BOOKMARK_CREATE:
+        case MessageConstants.MSG_OP_EVT_ROSTER_CLASS_CREATE:
             retVal = EventResponseConstants.MODE_CREATE;
             break;
 
@@ -288,6 +298,7 @@ public class ResponseObject {
         case MessageConstants.MSG_OP_EVT_COURSE_UPDATE:
         case MessageConstants.MSG_OP_EVT_CLASS_UPDATE:
         case MessageConstants.MSG_OP_EVT_RUBRIC_UPDATE:
+        case MessageConstants.MSG_OP_EVT_ROSTER_CLASS_UPDATE:
             retVal = EventResponseConstants.MODE_UPDATE;
             break;
 
@@ -482,6 +493,8 @@ public class ResponseObject {
         case MessageConstants.MSG_OP_EVT_CLASS_STUDENT_JOIN:
         case MessageConstants.MSG_OP_EVT_CLASS_STUDENT_REMOVAL:
         case MessageConstants.MSG_OP_EVT_CLASS_ARCHIVE:
+        case MessageConstants.MSG_OP_EVT_ROSTER_CLASS_CREATE:
+        case MessageConstants.MSG_OP_EVT_ROSTER_CLASS_UPDATE:
             retVal = EventResponseConstants.FORMAT_CLASS;
             break;
             

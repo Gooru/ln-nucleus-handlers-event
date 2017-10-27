@@ -96,6 +96,14 @@ public final class MessageConstants {
     
     public static final String MSG_OP_EVT_BOOKMARK_CREATE = "event.bookmark.create";
     public static final String MSG_OP_EVT_BOOKMARK_DELETE = "event.bookmark.delete";
+    
+    //Roster Events
+    public static final String MSG_OP_EVT_ROSTER_CLASS_CREATE = "event.roster.class.create";
+    public static final String MSG_OP_EVT_ROSTER_CLASS_UPDATE = "event.roster.class.update";
+    public static final String MSG_OP_EVT_ROSTER_CLASS_STUDENT_JOIN = "event.roster.class.student.join";
+    public static final String MSG_OP_EVT_ROSTER_CLASS_COLLABORATOR_UPDATE = "event.roster.class.collaborator.update";
+    public static final String MSG_OP_EVT_ROSTER_USER_CREATE = "event.roster.user.create";
+    public static final String MSG_OP_EVT_ROSTER_USER_UPDATE = "event.roster.user.update";
 
     // Event Structure Type
     public static final int EST_ERROR = -1;

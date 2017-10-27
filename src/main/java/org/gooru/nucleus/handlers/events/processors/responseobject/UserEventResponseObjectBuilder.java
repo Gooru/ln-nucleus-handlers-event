@@ -5,8 +5,7 @@ import org.gooru.nucleus.handlers.events.constants.EventResponseConstants;
 import io.vertx.core.json.JsonObject;
 
 /**
- * @author szgooru
- * Created On: 03-Mar-2017
+ * @author szgooru Created On: 03-Mar-2017
  */
 public class UserEventResponseObjectBuilder extends ResponseObject {
 
@@ -24,10 +23,10 @@ public class UserEventResponseObjectBuilder extends ResponseObject {
         eventStructure.put(EventResponseConstants.PAYLOAD_OBJECT, createPayLoadObjectStructure());
         return eventStructure;
     }
-    
+
     private JsonObject createContextStructure() {
         JsonObject contextStructure = new JsonObject();
-        contextStructure.put(EventResponseConstants.CLIENT_SOURCE, EventResponseConstants.CLIENT_SOURCE_COREAUTH);
+        contextStructure.put(EventResponseConstants.CLIENT_SOURCE, populateClientSource());
         return contextStructure;
     }
 
@@ -36,5 +35,14 @@ public class UserEventResponseObjectBuilder extends ResponseObject {
         payloadStructure.put(EventResponseConstants.DATA, this.response);
         payloadStructure.put(EventResponseConstants.SUB_EVENT_NAME, getSubEventName());
         return payloadStructure;
+    }
+
+    private String populateClientSource() {
+        String subEvent = getSubEventName();
+        if (subEvent.contains(EventResponseConstants.CLIENT_SOURCE_ROSTER)) {
+            return EventResponseConstants.CLIENT_SOURCE_ROSTER;
+        }
+
+        return EventResponseConstants.CLIENT_SOURCE_COREAUTH;
     }
 }
