@@ -112,6 +112,7 @@ public final class EventResponseConstants {
   
   public static final String CLIENT_SOURCE_CORE = "core";
   public static final String CLIENT_SOURCE_COREAUTH = "auth";
+  public static final String CLIENT_SOURCE_ROSTER = "roster";
   
   private EventResponseConstants() {
     throw new AssertionError();

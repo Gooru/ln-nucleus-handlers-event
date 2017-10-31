@@ -212,6 +212,8 @@ class MessageProcessor implements Processor {
             
             case MessageConstants.MSG_OP_EVT_CLASS_CREATE:
             case MessageConstants.MSG_OP_EVT_CLASS_UPDATE:
+            case MessageConstants.MSG_OP_EVT_ROSTER_CLASS_CREATE:
+            case MessageConstants.MSG_OP_EVT_ROSTER_CLASS_UPDATE:
                 result = processEventClassCreateUpdate();
                 break;
 
@@ -220,6 +222,7 @@ class MessageProcessor implements Processor {
                 break;
 
             case MessageConstants.MSG_OP_EVT_CLASS_COLLABORATOR_UPDATE:
+            case MessageConstants.MSG_OP_EVT_ROSTER_CLASS_COLLABORATOR_UPDATE:
                 result = processEventClassCollaboratorUpdate();
                 break;
 
@@ -232,6 +235,7 @@ class MessageProcessor implements Processor {
                 break;
 
             case MessageConstants.MSG_OP_EVT_CLASS_STUDENT_JOIN:
+            case MessageConstants.MSG_OP_EVT_ROSTER_CLASS_STUDENT_JOIN:
                 result = processEventClassStudentJoin();
                 break;
 
@@ -265,10 +269,12 @@ class MessageProcessor implements Processor {
                 break;
                 
             case MessageConstants.MSG_OP_EVT_USER_SIGNUP:
+            case MessageConstants.MSG_OP_EVT_ROSTER_USER_CREATE:
                 result = processEventUserSignup();
                 break;
                 
             case MessageConstants.MSG_OP_EVT_USER_UPDATE:
+            case MessageConstants.MSG_OP_EVT_ROSTER_USER_UPDATE:
                 result = processEventUserUpdate();
                 break;
                 

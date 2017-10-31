@@ -15,6 +15,7 @@ public final class EventRequestConstants {
 
     public static final String INVITEES = "invitees";
     public static final String USER_ID = "user_id";
+    public static final String ROSTER_USER_ID = "user.id";
     public static final String FOLLOW_ON_USER_ID = "follow_on_user_id";
 
     public static final String SOURCE = "source";
