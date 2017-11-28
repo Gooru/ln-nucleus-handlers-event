@@ -135,11 +135,11 @@ public class EmailProcessor implements Processor {
     }
 
     private JsonArray processEmailForUserSignup() {
-        JsonObject payloadObject = result.getJsonObject(EventResponseConstants.PAYLOAD_OBJECT);
-        JsonObject data = payloadObject.getJsonObject(EventResponseConstants.DATA);
-        String role = data.getString(AJEntityUsers.USER_CATEGORY);
+        String role = getRole();
         String template = null;
-        if (role.equalsIgnoreCase(AJEntityUsers.ROLE_STUDENT)) {
+        if(role == null || role.isEmpty()) {
+            template = EmailConstants.TEMPLATE_USER_SIGNUP_OTHER;
+        } else if (role.equalsIgnoreCase(AJEntityUsers.ROLE_STUDENT)) {
             template = EmailConstants.TEMPLATE_USER_SIGNUP_STUDENT;
         } else if (role.equalsIgnoreCase(AJEntityUsers.ROLE_TEACHER)) {
             template = EmailConstants.TEMPLATE_USER_SIGNUP_TEACHER;
@@ -195,5 +195,15 @@ public class EmailProcessor implements Processor {
         // TODO: check for null session
         JsonObject session = result.getJsonObject(EventResponseConstants.SESSION);
         return "Token " + session.getString(EventResponseConstants.SESSION_TOKEN);
+    }
+    
+    private String getRole() {
+        JsonObject payloadObject = result.getJsonObject(EventResponseConstants.PAYLOAD_OBJECT);
+        if (payloadObject == null || payloadObject.isEmpty()) {
+            return null;
+        }
+        
+        JsonObject data = payloadObject.getJsonObject(EventResponseConstants.DATA);
+        return data != null && !data.isEmpty() ? data.getString(AJEntityUsers.USER_CATEGORY) : null; 
     }
 }
