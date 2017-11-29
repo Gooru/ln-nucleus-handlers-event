@@ -7,6 +7,7 @@ import org.gooru.nucleus.handlers.events.constants.HttpConstants;
 import org.gooru.nucleus.handlers.events.constants.MessageConstants;
 import org.gooru.nucleus.handlers.events.emails.EmailDataBuilder;
 import org.gooru.nucleus.handlers.events.processors.exceptions.InvalidRequestException;
+import org.gooru.nucleus.handlers.events.processors.repositories.activejdbc.entities.AJEntityUsers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -134,8 +135,18 @@ public class EmailProcessor implements Processor {
     }
 
     private JsonArray processEmailForUserSignup() {
-        return new EmailDataBuilder().setEmailTemplate(EmailConstants.TEMPLATE_USER_SIGNUP).setResultData(result)
-            .build();
+        String role = getRole();
+        String template = null;
+        if(role == null || role.isEmpty()) {
+            template = EmailConstants.TEMPLATE_USER_SIGNUP_OTHER;
+        } else if (role.equalsIgnoreCase(AJEntityUsers.ROLE_STUDENT)) {
+            template = EmailConstants.TEMPLATE_USER_SIGNUP_STUDENT;
+        } else if (role.equalsIgnoreCase(AJEntityUsers.ROLE_TEACHER)) {
+            template = EmailConstants.TEMPLATE_USER_SIGNUP_TEACHER;
+        } else {
+            template = EmailConstants.TEMPLATE_USER_SIGNUP_OTHER;
+        }
+        return new EmailDataBuilder().setEmailTemplate(template).setResultData(result).build();
     }
 
     private JsonArray processEmailForResourceDelete() {
@@ -184,5 +195,15 @@ public class EmailProcessor implements Processor {
         // TODO: check for null session
         JsonObject session = result.getJsonObject(EventResponseConstants.SESSION);
         return "Token " + session.getString(EventResponseConstants.SESSION_TOKEN);
+    }
+    
+    private String getRole() {
+        JsonObject payloadObject = result.getJsonObject(EventResponseConstants.PAYLOAD_OBJECT);
+        if (payloadObject == null || payloadObject.isEmpty()) {
+            return null;
+        }
+        
+        JsonObject data = payloadObject.getJsonObject(EventResponseConstants.DATA);
+        return data != null && !data.isEmpty() ? data.getString(AJEntityUsers.USER_CATEGORY) : null; 
     }
 }
