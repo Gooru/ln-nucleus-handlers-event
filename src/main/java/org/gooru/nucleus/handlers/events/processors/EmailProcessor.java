@@ -7,6 +7,8 @@ import org.gooru.nucleus.handlers.events.constants.HttpConstants;
 import org.gooru.nucleus.handlers.events.constants.MessageConstants;
 import org.gooru.nucleus.handlers.events.emails.EmailDataBuilder;
 import org.gooru.nucleus.handlers.events.processors.exceptions.InvalidRequestException;
+import org.gooru.nucleus.handlers.events.processors.repositories.activejdbc.DBHelper;
+import org.gooru.nucleus.handlers.events.processors.repositories.activejdbc.entities.AJEntityUserState;
 import org.gooru.nucleus.handlers.events.processors.repositories.activejdbc.entities.AJEntityUsers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +34,7 @@ public class EmailProcessor implements Processor {
     @Override
     public JsonObject process() {
         JsonArray emailData = null;
+        boolean isPostProcessingNeeded = false;
         try {
             if (!validatePayload()) {
                 LOGGER.error("Invalid payload received from the result, can't process to send email");
@@ -71,8 +74,9 @@ public class EmailProcessor implements Processor {
                 emailData = processEmailToFollowProfile();
                 break;
 
-            case MessageConstants.MSG_OP_EVT_USER_SIGNUP:
+            case MessageConstants.MSG_OP_EVT_USER_UPDATE:
                 emailData = processEmailForUserSignup();
+                isPostProcessingNeeded = true;
                 break;
 
             case MessageConstants.MSG_OP_EVT_USER_PASSWORD_RESET_TRIGGER:
@@ -118,10 +122,21 @@ public class EmailProcessor implements Processor {
             emailRequest.write(data.toString());
             emailRequest.end();
         });
+        
+        if (isPostProcessingNeeded && !emailData.isEmpty())
+            postProcessing();
 
         LOGGER.debug("done with sending email.. returning");
         return new JsonObject().put(EmailConstants.EMAIL_SENT, true).put(EmailConstants.STATUS,
             EmailConstants.STATUS_SUCCESS);
+    }
+    
+    private void postProcessing() {
+        LOGGER.debug("need post processing");
+        if (this.eventName.equalsIgnoreCase(MessageConstants.MSG_OP_EVT_USER_UPDATE)) {
+            String userId = getUserId();
+            DBHelper.updateWelcomeEmailState(userId);
+        }
     }
 
     private JsonArray processEmailForResetPassword() {
@@ -135,18 +150,23 @@ public class EmailProcessor implements Processor {
     }
 
     private JsonArray processEmailForUserSignup() {
-        String role = getRole();
-        String template = null;
-        if(role == null || role.isEmpty()) {
-            template = EmailConstants.TEMPLATE_USER_SIGNUP_OTHER;
-        } else if (role.equalsIgnoreCase(AJEntityUsers.ROLE_STUDENT)) {
-            template = EmailConstants.TEMPLATE_USER_SIGNUP_STUDENT;
-        } else if (role.equalsIgnoreCase(AJEntityUsers.ROLE_TEACHER)) {
-            template = EmailConstants.TEMPLATE_USER_SIGNUP_TEACHER;
-        } else {
-            template = EmailConstants.TEMPLATE_USER_SIGNUP_OTHER;
+        if (!checkWelcomeEmailSent()) {
+            String role = getRole();
+            String template = null;
+            if(role == null || role.isEmpty()) {
+                template = EmailConstants.TEMPLATE_USER_SIGNUP_OTHER;
+            } else if (role.equalsIgnoreCase(AJEntityUsers.ROLE_STUDENT)) {
+                template = EmailConstants.TEMPLATE_USER_SIGNUP_STUDENT;
+            } else if (role.equalsIgnoreCase(AJEntityUsers.ROLE_TEACHER)) {
+                template = EmailConstants.TEMPLATE_USER_SIGNUP_TEACHER;
+            } else {
+                template = EmailConstants.TEMPLATE_USER_SIGNUP_OTHER;
+            }
+            LOGGER.debug("preparing to send welcome email");
+            return new EmailDataBuilder().setEmailTemplate(template).setResultData(result).build();
         }
-        return new EmailDataBuilder().setEmailTemplate(template).setResultData(result).build();
+        LOGGER.debug("welcome email is already sent, skipping..");
+        return new JsonArray();
     }
 
     private JsonArray processEmailForResourceDelete() {
@@ -165,7 +185,7 @@ public class EmailProcessor implements Processor {
     }
 
     private JsonArray processEmailForClassCollaboratorUpate() {
-        return new EmailDataBuilder().setEmailTemplate(EmailConstants.TEMPLATE_CLASS_COLLABORATOR_INVITE)
+        return new EmailDataBuilder().setEmailTemplate(EmailConstants.TEMPLATE_CLASS_COTEACHER_INVITE)
             .setResultData(result).setEventData(message).build();
     }
 
@@ -197,6 +217,16 @@ public class EmailProcessor implements Processor {
         return "Token " + session.getString(EventResponseConstants.SESSION_TOKEN);
     }
     
+    private String getUserId() {
+        JsonObject payloadObject = result.getJsonObject(EventResponseConstants.PAYLOAD_OBJECT);
+        if (payloadObject == null || payloadObject.isEmpty()) {
+            return null;
+        }
+        
+        JsonObject data = payloadObject.getJsonObject(EventResponseConstants.DATA);
+        return data != null && !data.isEmpty() ? data.getString(AJEntityUsers.ID) : null;
+    }
+    
     private String getRole() {
         JsonObject payloadObject = result.getJsonObject(EventResponseConstants.PAYLOAD_OBJECT);
         if (payloadObject == null || payloadObject.isEmpty()) {
@@ -205,5 +235,16 @@ public class EmailProcessor implements Processor {
         
         JsonObject data = payloadObject.getJsonObject(EventResponseConstants.DATA);
         return data != null && !data.isEmpty() ? data.getString(AJEntityUsers.USER_CATEGORY) : null; 
+    }
+    
+    private boolean checkWelcomeEmailSent() {
+        JsonObject payloadObject = result.getJsonObject(EventResponseConstants.PAYLOAD_OBJECT);
+        if (payloadObject == null || payloadObject.isEmpty()) {
+            return true;
+        }
+
+        JsonObject data = payloadObject.getJsonObject(EventResponseConstants.DATA);
+        return data != null && !data.isEmpty()
+            ? data.getBoolean(AJEntityUserState.WELCOME_EMAIL_SENT_STATE, true) : true;
     }
 }

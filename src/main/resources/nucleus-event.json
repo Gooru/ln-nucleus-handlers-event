@@ -8,6 +8,14 @@
   	"jdbcUrl" : "jdbc:postgresql://localhost:5432/nucleus",
   	"maximumPoolSize" : 5
   },
+  "writableDataSource" : {
+  	"nucleus.ds.type" : "hikari",
+  	"username" : "nucleus",
+  	"password" : "nucleus",
+  	"autoCommit" : true,
+  	"jdbcUrl" : "jdbc:postgresql://localhost:5432/nucleus",
+  	"maximumPoolSize" : 5
+  },
   "defaultKafkaSettings" : {
   	"bootstrap.servers" : "localhost:9092",
   	"key.serializer" : "org.apache.kafka.common.serialization.StringSerializer",
