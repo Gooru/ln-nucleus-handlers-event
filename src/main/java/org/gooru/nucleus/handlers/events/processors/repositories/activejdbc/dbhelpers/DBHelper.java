@@ -1,4 +1,4 @@
-package org.gooru.nucleus.handlers.events.processors.repositories.activejdbc;
+package org.gooru.nucleus.handlers.events.processors.repositories.activejdbc.dbhelpers;
 
 import org.gooru.nucleus.handlers.events.app.components.DataSourceRegistry;
 import org.gooru.nucleus.handlers.events.processors.repositories.activejdbc.entities.AJEntityUserState;
