@@ -132,11 +132,8 @@ public class EmailProcessor implements Processor {
     }
     
     private void postProcessing() {
-        LOGGER.debug("need post processing");
-        if (this.eventName.equalsIgnoreCase(MessageConstants.MSG_OP_EVT_USER_UPDATE)) {
-            String userId = getUserId();
-            HttpHelper.updateWelcomeEmailState(userId, getAuthorizationHeader());
-        }
+        String userId = getUserId();
+        HttpHelper.updateWelcomeEmailState(userId, getAuthorizationHeader());
     }
 
     private JsonArray processEmailForResetPassword() {
