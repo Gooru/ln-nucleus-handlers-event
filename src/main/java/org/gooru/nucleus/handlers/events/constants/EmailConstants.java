@@ -3,7 +3,7 @@
 public final class EmailConstants {
 
     public static final String TEMPLATE_COLLECTION_COLLABORATOR_INVITE = "invite_collaborator_collection";
-    public static final String TEMPLATE_CLASS_COLLABORATOR_INVITE = "invite_collaborator_class";
+    public static final String TEMPLATE_CLASS_COTEACHER_INVITE = "invite_coteacher_class";
     public static final String TEMPLATE_COURSE_COLLABORATOR_INVITE = "invite_collaborator_course";
     public static final String TEMPLATE_RESOURCE_DELETE = "resource_delete";
     public static final String TEMPLATE_USER_INVITE_CLASS = "user_invite_class";
