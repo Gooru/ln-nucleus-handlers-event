@@ -7,9 +7,9 @@ import org.gooru.nucleus.handlers.events.constants.HttpConstants;
 import org.gooru.nucleus.handlers.events.constants.MessageConstants;
 import org.gooru.nucleus.handlers.events.emails.EmailDataBuilder;
 import org.gooru.nucleus.handlers.events.processors.exceptions.InvalidRequestException;
-import org.gooru.nucleus.handlers.events.processors.repositories.activejdbc.DBHelper;
 import org.gooru.nucleus.handlers.events.processors.repositories.activejdbc.entities.AJEntityUserState;
 import org.gooru.nucleus.handlers.events.processors.repositories.activejdbc.entities.AJEntityUsers;
+import org.gooru.nucleus.handlers.events.processors.utils.HttpHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,7 +40,6 @@ public class EmailProcessor implements Processor {
                 LOGGER.error("Invalid payload received from the result, can't process to send email");
                 throw new InvalidRequestException();
             }
-
             JsonObject payloadObject = result.getJsonObject(EventResponseConstants.PAYLOAD_OBJECT);
             eventName = payloadObject.getString(EventResponseConstants.SUB_EVENT_NAME);
             if (eventName == null || eventName.isEmpty()) {
@@ -74,6 +73,7 @@ public class EmailProcessor implements Processor {
                 emailData = processEmailToFollowProfile();
                 break;
 
+            case MessageConstants.MSG_OP_EVT_USER_SIGNUP:
             case MessageConstants.MSG_OP_EVT_USER_UPDATE:
                 emailData = processEmailForUserSignup();
                 isPostProcessingNeeded = true;
@@ -105,7 +105,7 @@ public class EmailProcessor implements Processor {
 
         AppHttpClient httpClient = AppHttpClient.getInstance();
         emailData.stream().forEach(data -> {
-            HttpClientRequest emailRequest = httpClient.getHttpClient().post(httpClient.endpoint(), responseHandler -> {
+            HttpClientRequest emailRequest = httpClient.getEmailHttpClient().post(httpClient.emailEndpoint(), responseHandler -> {
                 if (responseHandler.statusCode() == HttpConstants.HttpStatus.SUCCESS.getCode()) {
                     LOGGER.info("email sent to '{}' for event: {}", data, eventName);
                 } else {
@@ -118,7 +118,7 @@ public class EmailProcessor implements Processor {
             emailRequest.putHeader(HttpConstants.HEADER_CONTENT_TYPE, HttpConstants.CONTENT_TYPE_JSON);
             emailRequest.putHeader(HttpConstants.HEADER_CONTENT_LENGTH,
                 String.valueOf(data.toString().getBytes().length));
-            emailRequest.putHeader(HttpConstants.HEADER_AUTH, getAuthorizationHeader(result));
+            emailRequest.putHeader(HttpConstants.HEADER_AUTH, getAuthorizationHeader());
             emailRequest.write(data.toString());
             emailRequest.end();
         });
@@ -135,7 +135,7 @@ public class EmailProcessor implements Processor {
         LOGGER.debug("need post processing");
         if (this.eventName.equalsIgnoreCase(MessageConstants.MSG_OP_EVT_USER_UPDATE)) {
             String userId = getUserId();
-            DBHelper.updateWelcomeEmailState(userId);
+            HttpHelper.updateWelcomeEmailState(userId, getAuthorizationHeader());
         }
     }
 
@@ -150,12 +150,11 @@ public class EmailProcessor implements Processor {
     }
 
     private JsonArray processEmailForUserSignup() {
-        if (!checkWelcomeEmailSent()) {
-            String role = getRole();
+        String role = getRole();
+        if (!checkWelcomeEmailSent() && role != null) {
+            
             String template = null;
-            if(role == null || role.isEmpty()) {
-                template = EmailConstants.TEMPLATE_USER_SIGNUP_OTHER;
-            } else if (role.equalsIgnoreCase(AJEntityUsers.ROLE_STUDENT)) {
+            if (role.equalsIgnoreCase(AJEntityUsers.ROLE_STUDENT)) {
                 template = EmailConstants.TEMPLATE_USER_SIGNUP_STUDENT;
             } else if (role.equalsIgnoreCase(AJEntityUsers.ROLE_TEACHER)) {
                 template = EmailConstants.TEMPLATE_USER_SIGNUP_TEACHER;
@@ -165,7 +164,6 @@ public class EmailProcessor implements Processor {
             LOGGER.debug("preparing to send welcome email");
             return new EmailDataBuilder().setEmailTemplate(template).setResultData(result).build();
         }
-        LOGGER.debug("welcome email is already sent, skipping..");
         return new JsonArray();
     }
 
@@ -211,9 +209,9 @@ public class EmailProcessor implements Processor {
         return true;
     }
 
-    private String getAuthorizationHeader(JsonObject result) {
+    private String getAuthorizationHeader() {
         // TODO: check for null session
-        JsonObject session = result.getJsonObject(EventResponseConstants.SESSION);
+        JsonObject session = this.result.getJsonObject(EventResponseConstants.SESSION);
         return "Token " + session.getString(EventResponseConstants.SESSION_TOKEN);
     }
     
@@ -245,6 +243,6 @@ public class EmailProcessor implements Processor {
 
         JsonObject data = payloadObject.getJsonObject(EventResponseConstants.DATA);
         return data != null && !data.isEmpty()
-            ? data.getBoolean(AJEntityUserState.WELCOME_EMAIL_SENT_STATE, true) : true;
+            ? data.getBoolean(AJEntityUserState.WELCOME_EMAIL_SENT_KEY, true) : true;
     }
 }

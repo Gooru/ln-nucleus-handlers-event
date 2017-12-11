@@ -17,10 +17,7 @@ public class AJEntityUserState extends Model {
     public static final String SYSTEM_STATE = "system_state";
     public static final String CLIENT_STATE = "client_state";
 
-    public static final String WELCOME_EMAIL_SENT_STATE = "welcome.email.sent";
-
-    public static final String UPDATE_WELCOME_EMAIL_STATE =
-        "UPDATE user_state SET system_state = jsonb_set(system_state, '{welcome.email.sent}', 'true', false) WHERE user_id = ?::uuid";
+    public static final String WELCOME_EMAIL_SENT_KEY = "welcome.email.sent";
 
     public JsonObject getSystemState() {
         String systemState = this.getString(SYSTEM_STATE);

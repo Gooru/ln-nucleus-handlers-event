@@ -18,14 +18,13 @@ import java.util.Map;
 public final class DataSourceRegistry implements Initializer, Finalizer {
 
     private static final String DEFAULT_DATA_SOURCE = "defaultDataSource";
-    public static final String WRITABLE_DATE_SOURCE = "writableDataSource";
     private static final String DEFAULT_DATA_SOURCE_TYPE = "nucleus.ds.type";
     private static final String DS_HIKARI = "hikari";
     private static final Logger LOGGER = LoggerFactory.getLogger(DataSourceRegistry.class);
     // All the elements in this array are supposed to be present in config file
     // as keys as we are going to initialize them with the value associated with
     // that key
-    private final List<String> datasources = Arrays.asList(DEFAULT_DATA_SOURCE, WRITABLE_DATE_SOURCE);
+    private final List<String> datasources = Arrays.asList(DEFAULT_DATA_SOURCE);
     private final Map<String, DataSource> registry = new HashMap<>();
     private volatile boolean initialized = false;
 
