@@ -47,6 +47,9 @@ public class AJEntityUsers extends Model {
     public static final String TENANT_ID = "tenant_id";
     public static final String PARENT_ID = "partner_id";
     public static final String IS_DELETED = "is_deleted";
+    
+    public static final String ROLE_TEACHER = "teacher";
+    public static final String ROLE_STUDENT = "student";
 
     public final static String SELECT_MULTIPLE_EMAILIDS = "SELECT email FROM users WHERE id = ANY (?::uuid[])";
     public final static String SELECT_FIRST_LAST_NAME = "SELECT first_name, last_name FROM users WHERE id = ?::uuid";

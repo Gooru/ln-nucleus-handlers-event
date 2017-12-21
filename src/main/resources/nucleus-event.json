@@ -24,5 +24,11 @@
     "api.port" : 8084,
     "api.endpoint" : "/api/nucleus-utils/v1/emails",
     "http.conn.poolsize" : 20
+  },
+  "profileSettings" : {
+    "api.host" : "localhost",
+    "api.port" : 8080,
+    "api.endpoint" : "/api/nucleus/v2/profiles/state",
+    "http.conn.poolsize" : 20
   }
 }

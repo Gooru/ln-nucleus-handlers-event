@@ -10,6 +10,7 @@ import org.gooru.nucleus.handlers.events.constants.EventRequestConstants;
 import org.gooru.nucleus.handlers.events.constants.MessageConstants;
 import org.gooru.nucleus.handlers.events.processors.ProcessorContext;
 import org.gooru.nucleus.handlers.events.processors.repositories.UsersRepo;
+import org.gooru.nucleus.handlers.events.processors.repositories.activejdbc.entities.AJEntityUserState;
 import org.gooru.nucleus.handlers.events.processors.repositories.activejdbc.entities.AJEntityUsers;
 import org.gooru.nucleus.handlers.events.processors.repositories.activejdbc.formatter.JsonFormatterBuilder;
 import org.javalite.activejdbc.Base;
@@ -109,7 +110,9 @@ public class AJUsersRepo implements UsersRepo {
     @Override
     public JsonObject userUpdate() {
         String userId = context.eventBody().getString(EventRequestConstants.ID);
-        return getUser(userId);
+        JsonObject userJson = getUser(userId);
+        JsonObject userState = getUserState(userId);
+        return userState != null && !userState.isEmpty() ? userJson.mergeIn(userState) : userJson;
     }
 
     @Override
@@ -142,6 +145,23 @@ public class AJUsersRepo implements UsersRepo {
             }
         } catch (IllegalArgumentException iae) {
             LOGGER.error("error while getting user from DB", iae);
+            return result;
+        } finally {
+            Base.close();
+        }
+        return result;
+    }
+    
+    private JsonObject getUserState(String id) {
+        Base.open(DataSourceRegistry.getInstance().getDefaultDataSource());
+        JsonObject result = null;
+        try {
+            AJEntityUserState userState = AJEntityUserState.findById(UUID.fromString(id));
+            if (userState != null) {
+                result = userState.getSystemState();
+            }
+        } catch (IllegalArgumentException iae) {
+            LOGGER.error("error while getting user state from DB", iae);
             return result;
         } finally {
             Base.close();

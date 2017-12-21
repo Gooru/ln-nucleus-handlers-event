@@ -3,13 +3,15 @@
 public final class EmailConstants {
 
     public static final String TEMPLATE_COLLECTION_COLLABORATOR_INVITE = "invite_collaborator_collection";
-    public static final String TEMPLATE_CLASS_COLLABORATOR_INVITE = "invite_collaborator_class";
+    public static final String TEMPLATE_CLASS_COTEACHER_INVITE = "invite_coteacher_class";
     public static final String TEMPLATE_COURSE_COLLABORATOR_INVITE = "invite_collaborator_course";
     public static final String TEMPLATE_RESOURCE_DELETE = "resource_delete";
     public static final String TEMPLATE_USER_INVITE_CLASS = "user_invite_class";
     public static final String TEMPLATE_USER_INVITE_OPEN_CLASS = "user_invite_open_class";
     public static final String TEMPLATE_PROFILE_FOLLOW = "profile_follow";
-    public static final String TEMPLATE_USER_SIGNUP = "welcome_mail";
+    public static final String TEMPLATE_USER_SIGNUP_TEACHER = "welcome_mail_teacher";
+    public static final String TEMPLATE_USER_SIGNUP_STUDENT = "welcome_mail_student";
+    public static final String TEMPLATE_USER_SIGNUP_OTHER = "welcome_mail_other";
     public static final String TEMPLATE_RESET_PASSWORD_TRG = "password_change_request";
     public static final String TEMPLATE_RESET_PASSWORD = "password_changed_confirmation";
 

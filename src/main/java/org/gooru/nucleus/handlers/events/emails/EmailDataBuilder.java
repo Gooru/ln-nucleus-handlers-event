@@ -60,7 +60,7 @@ public final class EmailDataBuilder {
             emailData = buildCollectionCollaboratorUpdateEmailData();
             break;
 
-        case EmailConstants.TEMPLATE_CLASS_COLLABORATOR_INVITE:
+        case EmailConstants.TEMPLATE_CLASS_COTEACHER_INVITE:
             emailData = buildClassCollaboratorUpdateEmailData();
             break;
 
@@ -84,7 +84,9 @@ public final class EmailDataBuilder {
             emailData = buildProfileFollowEmailData();
             break;
             
-        case EmailConstants.TEMPLATE_USER_SIGNUP:
+        case EmailConstants.TEMPLATE_USER_SIGNUP_TEACHER:
+        case EmailConstants.TEMPLATE_USER_SIGNUP_STUDENT:
+        case EmailConstants.TEMPLATE_USER_SIGNUP_OTHER:
             emailData = buildUserSignupEmailData();
             break;
             
