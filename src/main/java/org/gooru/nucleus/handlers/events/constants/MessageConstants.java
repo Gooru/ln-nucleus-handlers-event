@@ -44,6 +44,7 @@ public final class MessageConstants {
     public static final String MSG_OP_EVT_COURSE_REORDER = "event.course.reorder";
     public static final String MSG_OP_EVT_COURSE_CONTENT_REORDER = "event.course.content.reorder";
     public static final String MSG_OP_EVT_COURSE_COPY = "event.course.copy";
+    public static final String MSG_OP_EVT_COURSE_TAG_AGGREGATE = "event.course.tag.aggregate";
 
     public static final String MSG_OP_EVT_UNIT_CREATE = "event.unit.create";
     public static final String MSG_OP_EVT_UNIT_UPDATE = "event.unit.update";
@@ -51,6 +52,7 @@ public final class MessageConstants {
     public static final String MSG_OP_EVT_UNIT_CONTENT_REORDER = "event.unit.content.reorder";
     public static final String MSG_OP_EVT_UNIT_MOVE = "event.unit.move";
     public static final String MSG_OP_EVT_UNIT_COPY = "event.unit.copy";
+    public static final String MSG_OP_EVT_UNIT_TAG_AGGREGATE = "event.unit.tag.aggregate";
 
     public static final String MSG_OP_EVT_LESSON_CREATE = "event.lesson.create";
     public static final String MSG_OP_EVT_LESSON_UPDATE = "event.lesson.update";
@@ -58,6 +60,7 @@ public final class MessageConstants {
     public static final String MSG_OP_EVT_LESSON_MOVE = "event.lesson.move";
     public static final String MSG_OP_EVT_LESSON_CONTENT_REORDER = "event.lesson.content.reorder";
     public static final String MSG_OP_EVT_LESSON_COPY = "event.lesson.copy";
+    public static final String MSG_OP_EVT_LESSON_TAG_AGGREGATE = "event.lesson.tag.aggregate";
 
     public static final String MSG_OP_EVT_CLASS_CREATE = "event.class.create";
     public static final String MSG_OP_EVT_CLASS_UPDATE = "event.class.update";

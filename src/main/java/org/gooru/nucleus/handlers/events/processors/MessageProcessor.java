@@ -45,6 +45,7 @@ class MessageProcessor implements Processor {
             switch (msgOp) {
             case MessageConstants.MSG_OP_EVT_COURSE_CREATE:
             case MessageConstants.MSG_OP_EVT_COURSE_UPDATE:
+            case MessageConstants.MSG_OP_EVT_COURSE_TAG_AGGREGATE:
                 result = processEventCourseCreateUpdate();
                 break;
 
@@ -70,6 +71,7 @@ class MessageProcessor implements Processor {
 
             case MessageConstants.MSG_OP_EVT_UNIT_CREATE:
             case MessageConstants.MSG_OP_EVT_UNIT_UPDATE:
+            case MessageConstants.MSG_OP_EVT_UNIT_TAG_AGGREGATE:
                 result = processEventUnitCreateUpdate();
                 break;
 
@@ -91,6 +93,7 @@ class MessageProcessor implements Processor {
 
             case MessageConstants.MSG_OP_EVT_LESSON_CREATE:
             case MessageConstants.MSG_OP_EVT_LESSON_UPDATE:
+            case MessageConstants.MSG_OP_EVT_LESSON_TAG_AGGREGATE:
                 result = processEventLessonCreateUpdate();
                 break;
 

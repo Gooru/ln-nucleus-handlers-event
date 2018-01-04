@@ -128,8 +128,11 @@ public class ResponseObject {
         case MessageConstants.MSG_OP_EVT_COLLECTION_UPDATE:
         case MessageConstants.MSG_OP_EVT_ASSESSMENT_UPDATE:
         case MessageConstants.MSG_OP_EVT_LESSON_UPDATE:
+        case MessageConstants.MSG_OP_EVT_LESSON_TAG_AGGREGATE:
         case MessageConstants.MSG_OP_EVT_UNIT_UPDATE:
+        case MessageConstants.MSG_OP_EVT_UNIT_TAG_AGGREGATE:
         case MessageConstants.MSG_OP_EVT_COURSE_UPDATE:
+        case MessageConstants.MSG_OP_EVT_COURSE_TAG_AGGREGATE:
         case MessageConstants.MSG_OP_EVT_CLASS_UPDATE:
         case MessageConstants.MSG_OP_EVT_RUBRIC_UPDATE:
         case MessageConstants.MSG_OP_EVT_ROSTER_CLASS_UPDATE:
@@ -296,6 +299,9 @@ public class ResponseObject {
         case MessageConstants.MSG_OP_EVT_LESSON_UPDATE:
         case MessageConstants.MSG_OP_EVT_UNIT_UPDATE:
         case MessageConstants.MSG_OP_EVT_COURSE_UPDATE:
+        case MessageConstants.MSG_OP_EVT_LESSON_TAG_AGGREGATE:
+        case MessageConstants.MSG_OP_EVT_UNIT_TAG_AGGREGATE:
+        case MessageConstants.MSG_OP_EVT_COURSE_TAG_AGGREGATE:
         case MessageConstants.MSG_OP_EVT_CLASS_UPDATE:
         case MessageConstants.MSG_OP_EVT_RUBRIC_UPDATE:
         case MessageConstants.MSG_OP_EVT_ROSTER_CLASS_UPDATE:
@@ -391,6 +397,7 @@ public class ResponseObject {
 
         case MessageConstants.MSG_OP_EVT_LESSON_CREATE:
         case MessageConstants.MSG_OP_EVT_LESSON_UPDATE:
+        case MessageConstants.MSG_OP_EVT_LESSON_TAG_AGGREGATE:
         case MessageConstants.MSG_OP_EVT_LESSON_DELETE:
         case MessageConstants.MSG_OP_EVT_LESSON_COPY:
         case MessageConstants.MSG_OP_EVT_LESSON_MOVE:
@@ -403,6 +410,7 @@ public class ResponseObject {
 
         case MessageConstants.MSG_OP_EVT_UNIT_CREATE:
         case MessageConstants.MSG_OP_EVT_UNIT_UPDATE:
+        case MessageConstants.MSG_OP_EVT_UNIT_TAG_AGGREGATE:
         case MessageConstants.MSG_OP_EVT_UNIT_DELETE:
         case MessageConstants.MSG_OP_EVT_UNIT_COPY:
         case MessageConstants.MSG_OP_EVT_UNIT_MOVE:
@@ -457,6 +465,7 @@ public class ResponseObject {
 
         case MessageConstants.MSG_OP_EVT_LESSON_CREATE:
         case MessageConstants.MSG_OP_EVT_LESSON_UPDATE:
+        case MessageConstants.MSG_OP_EVT_LESSON_TAG_AGGREGATE:
         case MessageConstants.MSG_OP_EVT_LESSON_DELETE:
         case MessageConstants.MSG_OP_EVT_LESSON_COPY:
         case MessageConstants.MSG_OP_EVT_LESSON_MOVE:
@@ -466,6 +475,7 @@ public class ResponseObject {
 
         case MessageConstants.MSG_OP_EVT_UNIT_CREATE:
         case MessageConstants.MSG_OP_EVT_UNIT_UPDATE:
+        case MessageConstants.MSG_OP_EVT_UNIT_TAG_AGGREGATE:
         case MessageConstants.MSG_OP_EVT_UNIT_DELETE:
         case MessageConstants.MSG_OP_EVT_UNIT_COPY:
         case MessageConstants.MSG_OP_EVT_UNIT_MOVE:
@@ -475,6 +485,7 @@ public class ResponseObject {
 
         case MessageConstants.MSG_OP_EVT_COURSE_CREATE:
         case MessageConstants.MSG_OP_EVT_COURSE_UPDATE:
+        case MessageConstants.MSG_OP_EVT_COURSE_TAG_AGGREGATE:
         case MessageConstants.MSG_OP_EVT_COURSE_DELETE:
         case MessageConstants.MSG_OP_EVT_COURSE_COPY:
         case MessageConstants.MSG_OP_EVT_COURSE_CONTENT_REORDER:
@@ -556,6 +567,7 @@ public class ResponseObject {
 
         case MessageConstants.MSG_OP_EVT_LESSON_CREATE:
         case MessageConstants.MSG_OP_EVT_LESSON_UPDATE:
+        case MessageConstants.MSG_OP_EVT_LESSON_TAG_AGGREGATE:
         case MessageConstants.MSG_OP_EVT_LESSON_DELETE:
         case MessageConstants.MSG_OP_EVT_LESSON_COPY:
         case MessageConstants.MSG_OP_EVT_LESSON_MOVE:
@@ -564,6 +576,7 @@ public class ResponseObject {
 
         case MessageConstants.MSG_OP_EVT_UNIT_CREATE:
         case MessageConstants.MSG_OP_EVT_UNIT_UPDATE:
+        case MessageConstants.MSG_OP_EVT_UNIT_TAG_AGGREGATE:
         case MessageConstants.MSG_OP_EVT_UNIT_DELETE:
         case MessageConstants.MSG_OP_EVT_UNIT_COPY:
         case MessageConstants.MSG_OP_EVT_UNIT_MOVE:
@@ -572,6 +585,7 @@ public class ResponseObject {
 
         case MessageConstants.MSG_OP_EVT_COURSE_CREATE:
         case MessageConstants.MSG_OP_EVT_COURSE_UPDATE:
+        case MessageConstants.MSG_OP_EVT_COURSE_TAG_AGGREGATE:
         case MessageConstants.MSG_OP_EVT_COURSE_DELETE:
         case MessageConstants.MSG_OP_EVT_COURSE_COPY:
             retVal = this.response.getString(EntityConstants.ORIGINAL_COURSE_ID);
@@ -618,6 +632,7 @@ public class ResponseObject {
 
         case MessageConstants.MSG_OP_EVT_LESSON_CREATE:
         case MessageConstants.MSG_OP_EVT_LESSON_UPDATE:
+        case MessageConstants.MSG_OP_EVT_LESSON_TAG_AGGREGATE:
         case MessageConstants.MSG_OP_EVT_LESSON_DELETE:
         case MessageConstants.MSG_OP_EVT_LESSON_COPY:
         case MessageConstants.MSG_OP_EVT_LESSON_MOVE:
@@ -626,6 +641,7 @@ public class ResponseObject {
 
         case MessageConstants.MSG_OP_EVT_UNIT_CREATE:
         case MessageConstants.MSG_OP_EVT_UNIT_UPDATE:
+        case MessageConstants.MSG_OP_EVT_UNIT_TAG_AGGREGATE:
         case MessageConstants.MSG_OP_EVT_UNIT_DELETE:
         case MessageConstants.MSG_OP_EVT_UNIT_COPY:
         case MessageConstants.MSG_OP_EVT_UNIT_MOVE:
@@ -676,6 +692,7 @@ public class ResponseObject {
 
         case MessageConstants.MSG_OP_EVT_LESSON_CREATE:
         case MessageConstants.MSG_OP_EVT_LESSON_UPDATE:
+        case MessageConstants.MSG_OP_EVT_LESSON_TAG_AGGREGATE:
         case MessageConstants.MSG_OP_EVT_LESSON_DELETE:
         case MessageConstants.MSG_OP_EVT_LESSON_COPY:
         case MessageConstants.MSG_OP_EVT_LESSON_MOVE:
@@ -685,6 +702,7 @@ public class ResponseObject {
 
         case MessageConstants.MSG_OP_EVT_UNIT_CREATE:
         case MessageConstants.MSG_OP_EVT_UNIT_UPDATE:
+        case MessageConstants.MSG_OP_EVT_UNIT_TAG_AGGREGATE:
         case MessageConstants.MSG_OP_EVT_UNIT_DELETE:
         case MessageConstants.MSG_OP_EVT_UNIT_COPY:
         case MessageConstants.MSG_OP_EVT_UNIT_MOVE:
@@ -694,6 +712,7 @@ public class ResponseObject {
 
         case MessageConstants.MSG_OP_EVT_COURSE_CREATE:
         case MessageConstants.MSG_OP_EVT_COURSE_UPDATE:
+        case MessageConstants.MSG_OP_EVT_COURSE_TAG_AGGREGATE:
         case MessageConstants.MSG_OP_EVT_COURSE_DELETE:
         case MessageConstants.MSG_OP_EVT_COURSE_COPY:
         case MessageConstants.MSG_OP_EVT_COURSE_CONTENT_REORDER:
@@ -757,6 +776,7 @@ public class ResponseObject {
 
         case MessageConstants.MSG_OP_EVT_LESSON_CREATE:
         case MessageConstants.MSG_OP_EVT_LESSON_UPDATE:
+        case MessageConstants.MSG_OP_EVT_LESSON_TAG_AGGREGATE:
         case MessageConstants.MSG_OP_EVT_LESSON_DELETE:
         case MessageConstants.MSG_OP_EVT_LESSON_MOVE:
         case MessageConstants.MSG_OP_EVT_LESSON_COPY:
@@ -767,6 +787,7 @@ public class ResponseObject {
 
         case MessageConstants.MSG_OP_EVT_UNIT_CREATE:
         case MessageConstants.MSG_OP_EVT_UNIT_UPDATE:
+        case MessageConstants.MSG_OP_EVT_UNIT_TAG_AGGREGATE:
         case MessageConstants.MSG_OP_EVT_UNIT_DELETE:
         case MessageConstants.MSG_OP_EVT_UNIT_MOVE:
         case MessageConstants.MSG_OP_EVT_UNIT_COPY:
