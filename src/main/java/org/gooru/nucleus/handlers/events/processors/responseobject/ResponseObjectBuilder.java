@@ -50,6 +50,7 @@ public final class ResponseObjectBuilder {
                 break;
             case MessageConstants.EST_ITEM_CREATE:
             case MessageConstants.EST_ITEM_EDIT:
+            case MessageConstants.EST_ITEM_TAG_AGGREGATE:
                 result = buildItemCreateUpdateResponseObject();
                 break;
             case MessageConstants.EST_ITEM_COPY:

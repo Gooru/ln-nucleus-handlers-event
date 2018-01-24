@@ -28,6 +28,7 @@ public final class MessageConstants {
     public static final String MSG_OP_EVT_COLLECTION_COLLABORATOR_UPDATE = "event.collection.collaborator.update";
     public static final String MSG_OP_EVT_COLLECTION_MOVE = "event.collection.move";
     public static final String MSG_OP_EVT_COLLECTION_REMOVE = "event.collection.remove";
+    public static final String MSG_OP_EVT_COLLECTION_RESOURCE_TAG_AGGREGATE = "event.collection.resource.tag.aggregate";
 
     public static final String MSG_OP_EVT_ASSESSMENT_CREATE = "event.assessment.create";
     public static final String MSG_OP_EVT_ASSESSMENT_UPDATE = "event.assessment.update";
@@ -36,6 +37,7 @@ public final class MessageConstants {
     public static final String MSG_OP_EVT_ASSESSMENT_QUESTION_ADD = "event.assessment.question.add";
     public static final String MSG_OP_EVT_ASSESSMENT_CONTENT_REORDER = "event.assessment.content.reorder";
     public static final String MSG_OP_EVT_ASSESSMENT_COLLABORATOR_UPDATE = "event.assessment.collaborator.update";
+    public static final String MSG_OP_EVT_ASSESSMENT_QUESTION_TAG_AGGREGATE = "event.assessment.question.tag.aggregate";
 
     public static final String MSG_OP_EVT_COURSE_CREATE = "event.course.create";
     public static final String MSG_OP_EVT_COURSE_UPDATE = "event.course.update";
@@ -44,6 +46,7 @@ public final class MessageConstants {
     public static final String MSG_OP_EVT_COURSE_REORDER = "event.course.reorder";
     public static final String MSG_OP_EVT_COURSE_CONTENT_REORDER = "event.course.content.reorder";
     public static final String MSG_OP_EVT_COURSE_COPY = "event.course.copy";
+    public static final String MSG_OP_EVT_COURSE_TAG_AGGREGATE = "event.course.tag.aggregate";
 
     public static final String MSG_OP_EVT_UNIT_CREATE = "event.unit.create";
     public static final String MSG_OP_EVT_UNIT_UPDATE = "event.unit.update";
@@ -51,6 +54,7 @@ public final class MessageConstants {
     public static final String MSG_OP_EVT_UNIT_CONTENT_REORDER = "event.unit.content.reorder";
     public static final String MSG_OP_EVT_UNIT_MOVE = "event.unit.move";
     public static final String MSG_OP_EVT_UNIT_COPY = "event.unit.copy";
+    public static final String MSG_OP_EVT_UNIT_TAG_AGGREGATE = "event.unit.tag.aggregate";
 
     public static final String MSG_OP_EVT_LESSON_CREATE = "event.lesson.create";
     public static final String MSG_OP_EVT_LESSON_UPDATE = "event.lesson.update";
@@ -58,6 +62,7 @@ public final class MessageConstants {
     public static final String MSG_OP_EVT_LESSON_MOVE = "event.lesson.move";
     public static final String MSG_OP_EVT_LESSON_CONTENT_REORDER = "event.lesson.content.reorder";
     public static final String MSG_OP_EVT_LESSON_COPY = "event.lesson.copy";
+    public static final String MSG_OP_EVT_LESSON_TAG_AGGREGATE = "event.lesson.tag.aggregate";
 
     public static final String MSG_OP_EVT_CLASS_CREATE = "event.class.create";
     public static final String MSG_OP_EVT_CLASS_UPDATE = "event.class.update";
@@ -134,6 +139,7 @@ public final class MessageConstants {
 
     public static final int EST_CLASS_ARCHIVE = 23;
     public static final int EST_ASSOCIATE_RUBRIC_QUESTION = 24;
+    public static final int EST_ITEM_TAG_AGGREGATE = 25;
     
     private MessageConstants() {
         throw new AssertionError();

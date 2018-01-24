@@ -35,6 +35,7 @@ public final class EventResponseConstants {
   public static final String EVENT_USER_PASSWORD_RESET = "event.user.password.reset";
   public static final String EVENT_USER_PASSWORD_CHANGE = "event.user.password.change";
   public static final String EVENT_QUESTION_RUBRIC_ASSOCIATION = "question.rubirc.association";
+  public static final String EVENT_ITEM_TAG_AGGREGATE = "item.tag.aggregate";
 
   public static final String METRICS = "metrics";
 
