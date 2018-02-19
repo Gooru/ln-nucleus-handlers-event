@@ -16,8 +16,6 @@ import org.gooru.nucleus.handlers.events.processors.repositories.activejdbc.enti
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.hazelcast.core.Message;
-
 import io.vertx.core.json.JsonObject;
 
 public class ResponseObject {
@@ -25,7 +23,7 @@ public class ResponseObject {
     private static final Logger LOGGER = LoggerFactory.getLogger(ResponseObject.class);
 
     protected JsonObject body;
-    protected JsonObject response;
+    protected JsonObject response;  
     private final String eventName;
 
     protected ResponseObject(JsonObject body, JsonObject response) {
@@ -136,6 +134,14 @@ public class ResponseObject {
             retVal = EventResponseConstants.EVENT_ITEM_UPDATE;
             break;
 
+        case MessageConstants.MSG_OP_EVT_LESSON_TAG_AGGREGATE:
+        case MessageConstants.MSG_OP_EVT_UNIT_TAG_AGGREGATE:
+        case MessageConstants.MSG_OP_EVT_COURSE_TAG_AGGREGATE:
+        case MessageConstants.MSG_OP_EVT_COLLECTION_RESOURCE_TAG_AGGREGATE:
+        case MessageConstants.MSG_OP_EVT_ASSESSMENT_QUESTION_TAG_AGGREGATE:
+            retVal = EventResponseConstants.EVENT_ITEM_TAG_AGGREGATE;
+            break;
+        
         case MessageConstants.MSG_OP_EVT_RESOURCE_COPY:
         case MessageConstants.MSG_OP_EVT_QUESTION_COPY:
         case MessageConstants.MSG_OP_EVT_COLLECTION_COPY:
@@ -292,10 +298,15 @@ public class ResponseObject {
         case MessageConstants.MSG_OP_EVT_RESOURCE_UPDATE:
         case MessageConstants.MSG_OP_EVT_QUESTION_UPDATE:
         case MessageConstants.MSG_OP_EVT_COLLECTION_UPDATE:
+        case MessageConstants.MSG_OP_EVT_COLLECTION_RESOURCE_TAG_AGGREGATE:
         case MessageConstants.MSG_OP_EVT_ASSESSMENT_UPDATE:
+        case MessageConstants.MSG_OP_EVT_ASSESSMENT_QUESTION_TAG_AGGREGATE:
         case MessageConstants.MSG_OP_EVT_LESSON_UPDATE:
         case MessageConstants.MSG_OP_EVT_UNIT_UPDATE:
         case MessageConstants.MSG_OP_EVT_COURSE_UPDATE:
+        case MessageConstants.MSG_OP_EVT_LESSON_TAG_AGGREGATE:
+        case MessageConstants.MSG_OP_EVT_UNIT_TAG_AGGREGATE:
+        case MessageConstants.MSG_OP_EVT_COURSE_TAG_AGGREGATE:
         case MessageConstants.MSG_OP_EVT_CLASS_UPDATE:
         case MessageConstants.MSG_OP_EVT_RUBRIC_UPDATE:
         case MessageConstants.MSG_OP_EVT_ROSTER_CLASS_UPDATE:
@@ -370,6 +381,7 @@ public class ResponseObject {
         case MessageConstants.MSG_OP_EVT_COLLECTION_CONTENT_REORDER:
         case MessageConstants.MSG_OP_EVT_COLLECTION_COLLABORATOR_UPDATE:
         case MessageConstants.MSG_OP_EVT_COLLECTION_CONTENT_ADD:
+        case MessageConstants.MSG_OP_EVT_COLLECTION_RESOURCE_TAG_AGGREGATE:
             retVal = this.response.getString(EntityConstants.LESSON_ID);
             if (retVal != null) {
                 retType = EventResponseConstants.ITEM_TYPE_LESSON_COLLECTION;
@@ -383,6 +395,7 @@ public class ResponseObject {
         case MessageConstants.MSG_OP_EVT_ASSESSMENT_CONTENT_REORDER:
         case MessageConstants.MSG_OP_EVT_ASSESSMENT_COLLABORATOR_UPDATE:
         case MessageConstants.MSG_OP_EVT_ASSESSMENT_QUESTION_ADD:
+        case MessageConstants.MSG_OP_EVT_ASSESSMENT_QUESTION_TAG_AGGREGATE:
             retVal = this.response.getString(EntityConstants.LESSON_ID);
             if (retVal != null) {
                 retType = EventResponseConstants.ITEM_TYPE_LESSON_ASSESSMENT;
@@ -391,6 +404,7 @@ public class ResponseObject {
 
         case MessageConstants.MSG_OP_EVT_LESSON_CREATE:
         case MessageConstants.MSG_OP_EVT_LESSON_UPDATE:
+        case MessageConstants.MSG_OP_EVT_LESSON_TAG_AGGREGATE:
         case MessageConstants.MSG_OP_EVT_LESSON_DELETE:
         case MessageConstants.MSG_OP_EVT_LESSON_COPY:
         case MessageConstants.MSG_OP_EVT_LESSON_MOVE:
@@ -403,6 +417,7 @@ public class ResponseObject {
 
         case MessageConstants.MSG_OP_EVT_UNIT_CREATE:
         case MessageConstants.MSG_OP_EVT_UNIT_UPDATE:
+        case MessageConstants.MSG_OP_EVT_UNIT_TAG_AGGREGATE:
         case MessageConstants.MSG_OP_EVT_UNIT_DELETE:
         case MessageConstants.MSG_OP_EVT_UNIT_COPY:
         case MessageConstants.MSG_OP_EVT_UNIT_MOVE:
@@ -443,6 +458,7 @@ public class ResponseObject {
         case MessageConstants.MSG_OP_EVT_COLLECTION_MOVE:
         case MessageConstants.MSG_OP_EVT_COLLECTION_COLLABORATOR_UPDATE:
         case MessageConstants.MSG_OP_EVT_COLLECTION_CONTENT_REORDER:
+        case MessageConstants.MSG_OP_EVT_COLLECTION_RESOURCE_TAG_AGGREGATE:
             retVal = EventResponseConstants.FORMAT_COLLECTION;
             break;
 
@@ -452,11 +468,13 @@ public class ResponseObject {
         case MessageConstants.MSG_OP_EVT_ASSESSMENT_COPY:
         case MessageConstants.MSG_OP_EVT_ASSESSMENT_CONTENT_REORDER:
         case MessageConstants.MSG_OP_EVT_ASSESSMENT_COLLABORATOR_UPDATE:
+        case MessageConstants.MSG_OP_EVT_ASSESSMENT_QUESTION_TAG_AGGREGATE:
             retVal = EventResponseConstants.FORMAT_ASSESSMENT;
             break;
 
         case MessageConstants.MSG_OP_EVT_LESSON_CREATE:
         case MessageConstants.MSG_OP_EVT_LESSON_UPDATE:
+        case MessageConstants.MSG_OP_EVT_LESSON_TAG_AGGREGATE:
         case MessageConstants.MSG_OP_EVT_LESSON_DELETE:
         case MessageConstants.MSG_OP_EVT_LESSON_COPY:
         case MessageConstants.MSG_OP_EVT_LESSON_MOVE:
@@ -466,6 +484,7 @@ public class ResponseObject {
 
         case MessageConstants.MSG_OP_EVT_UNIT_CREATE:
         case MessageConstants.MSG_OP_EVT_UNIT_UPDATE:
+        case MessageConstants.MSG_OP_EVT_UNIT_TAG_AGGREGATE:
         case MessageConstants.MSG_OP_EVT_UNIT_DELETE:
         case MessageConstants.MSG_OP_EVT_UNIT_COPY:
         case MessageConstants.MSG_OP_EVT_UNIT_MOVE:
@@ -475,6 +494,7 @@ public class ResponseObject {
 
         case MessageConstants.MSG_OP_EVT_COURSE_CREATE:
         case MessageConstants.MSG_OP_EVT_COURSE_UPDATE:
+        case MessageConstants.MSG_OP_EVT_COURSE_TAG_AGGREGATE:
         case MessageConstants.MSG_OP_EVT_COURSE_DELETE:
         case MessageConstants.MSG_OP_EVT_COURSE_COPY:
         case MessageConstants.MSG_OP_EVT_COURSE_CONTENT_REORDER:
@@ -547,15 +567,18 @@ public class ResponseObject {
         case MessageConstants.MSG_OP_EVT_COLLECTION_DELETE:
         case MessageConstants.MSG_OP_EVT_COLLECTION_COPY:
         case MessageConstants.MSG_OP_EVT_COLLECTION_MOVE:
+        case MessageConstants.MSG_OP_EVT_COLLECTION_RESOURCE_TAG_AGGREGATE:
         case MessageConstants.MSG_OP_EVT_ASSESSMENT_CREATE:
         case MessageConstants.MSG_OP_EVT_ASSESSMENT_UPDATE:
         case MessageConstants.MSG_OP_EVT_ASSESSMENT_DELETE:
         case MessageConstants.MSG_OP_EVT_ASSESSMENT_COPY:
+        case MessageConstants.MSG_OP_EVT_ASSESSMENT_QUESTION_TAG_AGGREGATE:
             retVal = this.response.getString(EntityConstants.ORIGINAL_COLLECTION_ID);
             break;
 
         case MessageConstants.MSG_OP_EVT_LESSON_CREATE:
         case MessageConstants.MSG_OP_EVT_LESSON_UPDATE:
+        case MessageConstants.MSG_OP_EVT_LESSON_TAG_AGGREGATE:
         case MessageConstants.MSG_OP_EVT_LESSON_DELETE:
         case MessageConstants.MSG_OP_EVT_LESSON_COPY:
         case MessageConstants.MSG_OP_EVT_LESSON_MOVE:
@@ -564,6 +587,7 @@ public class ResponseObject {
 
         case MessageConstants.MSG_OP_EVT_UNIT_CREATE:
         case MessageConstants.MSG_OP_EVT_UNIT_UPDATE:
+        case MessageConstants.MSG_OP_EVT_UNIT_TAG_AGGREGATE:
         case MessageConstants.MSG_OP_EVT_UNIT_DELETE:
         case MessageConstants.MSG_OP_EVT_UNIT_COPY:
         case MessageConstants.MSG_OP_EVT_UNIT_MOVE:
@@ -572,6 +596,7 @@ public class ResponseObject {
 
         case MessageConstants.MSG_OP_EVT_COURSE_CREATE:
         case MessageConstants.MSG_OP_EVT_COURSE_UPDATE:
+        case MessageConstants.MSG_OP_EVT_COURSE_TAG_AGGREGATE:
         case MessageConstants.MSG_OP_EVT_COURSE_DELETE:
         case MessageConstants.MSG_OP_EVT_COURSE_COPY:
             retVal = this.response.getString(EntityConstants.ORIGINAL_COURSE_ID);
@@ -609,15 +634,18 @@ public class ResponseObject {
         case MessageConstants.MSG_OP_EVT_COLLECTION_DELETE:
         case MessageConstants.MSG_OP_EVT_COLLECTION_COPY:
         case MessageConstants.MSG_OP_EVT_COLLECTION_MOVE:
+        case MessageConstants.MSG_OP_EVT_COLLECTION_RESOURCE_TAG_AGGREGATE:
         case MessageConstants.MSG_OP_EVT_ASSESSMENT_CREATE:
         case MessageConstants.MSG_OP_EVT_ASSESSMENT_UPDATE:
         case MessageConstants.MSG_OP_EVT_ASSESSMENT_DELETE:
         case MessageConstants.MSG_OP_EVT_ASSESSMENT_COPY:
+        case MessageConstants.MSG_OP_EVT_ASSESSMENT_QUESTION_TAG_AGGREGATE:
             parentGooruId = content.getString(EntityConstants.LESSON_ID);
             break;
 
         case MessageConstants.MSG_OP_EVT_LESSON_CREATE:
         case MessageConstants.MSG_OP_EVT_LESSON_UPDATE:
+        case MessageConstants.MSG_OP_EVT_LESSON_TAG_AGGREGATE:
         case MessageConstants.MSG_OP_EVT_LESSON_DELETE:
         case MessageConstants.MSG_OP_EVT_LESSON_COPY:
         case MessageConstants.MSG_OP_EVT_LESSON_MOVE:
@@ -626,6 +654,7 @@ public class ResponseObject {
 
         case MessageConstants.MSG_OP_EVT_UNIT_CREATE:
         case MessageConstants.MSG_OP_EVT_UNIT_UPDATE:
+        case MessageConstants.MSG_OP_EVT_UNIT_TAG_AGGREGATE:
         case MessageConstants.MSG_OP_EVT_UNIT_DELETE:
         case MessageConstants.MSG_OP_EVT_UNIT_COPY:
         case MessageConstants.MSG_OP_EVT_UNIT_MOVE:
@@ -664,6 +693,7 @@ public class ResponseObject {
         case MessageConstants.MSG_OP_EVT_COLLECTION_MOVE:
         case MessageConstants.MSG_OP_EVT_COLLECTION_CONTENT_REORDER:
         case MessageConstants.MSG_OP_EVT_COLLECTION_COLLABORATOR_UPDATE:
+        case MessageConstants.MSG_OP_EVT_COLLECTION_RESOURCE_TAG_AGGREGATE:
         case MessageConstants.MSG_OP_EVT_ASSESSMENT_CREATE:
         case MessageConstants.MSG_OP_EVT_ASSESSMENT_UPDATE:
         case MessageConstants.MSG_OP_EVT_ASSESSMENT_DELETE:
@@ -671,11 +701,13 @@ public class ResponseObject {
         case MessageConstants.MSG_OP_EVT_ASSESSMENT_CONTENT_REORDER:
         case MessageConstants.MSG_OP_EVT_ASSESSMENT_COLLABORATOR_UPDATE:
         case MessageConstants.MSG_OP_EVT_COLLECTION_REMOVE:
+        case MessageConstants.MSG_OP_EVT_ASSESSMENT_QUESTION_TAG_AGGREGATE:
             parentContentId = content.getString(EntityConstants.PARENT_COLLECTION_ID);
             break;
 
         case MessageConstants.MSG_OP_EVT_LESSON_CREATE:
         case MessageConstants.MSG_OP_EVT_LESSON_UPDATE:
+        case MessageConstants.MSG_OP_EVT_LESSON_TAG_AGGREGATE:
         case MessageConstants.MSG_OP_EVT_LESSON_DELETE:
         case MessageConstants.MSG_OP_EVT_LESSON_COPY:
         case MessageConstants.MSG_OP_EVT_LESSON_MOVE:
@@ -685,6 +717,7 @@ public class ResponseObject {
 
         case MessageConstants.MSG_OP_EVT_UNIT_CREATE:
         case MessageConstants.MSG_OP_EVT_UNIT_UPDATE:
+        case MessageConstants.MSG_OP_EVT_UNIT_TAG_AGGREGATE:
         case MessageConstants.MSG_OP_EVT_UNIT_DELETE:
         case MessageConstants.MSG_OP_EVT_UNIT_COPY:
         case MessageConstants.MSG_OP_EVT_UNIT_MOVE:
@@ -694,6 +727,7 @@ public class ResponseObject {
 
         case MessageConstants.MSG_OP_EVT_COURSE_CREATE:
         case MessageConstants.MSG_OP_EVT_COURSE_UPDATE:
+        case MessageConstants.MSG_OP_EVT_COURSE_TAG_AGGREGATE:
         case MessageConstants.MSG_OP_EVT_COURSE_DELETE:
         case MessageConstants.MSG_OP_EVT_COURSE_COPY:
         case MessageConstants.MSG_OP_EVT_COURSE_CONTENT_REORDER:
@@ -742,6 +776,7 @@ public class ResponseObject {
         case MessageConstants.MSG_OP_EVT_COLLECTION_CONTENT_ADD:
         case MessageConstants.MSG_OP_EVT_COLLECTION_COLLABORATOR_UPDATE:
         case MessageConstants.MSG_OP_EVT_COLLECTION_CONTENT_REORDER:
+        case MessageConstants.MSG_OP_EVT_COLLECTION_RESOURCE_TAG_AGGREGATE:
         case MessageConstants.MSG_OP_EVT_ASSESSMENT_CREATE:
         case MessageConstants.MSG_OP_EVT_ASSESSMENT_UPDATE:
         case MessageConstants.MSG_OP_EVT_ASSESSMENT_COPY:
@@ -750,6 +785,7 @@ public class ResponseObject {
         case MessageConstants.MSG_OP_EVT_ASSESSMENT_COLLABORATOR_UPDATE:
         case MessageConstants.MSG_OP_EVT_ASSESSMENT_CONTENT_REORDER:
         case MessageConstants.MSG_OP_EVT_COLLECTION_REMOVE:
+        case MessageConstants.MSG_OP_EVT_ASSESSMENT_QUESTION_TAG_AGGREGATE:
             lessonId = fromContent.getString(EntityConstants.LESSON_ID);
             unitId = fromContent.getString(EntityConstants.UNIT_ID);
             courseId = fromContent.getString(EntityConstants.COURSE_ID);
@@ -757,6 +793,7 @@ public class ResponseObject {
 
         case MessageConstants.MSG_OP_EVT_LESSON_CREATE:
         case MessageConstants.MSG_OP_EVT_LESSON_UPDATE:
+        case MessageConstants.MSG_OP_EVT_LESSON_TAG_AGGREGATE:
         case MessageConstants.MSG_OP_EVT_LESSON_DELETE:
         case MessageConstants.MSG_OP_EVT_LESSON_MOVE:
         case MessageConstants.MSG_OP_EVT_LESSON_COPY:
@@ -767,6 +804,7 @@ public class ResponseObject {
 
         case MessageConstants.MSG_OP_EVT_UNIT_CREATE:
         case MessageConstants.MSG_OP_EVT_UNIT_UPDATE:
+        case MessageConstants.MSG_OP_EVT_UNIT_TAG_AGGREGATE:
         case MessageConstants.MSG_OP_EVT_UNIT_DELETE:
         case MessageConstants.MSG_OP_EVT_UNIT_MOVE:
         case MessageConstants.MSG_OP_EVT_UNIT_COPY:

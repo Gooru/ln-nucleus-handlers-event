@@ -47,6 +47,10 @@ class MessageProcessor implements Processor {
             case MessageConstants.MSG_OP_EVT_COURSE_UPDATE:
                 result = processEventCourseCreateUpdate();
                 break;
+                
+            case MessageConstants.MSG_OP_EVT_COURSE_TAG_AGGREGATE:
+                result = processEventCourseTagAggregate();
+                break;
 
             case MessageConstants.MSG_OP_EVT_COURSE_COPY:
                 result = processEventCourseCopy();
@@ -72,6 +76,10 @@ class MessageProcessor implements Processor {
             case MessageConstants.MSG_OP_EVT_UNIT_UPDATE:
                 result = processEventUnitCreateUpdate();
                 break;
+                
+            case MessageConstants.MSG_OP_EVT_UNIT_TAG_AGGREGATE:
+                result = processEventUnitTagAggregate();
+                break;
 
             case MessageConstants.MSG_OP_EVT_UNIT_COPY:
                 result = processEventUnitCopy();
@@ -93,6 +101,10 @@ class MessageProcessor implements Processor {
             case MessageConstants.MSG_OP_EVT_LESSON_UPDATE:
                 result = processEventLessonCreateUpdate();
                 break;
+                
+            case MessageConstants.MSG_OP_EVT_LESSON_TAG_AGGREGATE:
+                result = processEventLessonTagAggregate();
+                break;
 
             case MessageConstants.MSG_OP_EVT_LESSON_COPY:
                 result = processEventLessonCopy();
@@ -113,6 +125,10 @@ class MessageProcessor implements Processor {
             case MessageConstants.MSG_OP_EVT_COLLECTION_CREATE:
             case MessageConstants.MSG_OP_EVT_COLLECTION_UPDATE:
                 result = processEventCollectionCreateUpdate();
+                break;
+                
+            case MessageConstants.MSG_OP_EVT_COLLECTION_RESOURCE_TAG_AGGREGATE:
+                result = processEventCollectionResourceTagAggregate();
                 break;
 
             case MessageConstants.MSG_OP_EVT_COLLECTION_COPY:
@@ -146,6 +162,10 @@ class MessageProcessor implements Processor {
             case MessageConstants.MSG_OP_EVT_ASSESSMENT_CREATE:
             case MessageConstants.MSG_OP_EVT_ASSESSMENT_UPDATE:
                 result = processEventAssessmentCreateUpdate();
+                break;
+                
+            case MessageConstants.MSG_OP_EVT_ASSESSMENT_QUESTION_TAG_AGGREGATE:
+                result = processEventAssessmentQuestionTagAggregate();
                 break;
 
             case MessageConstants.MSG_OP_EVT_ASSESSMENT_COPY:
@@ -308,6 +328,86 @@ class MessageProcessor implements Processor {
                 .generateErrorResponse((JsonObject) (message != null ? message.body() : null)).toString());
         }
         return result;
+    }
+
+    private JsonObject processEventAssessmentQuestionTagAggregate() {
+        try {
+            ProcessorContext context = createContext();
+            JsonObject result = RepoBuilder.buildCollectionRepo(context).createUpdateAssessmentEvent();
+            if (result != null) {
+                LOGGER.debug("result returned: {}", result);
+                return ResponseFactory.generateResponse(request, result, MessageConstants.EST_ITEM_TAG_AGGREGATE);
+            }
+        } catch (Throwable t) {
+            LOGGER.error("Error while getting content from database:", t);
+        }
+        LOGGER.error("Failed to generate event. Input data received {}", request);
+        TRANSMIT_FAIL_LOGGER.error(ResponseFactory.generateErrorResponse(request).toString());
+        return null;
+    }
+
+    private JsonObject processEventCollectionResourceTagAggregate() {
+        try {
+            ProcessorContext context = createContext();
+            JsonObject result = RepoBuilder.buildCollectionRepo(context).createUpdateCollectionEvent();
+            if (result != null) {
+                LOGGER.debug("result returned: {}", result);
+                return ResponseFactory.generateResponse(request, result, MessageConstants.EST_ITEM_TAG_AGGREGATE);
+            }
+        } catch (Throwable t) {
+            LOGGER.error("Error while getting content from database:", t);
+        }
+        LOGGER.error("Failed to generate event. Input data received {}", request);
+        TRANSMIT_FAIL_LOGGER.error(ResponseFactory.generateErrorResponse(request).toString());
+        return null;
+    }
+
+    private JsonObject processEventLessonTagAggregate() {
+        try {
+            ProcessorContext context = createContext();
+            JsonObject result = RepoBuilder.buildLessonRepo(context).createUpdateLessonEvent();
+            if (result != null) {
+                LOGGER.debug("result returned: {}", result);
+                return ResponseFactory.generateResponse(request, result, MessageConstants.EST_ITEM_TAG_AGGREGATE);
+            }
+        } catch (Throwable t) {
+            LOGGER.error("Error while getting content from database:", t);
+        }
+        LOGGER.error("Failed to generate event. Input data received {}", request);
+        TRANSMIT_FAIL_LOGGER.error(ResponseFactory.generateErrorResponse(request).toString());
+        return null;
+    }
+
+    private JsonObject processEventUnitTagAggregate() {
+        try {
+            ProcessorContext context = createContext();
+            JsonObject result = RepoBuilder.buildUnitRepo(context).createUpdateUnitEvent();
+            if (result != null) {
+                LOGGER.debug("result returned: {}", result);
+                return ResponseFactory.generateResponse(request, result, MessageConstants.EST_ITEM_TAG_AGGREGATE);
+            }
+        } catch (Throwable t) {
+            LOGGER.error("Error while getting content from database:", t);
+        }
+        LOGGER.error("Failed to generate event. Input data received {}", request);
+        TRANSMIT_FAIL_LOGGER.error(ResponseFactory.generateErrorResponse(request).toString());
+        return null;
+    }
+
+    private JsonObject processEventCourseTagAggregate() {
+        try {
+            ProcessorContext context = createContext();
+            JsonObject result = RepoBuilder.buildCourseRepo(context).createUpdateCourseEvent();
+            if (result != null) {
+                LOGGER.debug("result returned: {}", result);
+                return ResponseFactory.generateResponse(request, result, MessageConstants.EST_ITEM_TAG_AGGREGATE);
+            }
+        } catch (Throwable t) {
+            LOGGER.error("Error while getting content from database:", t);
+        }
+        LOGGER.error("Failed to generate event. Input data received {}", request);
+        TRANSMIT_FAIL_LOGGER.error(ResponseFactory.generateErrorResponse(request).toString());
+        return null;
     }
 
     private JsonObject processEventBookmarkCreate() {
