@@ -45,7 +45,7 @@ public class AJEntityUsers extends Model {
     public static final String ROSTER_GLOBAL_USERID = "roster_global_userid";
     public static final String TENANT_ROOT = "tenant_root";
     public static final String TENANT_ID = "tenant_id";
-    public static final String PARENT_ID = "partner_id";
+    public static final String PARTNER_ID = "partner_id";
     public static final String IS_DELETED = "is_deleted";
     
     public static final String ROLE_TEACHER = "teacher";
@@ -57,6 +57,6 @@ public class AJEntityUsers extends Model {
 
     public static final List<String> ALL_FIELDS = Arrays.asList(ID, USERNAME, REFERENCE_ID, EMAIL, LOGIN_TYPE,
         FIRST_NAME, LAST_NAME, USER_CATEGORY, BIRTH_DATE, GENDER, SCHOOL, SCHOOL_ID, SCHOOL_DISTRICT,
-        SCHOOL_DISTRICT_ID, COUNTRY, COUNTRY_ID, STATE, STATE_ID, TENANT_ID, TENANT_ROOT);
+        SCHOOL_DISTRICT_ID, COUNTRY, COUNTRY_ID, STATE, STATE_ID, PARTNER_ID, TENANT_ID, TENANT_ROOT);
 
 }
