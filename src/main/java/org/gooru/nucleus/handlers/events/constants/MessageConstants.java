@@ -87,6 +87,7 @@ public final class MessageConstants {
     public static final String MSG_OP_EVT_ANONYMOUS_SIGNIN = "event.anonymous.signin";
     public static final String MSG_OP_EVT_USER_SIGNIN = "event.user.signin";
     public static final String MSG_OP_EVT_USER_SIGNOUT = "event.user.signout";
+    public static final String MSG_OP_EVT_USER_DELETE = "event.user.delete";
     //private static final String EVT_USER_TOKEN_CHECK = "event.user.token.check";
     //private static final String EVT_USER_TOKEN_DETAILS = "event.user.token.details";
     //private static final String EVT_USER_AUTHORIZE = "event.user.authorize";
@@ -140,6 +141,8 @@ public final class MessageConstants {
     public static final int EST_CLASS_ARCHIVE = 23;
     public static final int EST_ASSOCIATE_RUBRIC_QUESTION = 24;
     public static final int EST_ITEM_TAG_AGGREGATE = 25;
+    
+    public static final int EST_USER_DELETE = 26;
     
     private MessageConstants() {
         throw new AssertionError();

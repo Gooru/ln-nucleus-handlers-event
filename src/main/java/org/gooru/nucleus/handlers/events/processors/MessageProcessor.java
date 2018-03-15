@@ -288,6 +288,10 @@ class MessageProcessor implements Processor {
                 result = processEventUserSignout();
                 break;
                 
+            case MessageConstants.MSG_OP_EVT_USER_DELETE:
+            	result = processEventUserDelete();
+            	break;
+                
             case MessageConstants.MSG_OP_EVT_USER_SIGNUP:
             case MessageConstants.MSG_OP_EVT_ROSTER_USER_CREATE:
                 result = processEventUserSignup();
@@ -547,6 +551,23 @@ class MessageProcessor implements Processor {
             if (result != null) {
                 LOGGER.debug("result returned: {}", result);
                 return ResponseFactory.generateResponse(request, result, MessageConstants.EST_USER_PASSWORD_RESET_TRG);
+            }
+            
+        } catch (Throwable t) {
+            LOGGER.error("Error while getting user details from DB", t);
+        }
+        LOGGER.error("Failed to generate event. Input data received {}", request);
+        TRANSMIT_FAIL_LOGGER.error(ResponseFactory.generateErrorResponse(request).toString());
+        return null;
+    }
+    
+    private JsonObject processEventUserDelete() {
+    	try {
+            ProcessorContext context = createContext();
+            JsonObject result = RepoBuilder.buildUserRepo(context).userDelete();
+            if (result != null) {
+                LOGGER.debug("result returned: {}", result);
+                return ResponseFactory.generateResponse(request, result, MessageConstants.EST_USER_DELETE);
             }
             
         } catch (Throwable t) {
