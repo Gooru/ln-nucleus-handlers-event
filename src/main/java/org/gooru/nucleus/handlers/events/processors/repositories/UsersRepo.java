@@ -20,6 +20,8 @@ public interface UsersRepo {
     
     JsonObject userUpdate();
     
+    JsonObject userDelete();
+    
     JsonObject userResetPasswordTrigger();
     
     JsonObject userResetPassword();

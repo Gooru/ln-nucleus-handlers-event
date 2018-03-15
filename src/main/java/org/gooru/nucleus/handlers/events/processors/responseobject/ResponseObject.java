@@ -59,12 +59,17 @@ public class ResponseObject {
         JsonObject userStructure = new JsonObject();
         String sessionToken, userId;
         sessionToken = this.body.getString(EventRequestConstants.SESSION_TOKEN);
-        String decodedVal = getDecodedUserIDFromSession(sessionToken);
-        if (decodedVal != null) {
-            userId = decodedVal;
+        if (sessionToken != null && !sessionToken.isEmpty()) {
+	        String decodedVal = getDecodedUserIDFromSession(sessionToken);
+	        if (decodedVal != null) {
+	            userId = decodedVal;
+	        } else {
+	            String rosterUserId = this.body.getString(EventRequestConstants.ROSTER_USER_ID);
+	            userId = rosterUserId != null ? rosterUserId : null;
+	        }
         } else {
-            String rosterUserId = this.body.getString(EventRequestConstants.ROSTER_USER_ID);
-            userId = rosterUserId != null ? rosterUserId : null;
+        	JsonObject eventBody = this.body.getJsonObject(EventRequestConstants.EVENT_BODY);
+        	userId = eventBody.getString(EventRequestConstants.ID);
         }
 
         userStructure.put(EventResponseConstants.USER_IP, (Object) null);

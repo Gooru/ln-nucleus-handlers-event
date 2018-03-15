@@ -168,4 +168,10 @@ public class AJUsersRepo implements UsersRepo {
         }
         return result;
     }
+
+	@Override
+	public JsonObject userDelete() {
+		String userId = context.eventBody().getString(EventRequestConstants.ID);
+        return getUser(userId);
+	}
 }
