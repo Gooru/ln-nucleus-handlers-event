@@ -1,4 +1,4 @@
-package org.gooru.nucleus.handlers.events.processors;
+	package org.gooru.nucleus.handlers.events.processors;
 
 import io.vertx.core.eventbus.Message;
 import io.vertx.core.json.JsonObject;
@@ -322,6 +322,10 @@ class MessageProcessor implements Processor {
                 result = processEventBookmarkDelete();
                 break;
                 
+            case MessageConstants.MSG_OP_EVT_PARTNER_CONTENT_CREATE:
+            	result = processEventPartnerContentCreate();
+            	break;
+                
             default:
                 LOGGER.error("Invalid operation type passed in, not able to handle");
                 throw new InvalidRequestException();
@@ -332,6 +336,10 @@ class MessageProcessor implements Processor {
                 .generateErrorResponse((JsonObject) (message != null ? message.body() : null)).toString());
         }
         return result;
+    }
+    
+    private JsonObject processEventPartnerContentCreate() {
+    	return new PartnerEventProcessor(request).process();
     }
 
     private JsonObject processEventAssessmentQuestionTagAggregate() {
