@@ -1,5 +1,8 @@
 package org.gooru.nucleus.handlers.events.processors.repositories.activejdbc;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.gooru.nucleus.handlers.events.app.components.DataSourceRegistry;
 import org.gooru.nucleus.handlers.events.constants.EventRequestConstants;
 import org.gooru.nucleus.handlers.events.constants.EventResponseConstants;
@@ -95,4 +98,16 @@ public class AJUnitRepo implements UnitRepo {
         Base.close();
         return result;
     }
+
+	@Override
+	public List<String> fetchUnitsByCourse(String courseId) {
+		Base.open(DataSourceRegistry.getInstance().getDefaultDataSource());
+		LazyList<AJEntityUnit> units = AJEntityUnit.findBySQL(AJEntityUnit.SELECT_UNITS_BY_COURSE, courseId);
+		List<String> result = new ArrayList<>();
+		units.forEach(unit -> {
+			result.add(unit.getString(AJEntityUnit.UNIT_ID));
+		});
+		Base.close();
+        return result;
+	}
 }

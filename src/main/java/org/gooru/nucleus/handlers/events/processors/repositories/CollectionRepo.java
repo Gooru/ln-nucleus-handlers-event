@@ -2,6 +2,8 @@ package org.gooru.nucleus.handlers.events.processors.repositories;
 
 import java.util.List;
 
+import org.gooru.nucleus.handlers.events.processors.repositories.activejdbc.entities.AJEntityCollection;
+
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 
@@ -9,7 +11,9 @@ import io.vertx.core.json.JsonObject;
  * Created by subbu on 12-Jan-2016.
  */
 public interface CollectionRepo {
-        JsonObject createUpdateCollectionEvent();
+    JsonObject createUpdateCollectionEvent();
+    
+    JsonObject createExtCollectionEvent();
 
     JsonObject copyCollectionEvent();
 
@@ -24,6 +28,8 @@ public interface CollectionRepo {
     JsonObject moveCollectionEvent();
 
     JsonObject createUpdateAssessmentEvent();
+    
+    JsonObject createExtAssessmentEvent();
 
     JsonObject copyAssessmentEvent();
 
@@ -37,7 +43,9 @@ public interface CollectionRepo {
 
     List<String> getOwnerAndCreatorIds(JsonArray refCollectionIds);
 
-    JsonObject getCollection(String id);
+    JsonObject getCollection(String id, String format);
 
     JsonObject removeCollection();
+    
+    List<AJEntityCollection> fetchCollectionsByCUL(String courseId, String unitId, String lessonId);
 }

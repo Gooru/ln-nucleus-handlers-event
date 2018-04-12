@@ -184,7 +184,7 @@ public final class EmailDataBuilder {
         List<String> emailIds = RepoBuilder.buildUserRepo(null).getMultipleEmailIds(userIds);
         LOGGER.debug("Preparing data for email ids:{}", Arrays.toString(emailIds.toArray()));
 
-        JsonObject collection = RepoBuilder.buildCollectionRepo(null).getCollection(collectionId);
+        JsonObject collection = RepoBuilder.buildCollectionRepo(null).getCollection(collectionId, AJEntityCollection.FORMAT_COLLECTION);
         String username = RepoBuilder.buildUserRepo(null).getUsername(getUserId());
 
         emailIds.stream().forEach(email -> {

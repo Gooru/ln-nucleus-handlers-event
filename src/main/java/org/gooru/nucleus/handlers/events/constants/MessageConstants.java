@@ -29,6 +29,7 @@ public final class MessageConstants {
     public static final String MSG_OP_EVT_COLLECTION_MOVE = "event.collection.move";
     public static final String MSG_OP_EVT_COLLECTION_REMOVE = "event.collection.remove";
     public static final String MSG_OP_EVT_COLLECTION_RESOURCE_TAG_AGGREGATE = "event.collection.resource.tag.aggregate";
+    public static final String MSG_OP_EVT_EX_COLLECTION_CREATE = "event.external.collection.create";
 
     public static final String MSG_OP_EVT_ASSESSMENT_CREATE = "event.assessment.create";
     public static final String MSG_OP_EVT_ASSESSMENT_UPDATE = "event.assessment.update";
@@ -38,6 +39,7 @@ public final class MessageConstants {
     public static final String MSG_OP_EVT_ASSESSMENT_CONTENT_REORDER = "event.assessment.content.reorder";
     public static final String MSG_OP_EVT_ASSESSMENT_COLLABORATOR_UPDATE = "event.assessment.collaborator.update";
     public static final String MSG_OP_EVT_ASSESSMENT_QUESTION_TAG_AGGREGATE = "event.assessment.question.tag.aggregate";
+    public static final String MSG_OP_EVT_EX_ASSESSMENT_CREATE = "event.external.assessment.create";
 
     public static final String MSG_OP_EVT_COURSE_CREATE = "event.course.create";
     public static final String MSG_OP_EVT_COURSE_UPDATE = "event.course.update";
@@ -110,6 +112,8 @@ public final class MessageConstants {
     public static final String MSG_OP_EVT_ROSTER_CLASS_COLLABORATOR_UPDATE = "event.roster.class.collaborator.update";
     public static final String MSG_OP_EVT_ROSTER_USER_CREATE = "event.roster.user.create";
     public static final String MSG_OP_EVT_ROSTER_USER_UPDATE = "event.roster.user.update";
+    
+    public static final String MSG_OP_EVT_PARTNER_CONTENT_CREATE = "event.partner.content.create";
 
     // Event Structure Type
     public static final int EST_ERROR = -1;

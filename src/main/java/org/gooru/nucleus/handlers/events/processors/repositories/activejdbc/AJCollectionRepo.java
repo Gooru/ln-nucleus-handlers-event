@@ -36,19 +36,19 @@ public class AJCollectionRepo implements CollectionRepo {
     @Override
     public JsonObject createUpdateCollectionEvent() {
         String contentId = context.eventBody().getString(EventRequestConstants.ID);
-        return getCollection(contentId);
+        return getCollection(contentId, AJEntityCollection.FORMAT_COLLECTION);
     }
 
     @Override
     public JsonObject copyCollectionEvent() {
         JsonObject response = new JsonObject();
         String targetContentId = context.eventBody().getString(EventRequestConstants.ID);
-        JsonObject targetContent = getCollection(targetContentId);
+        JsonObject targetContent = getCollection(targetContentId, AJEntityCollection.FORMAT_COLLECTION);
         response.put(EventResponseConstants.TARGET, targetContent);
 
         String sourceContentId = targetContent.getString(AJEntityCollection.ORIGINAL_COLLECTION_ID);
         if (sourceContentId != null && !sourceContentId.isEmpty()) {
-            JsonObject sourceContent = getCollection(sourceContentId);
+            JsonObject sourceContent = getCollection(sourceContentId, AJEntityCollection.FORMAT_COLLECTION);
             response.put(EventResponseConstants.SOURCE, sourceContent);
         }
         return response;
@@ -57,7 +57,7 @@ public class AJCollectionRepo implements CollectionRepo {
     @Override
     public JsonObject deleteCollectionEvent() {
         String contentId = context.eventBody().getString(EventRequestConstants.ID);
-        return getCollection(contentId);
+        return getCollection(contentId, AJEntityCollection.FORMAT_COLLECTION);
     }
 
     @Override
@@ -68,7 +68,7 @@ public class AJCollectionRepo implements CollectionRepo {
     @Override
     public JsonObject addContentToCollectionEvent() {
         String contentId = context.eventBody().getString(EventRequestConstants.ID);
-        return getCollection(contentId);
+        return getCollection(contentId, AJEntityCollection.FORMAT_COLLECTION);
     }
 
     @Override
@@ -116,19 +116,19 @@ public class AJCollectionRepo implements CollectionRepo {
     @Override
     public JsonObject createUpdateAssessmentEvent() {
         String contentId = context.eventBody().getString(EventRequestConstants.ID);
-        return getAssessment(contentId);
+        return getAssessment(contentId, AJEntityCollection.FORMAT_ASSESSMENT);
     }
 
     @Override
     public JsonObject copyAssessmentEvent() {
         JsonObject response = new JsonObject();
         String targetContentId = context.eventBody().getString(EventRequestConstants.ID);
-        JsonObject targetContent = getAssessment(targetContentId);
+        JsonObject targetContent = getAssessment(targetContentId, AJEntityCollection.FORMAT_ASSESSMENT);
         response.put(EventResponseConstants.TARGET, targetContent);
 
         String sourceContentId = targetContent.getString(AJEntityCollection.ORIGINAL_COLLECTION_ID);
         if (sourceContentId != null && !sourceContentId.isEmpty()) {
-            JsonObject sourceContent = getAssessment(sourceContentId);
+            JsonObject sourceContent = getAssessment(sourceContentId, AJEntityCollection.FORMAT_ASSESSMENT);
             response.put(EventResponseConstants.SOURCE, sourceContent);
         }
         return response;
@@ -137,13 +137,13 @@ public class AJCollectionRepo implements CollectionRepo {
     @Override
     public JsonObject deleteAssessmentEvent() {
         String contentId = context.eventBody().getString(EventRequestConstants.ID);
-        return getAssessment(contentId);
+        return getAssessment(contentId, AJEntityCollection.FORMAT_ASSESSMENT);
     }
 
     @Override
     public JsonObject addQuestionToAssessmentEvent() {
         String contentId = context.eventBody().getString(EventRequestConstants.ID);
-        return getAssessment(contentId);
+        return getAssessment(contentId, AJEntityCollection.FORMAT_ASSESSMENT);
     }
 
     @Override
@@ -167,13 +167,13 @@ public class AJCollectionRepo implements CollectionRepo {
     }
 
     @Override
-    public JsonObject getCollection(String contentId) {
+    public JsonObject getCollection(String contentId, String format) {
         Base.open(DataSourceRegistry.getInstance().getDefaultDataSource());
         LOGGER.debug("getting collection for id {}", contentId);
 
         JsonObject result = null;
         LazyList<AJEntityCollection> collections =
-            AJEntityCollection.findBySQL(AJEntityCollection.SELECT_COLLECTION, contentId);
+            AJEntityCollection.findBySQL(AJEntityCollection.SELECT_COLLECTION, contentId, format);
         LOGGER.debug("number of collections found {}", collections.size());
         if (!collections.isEmpty()) {
             result = new JsonObject(new JsonFormatterBuilder()
@@ -183,13 +183,13 @@ public class AJCollectionRepo implements CollectionRepo {
         return result;
     }
 
-    private JsonObject getAssessment(String contentId) {
+    private JsonObject getAssessment(String contentId, String format) {
         Base.open(DataSourceRegistry.getInstance().getDefaultDataSource());
         LOGGER.debug("getting assessment for id {}", contentId);
 
         JsonObject result = null;
         LazyList<AJEntityCollection> assessments =
-            AJEntityCollection.findBySQL(AJEntityCollection.SELECT_ASSESSMENT, contentId);
+            AJEntityCollection.findBySQL(AJEntityCollection.SELECT_ASSESSMENT, contentId, format);
         if (!assessments.isEmpty()) {
             result = new JsonObject(new JsonFormatterBuilder()
                 .buildSimpleJsonFormatter(false, AJEntityCollection.ASSESSMENT_FIELDS).toJson(assessments.get(0)));
@@ -255,4 +255,27 @@ public class AJCollectionRepo implements CollectionRepo {
         Base.close();
         return result;
     }
+
+	@Override
+	public List<AJEntityCollection> fetchCollectionsByCUL(String courseId, String unitId, String lessonId) {
+		Base.open(DataSourceRegistry.getInstance().getDefaultDataSource());
+
+		LazyList<AJEntityCollection> collections = AJEntityCollection
+				.findBySQL(AJEntityCollection.SELECT_COLLECTION_BY_CUL, courseId, unitId, lessonId);
+		LOGGER.debug("collections:{}", collections.size());
+		Base.close();
+		return collections;
+	}
+
+	@Override
+	public JsonObject createExtCollectionEvent() {
+		String contentId = context.eventBody().getString(EventRequestConstants.ID);
+        return getCollection(contentId, AJEntityCollection.FORMAT_EX_COLLECTION);
+	}
+
+	@Override
+	public JsonObject createExtAssessmentEvent() {
+		String contentId = context.eventBody().getString(EventRequestConstants.ID);
+        return getAssessment(contentId, AJEntityCollection.FORMAT_EX_ASSESSMENT);
+	}
 }
