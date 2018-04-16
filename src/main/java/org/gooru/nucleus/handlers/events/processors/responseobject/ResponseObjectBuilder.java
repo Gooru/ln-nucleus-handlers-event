@@ -99,6 +99,7 @@ public final class ResponseObjectBuilder {
             case MessageConstants.EST_USER_SIGNOUT:
             case MessageConstants.EST_USER_SIGNUP:
             case MessageConstants.EST_USER_UPDATE:
+            case MessageConstants.EST_USER_DELETE:
             case MessageConstants.EST_USER_PASSWORD_RESET_TRG:
             case MessageConstants.EST_USER_PASSWORD_RESET:
             case MessageConstants.EST_USER_PASSWORD_CHANGE:

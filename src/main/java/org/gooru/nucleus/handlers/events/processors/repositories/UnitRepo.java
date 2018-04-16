@@ -1,5 +1,7 @@
 package org.gooru.nucleus.handlers.events.processors.repositories;
 
+import java.util.List;
+
 import io.vertx.core.json.JsonObject;
 
 public interface UnitRepo {
@@ -15,4 +17,6 @@ public interface UnitRepo {
     JsonObject reorderUnitContentEvent();
     
     JsonObject getUnit(String unitId);
+    
+    List<String> fetchUnitsByCourse(String courseId);
 }

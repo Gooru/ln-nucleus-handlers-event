@@ -47,12 +47,20 @@ public class AJEntityCollection extends Model {
     public static final String CREATOR_SYSTEM = "creator_system";
     public static final String TENANT = "tenant";
     public static final String TENANT_ROOT = "tenant_root";
+    
+    public static final String FORMAT_COLLECTION = "collection";
+    public static final String FORMAT_ASSESSMENT = "assessment";
+    public static final String FORMAT_EX_COLLECTION = "collection-external";
+    public static final String FORMAT_EX_ASSESSMENT = "assessment-external";
 
     public static final String SELECT_COLLECTION =
         "SELECT id, course_id, unit_id, lesson_id, title, created_at, updated_at, owner_id, creator_id, modifier_id, original_creator_id,"
             + " original_collection_id, parent_collection_id, sequence_id, publish_date, publish_status, format, thumbnail, learning_objective,"
             + " collaborator, metadata, taxonomy, url, login_required, setting, grading, visible_on_profile, is_deleted, editorial_tags, creator_system,"
-            + " license, tenant, tenant_root FROM collection WHERE id = ?::uuid AND format = 'collection'::content_container_type";
+            + " license, tenant, tenant_root FROM collection WHERE id = ?::uuid AND format = ?::content_container_type";
+    
+    public static final String SELECT_COLLECTION_BY_CUL = "SELECT id, format FROM collection WHERE course_id = ?::uuid AND unit_id = ?::uuid AND"
+			+ " lesson_id = ?::uuid AND is_deleted = false";
 
     public static final String SELECT_COLLABORATOR = "SELECT collaborator FROM collection WHERE id = ?::uuid";
 
@@ -66,7 +74,7 @@ public class AJEntityCollection extends Model {
         "SELECT id, course_id, unit_id, lesson_id, title, created_at, updated_at, owner_id, creator_id, modifier_id, original_creator_id,"
             + " original_collection_id, parent_collection_id, sequence_id, publish_date, publish_status, format, thumbnail, learning_objective,"
             + " collaborator, metadata, taxonomy, url, login_required, setting, grading, visible_on_profile, is_deleted, editorial_tags, creator_system,"
-            + " license, tenant, tenant_root FROM collection WHERE id = ?::uuid AND format = 'assessment'::content_container_type";
+            + " license, tenant, tenant_root FROM collection WHERE id = ?::uuid AND format = ?::content_container_type";
 
     public static final List<String> ASSESSMENT_FIELDS =
         Arrays.asList(ID, COURSE_ID, UNIT_ID, LESSON_ID, TITLE, CREATED_AT, UPDATED_AT, OWNER_ID, CREATOR_ID,

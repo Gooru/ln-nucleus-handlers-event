@@ -59,12 +59,17 @@ public class ResponseObject {
         JsonObject userStructure = new JsonObject();
         String sessionToken, userId;
         sessionToken = this.body.getString(EventRequestConstants.SESSION_TOKEN);
-        String decodedVal = getDecodedUserIDFromSession(sessionToken);
-        if (decodedVal != null) {
-            userId = decodedVal;
+        if (sessionToken != null && !sessionToken.isEmpty()) {
+	        String decodedVal = getDecodedUserIDFromSession(sessionToken);
+	        if (decodedVal != null) {
+	            userId = decodedVal;
+	        } else {
+	            String rosterUserId = this.body.getString(EventRequestConstants.ROSTER_USER_ID);
+	            userId = rosterUserId != null ? rosterUserId : null;
+	        }
         } else {
-            String rosterUserId = this.body.getString(EventRequestConstants.ROSTER_USER_ID);
-            userId = rosterUserId != null ? rosterUserId : null;
+        	JsonObject eventBody = this.body.getJsonObject(EventRequestConstants.EVENT_BODY);
+        	userId = eventBody.getString(EventRequestConstants.ID);
         }
 
         userStructure.put(EventResponseConstants.USER_IP, (Object) null);
@@ -110,6 +115,8 @@ public class ResponseObject {
         case MessageConstants.MSG_OP_EVT_RESOURCE_CREATE:
         case MessageConstants.MSG_OP_EVT_QUESTION_CREATE:
         case MessageConstants.MSG_OP_EVT_COLLECTION_CREATE:
+        case MessageConstants.MSG_OP_EVT_EX_COLLECTION_CREATE:
+        case MessageConstants.MSG_OP_EVT_EX_ASSESSMENT_CREATE:
         case MessageConstants.MSG_OP_EVT_ASSESSMENT_CREATE:
         case MessageConstants.MSG_OP_EVT_LESSON_CREATE:
         case MessageConstants.MSG_OP_EVT_UNIT_CREATE:
@@ -285,6 +292,8 @@ public class ResponseObject {
         case MessageConstants.MSG_OP_EVT_QUESTION_CREATE:
         case MessageConstants.MSG_OP_EVT_COLLECTION_CREATE:
         case MessageConstants.MSG_OP_EVT_ASSESSMENT_CREATE:
+        case MessageConstants.MSG_OP_EVT_EX_COLLECTION_CREATE:
+        case MessageConstants.MSG_OP_EVT_EX_ASSESSMENT_CREATE:
         case MessageConstants.MSG_OP_EVT_LESSON_CREATE:
         case MessageConstants.MSG_OP_EVT_UNIT_CREATE:
         case MessageConstants.MSG_OP_EVT_COURSE_CREATE:
@@ -374,6 +383,7 @@ public class ResponseObject {
             break;
 
         case MessageConstants.MSG_OP_EVT_COLLECTION_CREATE:
+        case MessageConstants.MSG_OP_EVT_EX_COLLECTION_CREATE:
         case MessageConstants.MSG_OP_EVT_COLLECTION_UPDATE:
         case MessageConstants.MSG_OP_EVT_COLLECTION_COPY:
         case MessageConstants.MSG_OP_EVT_COLLECTION_DELETE:
@@ -389,6 +399,7 @@ public class ResponseObject {
             break;
 
         case MessageConstants.MSG_OP_EVT_ASSESSMENT_CREATE:
+        case MessageConstants.MSG_OP_EVT_EX_ASSESSMENT_CREATE:
         case MessageConstants.MSG_OP_EVT_ASSESSMENT_UPDATE:
         case MessageConstants.MSG_OP_EVT_ASSESSMENT_COPY:
         case MessageConstants.MSG_OP_EVT_ASSESSMENT_DELETE:
@@ -461,7 +472,11 @@ public class ResponseObject {
         case MessageConstants.MSG_OP_EVT_COLLECTION_RESOURCE_TAG_AGGREGATE:
             retVal = EventResponseConstants.FORMAT_COLLECTION;
             break;
-
+            
+		case MessageConstants.MSG_OP_EVT_EX_COLLECTION_CREATE:
+			retVal = EventResponseConstants.FORMAT_EX_COLLECTION;
+			break;
+        	
         case MessageConstants.MSG_OP_EVT_ASSESSMENT_CREATE:
         case MessageConstants.MSG_OP_EVT_ASSESSMENT_UPDATE:
         case MessageConstants.MSG_OP_EVT_ASSESSMENT_DELETE:
@@ -472,6 +487,10 @@ public class ResponseObject {
             retVal = EventResponseConstants.FORMAT_ASSESSMENT;
             break;
 
+        case MessageConstants.MSG_OP_EVT_EX_ASSESSMENT_CREATE:
+        	retVal = EventResponseConstants.FORMAT_EX_ASSESSMENT;
+        	break;
+        
         case MessageConstants.MSG_OP_EVT_LESSON_CREATE:
         case MessageConstants.MSG_OP_EVT_LESSON_UPDATE:
         case MessageConstants.MSG_OP_EVT_LESSON_TAG_AGGREGATE:
@@ -563,12 +582,14 @@ public class ResponseObject {
             break;
 
         case MessageConstants.MSG_OP_EVT_COLLECTION_CREATE:
+        case MessageConstants.MSG_OP_EVT_EX_COLLECTION_CREATE:
         case MessageConstants.MSG_OP_EVT_COLLECTION_UPDATE:
         case MessageConstants.MSG_OP_EVT_COLLECTION_DELETE:
         case MessageConstants.MSG_OP_EVT_COLLECTION_COPY:
         case MessageConstants.MSG_OP_EVT_COLLECTION_MOVE:
         case MessageConstants.MSG_OP_EVT_COLLECTION_RESOURCE_TAG_AGGREGATE:
         case MessageConstants.MSG_OP_EVT_ASSESSMENT_CREATE:
+        case MessageConstants.MSG_OP_EVT_EX_ASSESSMENT_CREATE:
         case MessageConstants.MSG_OP_EVT_ASSESSMENT_UPDATE:
         case MessageConstants.MSG_OP_EVT_ASSESSMENT_DELETE:
         case MessageConstants.MSG_OP_EVT_ASSESSMENT_COPY:
@@ -630,12 +651,14 @@ public class ResponseObject {
             break;
 
         case MessageConstants.MSG_OP_EVT_COLLECTION_CREATE:
+        case MessageConstants.MSG_OP_EVT_EX_COLLECTION_CREATE:
         case MessageConstants.MSG_OP_EVT_COLLECTION_UPDATE:
         case MessageConstants.MSG_OP_EVT_COLLECTION_DELETE:
         case MessageConstants.MSG_OP_EVT_COLLECTION_COPY:
         case MessageConstants.MSG_OP_EVT_COLLECTION_MOVE:
         case MessageConstants.MSG_OP_EVT_COLLECTION_RESOURCE_TAG_AGGREGATE:
         case MessageConstants.MSG_OP_EVT_ASSESSMENT_CREATE:
+        case MessageConstants.MSG_OP_EVT_EX_ASSESSMENT_CREATE:
         case MessageConstants.MSG_OP_EVT_ASSESSMENT_UPDATE:
         case MessageConstants.MSG_OP_EVT_ASSESSMENT_DELETE:
         case MessageConstants.MSG_OP_EVT_ASSESSMENT_COPY:
@@ -687,6 +710,7 @@ public class ResponseObject {
             break;
 
         case MessageConstants.MSG_OP_EVT_COLLECTION_CREATE:
+        case MessageConstants.MSG_OP_EVT_EX_COLLECTION_CREATE:
         case MessageConstants.MSG_OP_EVT_COLLECTION_UPDATE:
         case MessageConstants.MSG_OP_EVT_COLLECTION_DELETE:
         case MessageConstants.MSG_OP_EVT_COLLECTION_COPY:
@@ -695,6 +719,7 @@ public class ResponseObject {
         case MessageConstants.MSG_OP_EVT_COLLECTION_COLLABORATOR_UPDATE:
         case MessageConstants.MSG_OP_EVT_COLLECTION_RESOURCE_TAG_AGGREGATE:
         case MessageConstants.MSG_OP_EVT_ASSESSMENT_CREATE:
+        case MessageConstants.MSG_OP_EVT_EX_ASSESSMENT_CREATE:
         case MessageConstants.MSG_OP_EVT_ASSESSMENT_UPDATE:
         case MessageConstants.MSG_OP_EVT_ASSESSMENT_DELETE:
         case MessageConstants.MSG_OP_EVT_ASSESSMENT_COPY:
@@ -769,6 +794,7 @@ public class ResponseObject {
             break;
 
         case MessageConstants.MSG_OP_EVT_COLLECTION_CREATE:
+        case MessageConstants.MSG_OP_EVT_EX_COLLECTION_CREATE:
         case MessageConstants.MSG_OP_EVT_COLLECTION_UPDATE:
         case MessageConstants.MSG_OP_EVT_COLLECTION_COPY:
         case MessageConstants.MSG_OP_EVT_COLLECTION_DELETE:
@@ -778,6 +804,7 @@ public class ResponseObject {
         case MessageConstants.MSG_OP_EVT_COLLECTION_CONTENT_REORDER:
         case MessageConstants.MSG_OP_EVT_COLLECTION_RESOURCE_TAG_AGGREGATE:
         case MessageConstants.MSG_OP_EVT_ASSESSMENT_CREATE:
+        case MessageConstants.MSG_OP_EVT_EX_ASSESSMENT_CREATE:
         case MessageConstants.MSG_OP_EVT_ASSESSMENT_UPDATE:
         case MessageConstants.MSG_OP_EVT_ASSESSMENT_COPY:
         case MessageConstants.MSG_OP_EVT_ASSESSMENT_DELETE:

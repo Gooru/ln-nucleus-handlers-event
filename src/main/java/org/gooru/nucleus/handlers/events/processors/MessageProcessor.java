@@ -1,4 +1,4 @@
-package org.gooru.nucleus.handlers.events.processors;
+	package org.gooru.nucleus.handlers.events.processors;
 
 import io.vertx.core.eventbus.Message;
 import io.vertx.core.json.JsonObject;
@@ -288,6 +288,10 @@ class MessageProcessor implements Processor {
                 result = processEventUserSignout();
                 break;
                 
+            case MessageConstants.MSG_OP_EVT_USER_DELETE:
+            	result = processEventUserDelete();
+            	break;
+                
             case MessageConstants.MSG_OP_EVT_USER_SIGNUP:
             case MessageConstants.MSG_OP_EVT_ROSTER_USER_CREATE:
                 result = processEventUserSignup();
@@ -318,6 +322,10 @@ class MessageProcessor implements Processor {
                 result = processEventBookmarkDelete();
                 break;
                 
+            case MessageConstants.MSG_OP_EVT_PARTNER_CONTENT_CREATE:
+            	result = processEventPartnerContentCreate();
+            	break;
+                
             default:
                 LOGGER.error("Invalid operation type passed in, not able to handle");
                 throw new InvalidRequestException();
@@ -328,6 +336,10 @@ class MessageProcessor implements Processor {
                 .generateErrorResponse((JsonObject) (message != null ? message.body() : null)).toString());
         }
         return result;
+    }
+    
+    private JsonObject processEventPartnerContentCreate() {
+    	return new PartnerEventProcessor(request).process();
     }
 
     private JsonObject processEventAssessmentQuestionTagAggregate() {
@@ -547,6 +559,23 @@ class MessageProcessor implements Processor {
             if (result != null) {
                 LOGGER.debug("result returned: {}", result);
                 return ResponseFactory.generateResponse(request, result, MessageConstants.EST_USER_PASSWORD_RESET_TRG);
+            }
+            
+        } catch (Throwable t) {
+            LOGGER.error("Error while getting user details from DB", t);
+        }
+        LOGGER.error("Failed to generate event. Input data received {}", request);
+        TRANSMIT_FAIL_LOGGER.error(ResponseFactory.generateErrorResponse(request).toString());
+        return null;
+    }
+    
+    private JsonObject processEventUserDelete() {
+    	try {
+            ProcessorContext context = createContext();
+            JsonObject result = RepoBuilder.buildUserRepo(context).userDelete();
+            if (result != null) {
+                LOGGER.debug("result returned: {}", result);
+                return ResponseFactory.generateResponse(request, result, MessageConstants.EST_USER_DELETE);
             }
             
         } catch (Throwable t) {

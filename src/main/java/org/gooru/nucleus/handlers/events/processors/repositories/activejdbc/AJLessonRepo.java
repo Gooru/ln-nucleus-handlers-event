@@ -1,5 +1,8 @@
 package org.gooru.nucleus.handlers.events.processors.repositories.activejdbc;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.gooru.nucleus.handlers.events.app.components.DataSourceRegistry;
 import org.gooru.nucleus.handlers.events.constants.EventRequestConstants;
 import org.gooru.nucleus.handlers.events.constants.EventResponseConstants;
@@ -95,5 +98,18 @@ public class AJLessonRepo implements LessonRepo {
         Base.close();
         return result;
     }
+
+	@Override
+	public List<String> fetchLessonsByCU(String courseId, String unitId) {
+		Base.open(DataSourceRegistry.getInstance().getDefaultDataSource());
+
+		LazyList<AJEntityLesson> lessons = AJEntityLesson.findBySQL(AJEntityLesson.SELECT_LESSON_BY_CU, courseId, unitId);
+		List<String> result = new ArrayList<>(lessons.size());
+		lessons.forEach(lesson -> {
+			result.add(lesson.getString(AJEntityLesson.LESSON_ID));
+		});
+		Base.close();
+		return result;
+	}
 
 }

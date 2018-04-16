@@ -1,5 +1,7 @@
 package org.gooru.nucleus.handlers.events.processors.repositories;
 
+import java.util.List;
+
 import io.vertx.core.json.JsonObject;
 
 public interface LessonRepo {
@@ -14,5 +16,7 @@ public interface LessonRepo {
 
     JsonObject reorderLessonContentEvent();
     
-    JsonObject getLesson(String lessonId);
+    JsonObject getLesson(String lessonId);         
+    
+    List<String> fetchLessonsByCU(String courseId, String unitId);
 }
