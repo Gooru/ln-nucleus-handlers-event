@@ -323,6 +323,7 @@ class MessageProcessor implements Processor {
                 break;
                 
             case MessageConstants.MSG_OP_EVT_PARTNER_CONTENT_CREATE:
+            case MessageConstants.MSG_OP_EVT_PARTNER_CONTENT_DELETE:
             	result = processEventPartnerContentCreate();
             	break;
                 

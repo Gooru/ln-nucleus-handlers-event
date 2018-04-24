@@ -114,6 +114,7 @@ public final class MessageConstants {
     public static final String MSG_OP_EVT_ROSTER_USER_UPDATE = "event.roster.user.update";
     
     public static final String MSG_OP_EVT_PARTNER_CONTENT_CREATE = "event.partner.content.create";
+    public static final String MSG_OP_EVT_PARTNER_CONTENT_DELETE = "event.partner.content.delete";
 
     // Event Structure Type
     public static final int EST_ERROR = -1;
