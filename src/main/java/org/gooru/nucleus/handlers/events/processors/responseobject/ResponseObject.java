@@ -68,8 +68,7 @@ public class ResponseObject {
 	            userId = rosterUserId != null ? rosterUserId : null;
 	        }
         } else {
-        	JsonObject eventBody = this.body.getJsonObject(EventRequestConstants.EVENT_BODY);
-        	userId = eventBody.getString(EventRequestConstants.ID);
+        	userId = this.body.getString(EventRequestConstants.ROSTER_USER_ID);
         }
 
         userStructure.put(EventResponseConstants.USER_IP, (Object) null);
