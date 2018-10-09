@@ -525,6 +525,7 @@ public class ResponseObject {
         case MessageConstants.MSG_OP_EVT_CLASS_UPDATE:
         case MessageConstants.MSG_OP_EVT_CLASS_DELETE:
         case MessageConstants.MSG_OP_EVT_CLASS_COLLABORATOR_UPDATE:
+        case MessageConstants.MSG_OP_EVT_ROSTER_CLASS_COLLABORATOR_UPDATE:
         case MessageConstants.MSG_OP_EVT_CLASS_CONTENT_VISIBLE:
         case MessageConstants.MSG_OP_EVT_CLASS_COURSE_ASSIGNED:
         case MessageConstants.MSG_OP_EVT_CLASS_STUDENT_INVITE:
