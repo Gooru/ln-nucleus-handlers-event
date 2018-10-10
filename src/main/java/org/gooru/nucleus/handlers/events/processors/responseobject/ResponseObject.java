@@ -68,8 +68,7 @@ public class ResponseObject {
 	            userId = rosterUserId != null ? rosterUserId : null;
 	        }
         } else {
-        	JsonObject eventBody = this.body.getJsonObject(EventRequestConstants.EVENT_BODY);
-        	userId = eventBody.getString(EventRequestConstants.ID);
+        	userId = this.body.getString(EventRequestConstants.ROSTER_USER_ID);
         }
 
         userStructure.put(EventResponseConstants.USER_IP, (Object) null);
@@ -526,6 +525,7 @@ public class ResponseObject {
         case MessageConstants.MSG_OP_EVT_CLASS_UPDATE:
         case MessageConstants.MSG_OP_EVT_CLASS_DELETE:
         case MessageConstants.MSG_OP_EVT_CLASS_COLLABORATOR_UPDATE:
+        case MessageConstants.MSG_OP_EVT_ROSTER_CLASS_COLLABORATOR_UPDATE:
         case MessageConstants.MSG_OP_EVT_CLASS_CONTENT_VISIBLE:
         case MessageConstants.MSG_OP_EVT_CLASS_COURSE_ASSIGNED:
         case MessageConstants.MSG_OP_EVT_CLASS_STUDENT_INVITE:
