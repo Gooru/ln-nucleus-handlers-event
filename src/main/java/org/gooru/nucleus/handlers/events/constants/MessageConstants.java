@@ -29,7 +29,11 @@ public final class MessageConstants {
     public static final String MSG_OP_EVT_COLLECTION_MOVE = "event.collection.move";
     public static final String MSG_OP_EVT_COLLECTION_REMOVE = "event.collection.remove";
     public static final String MSG_OP_EVT_COLLECTION_RESOURCE_TAG_AGGREGATE = "event.collection.resource.tag.aggregate";
+    
     public static final String MSG_OP_EVT_EX_COLLECTION_CREATE = "event.external.collection.create";
+    public static final String MSG_OP_EVT_EX_COLLECTION_UPDATE = "event.external.collection.update";
+    public static final String MSG_OP_EVT_EX_COLLECTION_DELETE = "event.external.collection.delete";
+    public static final String MSG_OP_EVT_EX_COLLECTION_COLLABORATOR_UPDATE = "event.external.collection.collaborator.update";
 
     public static final String MSG_OP_EVT_ASSESSMENT_CREATE = "event.assessment.create";
     public static final String MSG_OP_EVT_ASSESSMENT_UPDATE = "event.assessment.update";
@@ -39,7 +43,16 @@ public final class MessageConstants {
     public static final String MSG_OP_EVT_ASSESSMENT_CONTENT_REORDER = "event.assessment.content.reorder";
     public static final String MSG_OP_EVT_ASSESSMENT_COLLABORATOR_UPDATE = "event.assessment.collaborator.update";
     public static final String MSG_OP_EVT_ASSESSMENT_QUESTION_TAG_AGGREGATE = "event.assessment.question.tag.aggregate";
+    
     public static final String MSG_OP_EVT_EX_ASSESSMENT_CREATE = "event.external.assessment.create";
+    public static final String MSG_OP_EVT_EX_ASSESSMENT_UPDATE = "event.external.assessment.update";
+    public static final String MSG_OP_EVT_EX_ASSESSMENT_DELETE = "event.external.assessment.delete";
+    public static final String MSG_OP_EVT_EX_ASSESSMENT_COLLABORATOR_UPDATE = "event.external.assessment.collaborator.update";
+
+    public static final String MSG_OP_EVT_OA_CREATE = "event.oa.create";
+    public static final String MSG_OP_EVT_OA_UPDATE = "event.oa.update";
+    public static final String MSG_OP_EVT_OA_DELETE = "event.oa.delete";
+    public static final String MSG_OP_EVT_OA_COLLABORATOR_UPDATE = "event.oa.collaborator.update";
 
     public static final String MSG_OP_EVT_COURSE_CREATE = "event.course.create";
     public static final String MSG_OP_EVT_COURSE_UPDATE = "event.course.update";
