@@ -140,7 +140,11 @@ class MessageProcessor implements Processor {
                 break;
 
             case MessageConstants.MSG_OP_EVT_COLLECTION_COLLABORATOR_UPDATE:
-                result = processEventCollectionCollaboratorUpdate();
+            case MessageConstants.MSG_OP_EVT_ASSESSMENT_COLLABORATOR_UPDATE:
+            case MessageConstants.MSG_OP_EVT_EX_ASSESSMENT_COLLABORATOR_UPDATE:
+            case MessageConstants.MSG_OP_EVT_EX_COLLECTION_COLLABORATOR_UPDATE:
+            case MessageConstants.MSG_OP_EVT_OA_COLLABORATOR_UPDATE:
+            	result = processEventCollectionCollaboratorUpdate();
                 break;
 
             case MessageConstants.MSG_OP_EVT_COLLECTION_CONTENT_ADD:
@@ -176,10 +180,6 @@ class MessageProcessor implements Processor {
                 result = processEventAssessmentDelete();
                 break;
 
-            case MessageConstants.MSG_OP_EVT_ASSESSMENT_COLLABORATOR_UPDATE:
-                result = processEventAssessmentCollaboratorUpdate();
-                break;
-
             case MessageConstants.MSG_OP_EVT_ASSESSMENT_QUESTION_ADD:
                 result = processEventAssessmentQuestionAdd();
                 break;
@@ -187,6 +187,37 @@ class MessageProcessor implements Processor {
             case MessageConstants.MSG_OP_EVT_ASSESSMENT_CONTENT_REORDER:
                 result = processEventAssessmentContentReorder();
                 break;
+                
+            case MessageConstants.MSG_OP_EVT_EX_ASSESSMENT_CREATE:
+            case MessageConstants.MSG_OP_EVT_EX_ASSESSMENT_UPDATE:
+                result = processEventExtAssessmentCreateUpdate();
+            	break;
+            	
+            case MessageConstants.MSG_OP_EVT_EX_ASSESSMENT_DELETE:
+            	result = processEventExtAssessmentDelete();
+            	break;
+            	
+            case MessageConstants.MSG_OP_EVT_EX_COLLECTION_CREATE:
+            case MessageConstants.MSG_OP_EVT_EX_COLLECTION_UPDATE:
+                result = processEventExtCollectionCreateUpdate();
+            	break;
+            	
+            case MessageConstants.MSG_OP_EVT_EX_COLLECTION_DELETE:
+            	result = processEventExtCollectionDelete();
+            	break;
+
+            case MessageConstants.MSG_OP_EVT_OA_CREATE:
+            case MessageConstants.MSG_OP_EVT_OA_UPDATE:
+                result = processEventOfflineActivityCreateUpdate();
+            	break;
+            	
+            case MessageConstants.MSG_OP_EVT_OA_DELETE:
+            	result = processEventOfflineActivityDelete();
+            	break;
+            	
+            case MessageConstants.MSG_OP_EVT_OA_COPY:
+              result = processEventOfflineActivityCopy();
+              break;
                 
             case MessageConstants.MSG_OP_EVT_RESOURCE_CREATE:
             case MessageConstants.MSG_OP_EVT_RESOURCE_UPDATE:
@@ -1115,22 +1146,6 @@ class MessageProcessor implements Processor {
         return null;
     }
 
-    private JsonObject processEventAssessmentCollaboratorUpdate() {
-        try {
-            ProcessorContext context = createContext();
-            JsonObject result = RepoBuilder.buildCollectionRepo(context).updateAssessmentCollaboratorEvent();
-            if (result != null) {
-                LOGGER.debug("result returned: {}", result);
-                return ResponseFactory.generateItemCollaboratorUpdateResponse(request, result);
-            }
-        } catch (Throwable t) {
-            LOGGER.error("Error while getting content from database:", t);
-        }
-        LOGGER.error("Failed to generate event. Input data received {}", request);
-        TRANSMIT_FAIL_LOGGER.error(ResponseFactory.generateErrorResponse(request).toString());
-        return null;
-    }
-
     private JsonObject processEventAssessmentQuestionAdd() {
         try {
             ProcessorContext context = createContext();
@@ -1418,4 +1433,118 @@ class MessageProcessor implements Processor {
         TRANSMIT_FAIL_LOGGER.error(ResponseFactory.generateErrorResponse(request).toString());
         return null;
     }
+    
+    private JsonObject processEventExtAssessmentCreateUpdate() {
+        try {
+            ProcessorContext context = createContext();
+            JsonObject result = RepoBuilder.buildCollectionRepo(context).createExtAssessmentEvent();
+            if (result != null) {
+                LOGGER.debug("result returned: {}", result);
+                return ResponseFactory.generateItemCreateResponse(request, result);
+            }
+        } catch (Throwable t) {
+            LOGGER.error("Error while getting content from database:", t);
+        }
+        LOGGER.error("Failed to generate event. Input data received {}", request);
+        TRANSMIT_FAIL_LOGGER.error(ResponseFactory.generateErrorResponse(request).toString());
+        return null;
+    }
+    
+    private JsonObject processEventExtAssessmentDelete() {
+        try {
+            ProcessorContext context = createContext();
+            JsonObject result = RepoBuilder.buildCollectionRepo(context).deleteExtAssessmentEvent();
+            if (result != null) {
+                LOGGER.debug("result returned: {}", result);
+                return ResponseFactory.generateItemDeleteResponse(request, result);
+            }
+        } catch (Throwable t) {
+            LOGGER.error("Error while getting content from database:", t);
+        }
+        LOGGER.error("Failed to generate event. Input data received {}", request);
+        TRANSMIT_FAIL_LOGGER.error(ResponseFactory.generateErrorResponse(request).toString());
+        return null;
+    }
+    
+    private JsonObject processEventExtCollectionCreateUpdate() {
+        try {
+            ProcessorContext context = createContext();
+            JsonObject result = RepoBuilder.buildCollectionRepo(context).createExtCollectionEvent();
+            if (result != null) {
+                LOGGER.debug("result returned: {}", result);
+                return ResponseFactory.generateItemCreateResponse(request, result);
+            }
+        } catch (Throwable t) {
+            LOGGER.error("Error while getting content from database:", t);
+        }
+        LOGGER.error("Failed to generate event. Input data received {}", request);
+        TRANSMIT_FAIL_LOGGER.error(ResponseFactory.generateErrorResponse(request).toString());
+        return null;
+    }
+    
+    private JsonObject processEventExtCollectionDelete() {
+        try {
+            ProcessorContext context = createContext();
+            JsonObject result = RepoBuilder.buildCollectionRepo(context).deleteExtCollectionEvent();
+            if (result != null) {
+                LOGGER.debug("result returned: {}", result);
+                return ResponseFactory.generateItemDeleteResponse(request, result);
+            }
+        } catch (Throwable t) {
+            LOGGER.error("Error while getting content from database:", t);
+        }
+        LOGGER.error("Failed to generate event. Input data received {}", request);
+        TRANSMIT_FAIL_LOGGER.error(ResponseFactory.generateErrorResponse(request).toString());
+        return null;
+    }
+    
+    private JsonObject processEventOfflineActivityCreateUpdate() {
+        try {
+            ProcessorContext context = createContext();
+            JsonObject result = RepoBuilder.buildCollectionRepo(context).createOfflineActivityEvent();
+            if (result != null) {
+                LOGGER.debug("result returned: {}", result);
+                return ResponseFactory.generateItemCreateResponse(request, result);
+            }
+        } catch (Throwable t) {
+            LOGGER.error("Error while getting content from database:", t);
+        }
+        LOGGER.error("Failed to generate event. Input data received {}", request);
+        TRANSMIT_FAIL_LOGGER.error(ResponseFactory.generateErrorResponse(request).toString());
+        return null;
+    }
+    
+    private JsonObject processEventOfflineActivityDelete() {
+        try {
+            ProcessorContext context = createContext();
+            JsonObject result = RepoBuilder.buildCollectionRepo(context).deleteOfflineActivityEvent();
+            if (result != null) {
+                LOGGER.debug("result returned: {}", result);
+                return ResponseFactory.generateItemDeleteResponse(request, result);
+            }
+        } catch (Throwable t) {
+            LOGGER.error("Error while getting content from database:", t);
+        }
+        LOGGER.error("Failed to generate event. Input data received {}", request);
+        TRANSMIT_FAIL_LOGGER.error(ResponseFactory.generateErrorResponse(request).toString());
+        return null;
+    }
+    
+    private JsonObject processEventOfflineActivityCopy() {
+      try {
+          ProcessorContext context = createContext();
+          JsonObject result = RepoBuilder.buildCollectionRepo(context).copyOfflineActivityEvent();
+          if (result != null) {
+              LOGGER.debug("getOfflineActivity() returned: {}", result);
+              return ResponseFactory.generateItemCopyResponse(request, result);
+          }
+      } catch (Throwable t) {
+          LOGGER.error("Error while getting content from database:", t);
+      }
+      LOGGER.error("Failed to generate event. Input data received {}", request);
+      TRANSMIT_FAIL_LOGGER.error(ResponseFactory.generateErrorResponse(request).toString());
+      return null;
+  }
+
+    
 }

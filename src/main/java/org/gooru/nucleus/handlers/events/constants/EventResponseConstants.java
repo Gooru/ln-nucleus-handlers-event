@@ -89,6 +89,7 @@ public final class EventResponseConstants {
   public static final String FORMAT_EX_COLLECTION = "collection-external";
   public static final String FORMAT_ASSESSMENT = "assessment";
   public static final String FORMAT_EX_ASSESSMENT = "assessment-external";
+  public static final String FORMAT_OFFLINE_ACTIVITY = "offline-activity";
   public static final String FORMAT_LESSON = "lesson";
   public static final String FORMAT_UNIT = "unit";
   public static final String FORMAT_COURSE = "course";

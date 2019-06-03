@@ -198,7 +198,7 @@ public class AJCollectionRepo implements CollectionRepo {
         Base.close();
         return result;
     }
-
+    
     @Override
     public List<String> getOwnerAndCreatorIds(JsonArray refCollectionIds) {
         Base.open(DataSourceRegistry.getInstance().getDefaultDataSource());
@@ -267,15 +267,71 @@ public class AJCollectionRepo implements CollectionRepo {
 		return collections;
 	}
 
-	@Override
+    @Override
 	public JsonObject createExtCollectionEvent() {
 		String contentId = context.eventBody().getString(EventRequestConstants.ID);
         return getCollection(contentId, AJEntityCollection.FORMAT_EX_COLLECTION);
-	}
-
-	@Override
+    }
+	
+    @Override
+    public JsonObject deleteExtCollectionEvent() {
+        String contentId = context.eventBody().getString(EventRequestConstants.ID);
+        return getCollection(contentId, AJEntityCollection.FORMAT_EX_COLLECTION);
+    }
+	
+    @Override
 	public JsonObject createExtAssessmentEvent() {
 		String contentId = context.eventBody().getString(EventRequestConstants.ID);
         return getAssessment(contentId, AJEntityCollection.FORMAT_EX_ASSESSMENT);
 	}
+	
+    @Override
+    public JsonObject deleteExtAssessmentEvent() {
+        String contentId = context.eventBody().getString(EventRequestConstants.ID);
+        return getAssessment(contentId, AJEntityCollection.FORMAT_EX_ASSESSMENT);
+    }
+	
+    @Override
+    public JsonObject createOfflineActivityEvent() {
+		String contentId = context.eventBody().getString(EventRequestConstants.ID);
+        return getOfflineActivity(contentId, AJEntityCollection.FORMAT_OFFLINE_ACTIVITY);
+	}
+	
+    @Override
+    public JsonObject deleteOfflineActivityEvent() {
+        String contentId = context.eventBody().getString(EventRequestConstants.ID);
+        return getOfflineActivity(contentId, AJEntityCollection.FORMAT_OFFLINE_ACTIVITY);
+    }
+    
+    private JsonObject getOfflineActivity(String contentId, String format) {
+      Base.open(DataSourceRegistry.getInstance().getDefaultDataSource());
+      LOGGER.debug("getting offline activity for id {}", contentId);
+  
+      JsonObject result = null;
+      LazyList<AJEntityCollection> assessments =
+          AJEntityCollection.findBySQL(AJEntityCollection.SELECT_OFFLINE_ACTIVITY, contentId, format);
+      if (!assessments.isEmpty()) {
+        result = new JsonObject(new JsonFormatterBuilder()
+            .buildSimpleJsonFormatter(false, AJEntityCollection.OFFLINE_ACTIVITY_FIELDS)
+            .toJson(assessments.get(0)));
+      }
+  
+      Base.close();
+      return result;
+    }
+    
+    @Override
+    public JsonObject copyOfflineActivityEvent() {
+        JsonObject response = new JsonObject();
+        String targetContentId = context.eventBody().getString(EventRequestConstants.ID);
+        JsonObject targetContent = getOfflineActivity(targetContentId, AJEntityCollection.FORMAT_OFFLINE_ACTIVITY);
+        response.put(EventResponseConstants.TARGET, targetContent);
+
+        String sourceContentId = targetContent.getString(AJEntityCollection.ORIGINAL_COLLECTION_ID);
+        if (sourceContentId != null && !sourceContentId.isEmpty()) {
+            JsonObject sourceContent = getOfflineActivity(sourceContentId, AJEntityCollection.FORMAT_OFFLINE_ACTIVITY);
+            response.put(EventResponseConstants.SOURCE, sourceContent);
+        }
+        return response;
+    }
 }

@@ -47,11 +47,13 @@ public class AJEntityCollection extends Model {
     public static final String CREATOR_SYSTEM = "creator_system";
     public static final String TENANT = "tenant";
     public static final String TENANT_ROOT = "tenant_root";
+    public static final String SUBFORMAT = "subformat";
     
     public static final String FORMAT_COLLECTION = "collection";
     public static final String FORMAT_ASSESSMENT = "assessment";
     public static final String FORMAT_EX_COLLECTION = "collection-external";
     public static final String FORMAT_EX_ASSESSMENT = "assessment-external";
+    public static final String FORMAT_OFFLINE_ACTIVITY = "offline-activity";
 
     public static final String SELECT_COLLECTION =
         "SELECT id, course_id, unit_id, lesson_id, title, created_at, updated_at, owner_id, creator_id, modifier_id, original_creator_id,"
@@ -81,6 +83,19 @@ public class AJEntityCollection extends Model {
             MODIFIER_ID, ORIGINAL_CREATOR_ID, ORIGINAL_COLLECTION_ID, PARENT_COLLECTION_ID, SEQUENCE_ID, PUBLISH_DATE,
             PUBLISH_STATUS, FORMAT, THUMBNAIL, LEARNING_OBJECTIVE, COLLABORATOR, METADATA, TAXONOMY, URL,
             LOGIN_REQUIRED, SETTING, GRADING, VISIBLE_ON_PROFILE, IS_DELETED, EDITORIAL_TAGS, CREATOR_SYSTEM, LICENSE, TENANT, TENANT_ROOT);
+
+    public static final String SELECT_OFFLINE_ACTIVITY =
+        "SELECT id, course_id, unit_id, lesson_id, title, created_at, updated_at, owner_id, creator_id, modifier_id, original_creator_id,"
+            + " original_collection_id, parent_collection_id, sequence_id, publish_date, publish_status, format, thumbnail, learning_objective,"
+            + " collaborator, metadata, taxonomy, url, login_required, setting, grading, visible_on_profile, is_deleted, editorial_tags, creator_system,"
+            + " license, tenant, tenant_root, subformat FROM collection WHERE id = ?::uuid AND format = ?::content_container_type";
+  
+    public static final List<String> OFFLINE_ACTIVITY_FIELDS = Arrays.asList(ID, COURSE_ID, UNIT_ID,
+        LESSON_ID, TITLE, CREATED_AT, UPDATED_AT, OWNER_ID, CREATOR_ID, MODIFIER_ID,
+        ORIGINAL_CREATOR_ID, ORIGINAL_COLLECTION_ID, PARENT_COLLECTION_ID, SEQUENCE_ID, PUBLISH_DATE,
+        PUBLISH_STATUS, FORMAT, THUMBNAIL, LEARNING_OBJECTIVE, COLLABORATOR, METADATA, TAXONOMY, URL,
+        LOGIN_REQUIRED, SETTING, GRADING, VISIBLE_ON_PROFILE, IS_DELETED, EDITORIAL_TAGS,
+        CREATOR_SYSTEM, LICENSE, TENANT, TENANT_ROOT, SUBFORMAT);
 
     public static final String SELECT_OWNER_CREATOR =
         "SELECT owner_id, creator_id FROM collection where id = ANY(?::uuid[])";
