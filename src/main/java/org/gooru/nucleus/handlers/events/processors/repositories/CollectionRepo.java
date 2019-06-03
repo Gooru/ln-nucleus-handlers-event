@@ -56,4 +56,6 @@ public interface CollectionRepo {
     JsonObject createOfflineActivityEvent();
     
     JsonObject deleteOfflineActivityEvent();
+
+    JsonObject copyOfflineActivityEvent();
 }

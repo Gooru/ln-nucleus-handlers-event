@@ -53,6 +53,7 @@ public final class MessageConstants {
     public static final String MSG_OP_EVT_OA_UPDATE = "event.oa.update";
     public static final String MSG_OP_EVT_OA_DELETE = "event.oa.delete";
     public static final String MSG_OP_EVT_OA_COLLABORATOR_UPDATE = "event.oa.collaborator.update";
+    public static final String MSG_OP_EVT_OA_COPY = "event.oa.copy";
 
     public static final String MSG_OP_EVT_COURSE_CREATE = "event.course.create";
     public static final String MSG_OP_EVT_COURSE_UPDATE = "event.course.update";

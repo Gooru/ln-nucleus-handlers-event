@@ -214,6 +214,10 @@ class MessageProcessor implements Processor {
             case MessageConstants.MSG_OP_EVT_OA_DELETE:
             	result = processEventOfflineActivityDelete();
             	break;
+            	
+            case MessageConstants.MSG_OP_EVT_OA_COPY:
+              result = processEventOfflineActivityCopy();
+              break;
                 
             case MessageConstants.MSG_OP_EVT_RESOURCE_CREATE:
             case MessageConstants.MSG_OP_EVT_RESOURCE_UPDATE:
@@ -1525,5 +1529,22 @@ class MessageProcessor implements Processor {
         TRANSMIT_FAIL_LOGGER.error(ResponseFactory.generateErrorResponse(request).toString());
         return null;
     }
+    
+    private JsonObject processEventOfflineActivityCopy() {
+      try {
+          ProcessorContext context = createContext();
+          JsonObject result = RepoBuilder.buildCollectionRepo(context).copyOfflineActivityEvent();
+          if (result != null) {
+              LOGGER.debug("getOfflineActivity() returned: {}", result);
+              return ResponseFactory.generateItemCopyResponse(request, result);
+          }
+      } catch (Throwable t) {
+          LOGGER.error("Error while getting content from database:", t);
+      }
+      LOGGER.error("Failed to generate event. Input data received {}", request);
+      TRANSMIT_FAIL_LOGGER.error(ResponseFactory.generateErrorResponse(request).toString());
+      return null;
+  }
+
     
 }

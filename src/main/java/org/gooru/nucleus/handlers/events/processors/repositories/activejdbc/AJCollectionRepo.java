@@ -319,4 +319,19 @@ public class AJCollectionRepo implements CollectionRepo {
       Base.close();
       return result;
     }
+    
+    @Override
+    public JsonObject copyOfflineActivityEvent() {
+        JsonObject response = new JsonObject();
+        String targetContentId = context.eventBody().getString(EventRequestConstants.ID);
+        JsonObject targetContent = getOfflineActivity(targetContentId, AJEntityCollection.FORMAT_OFFLINE_ACTIVITY);
+        response.put(EventResponseConstants.TARGET, targetContent);
+
+        String sourceContentId = targetContent.getString(AJEntityCollection.ORIGINAL_COLLECTION_ID);
+        if (sourceContentId != null && !sourceContentId.isEmpty()) {
+            JsonObject sourceContent = getOfflineActivity(sourceContentId, AJEntityCollection.FORMAT_OFFLINE_ACTIVITY);
+            response.put(EventResponseConstants.SOURCE, sourceContent);
+        }
+        return response;
+    }
 }
