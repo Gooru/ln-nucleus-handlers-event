@@ -48,4 +48,14 @@ public interface CollectionRepo {
     JsonObject removeCollection();
     
     List<AJEntityCollection> fetchCollectionsByCUL(String courseId, String unitId, String lessonId);
+    
+    JsonObject deleteExtAssessmentEvent();
+    
+    JsonObject deleteExtCollectionEvent();
+    
+    JsonObject createOfflineActivityEvent();
+    
+    JsonObject deleteOfflineActivityEvent();
+
+    JsonObject copyOfflineActivityEvent();
 }
