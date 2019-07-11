@@ -8,47 +8,47 @@ import org.gooru.nucleus.handlers.events.processors.repositories.activejdbc.AJRe
  */
 public final class RepoBuilder {
 
-    public static ContentRepo buildContentRepo(ProcessorContext context) {
-        return AJRepoBuilder.buildContentRepo(context);
-    }
+  public static ContentRepo buildContentRepo(ProcessorContext context) {
+    return AJRepoBuilder.buildContentRepo(context);
+  }
 
-    public static CollectionRepo buildCollectionRepo(ProcessorContext context) {
-        return AJRepoBuilder.buildCollectionRepo(context);
-    }
+  public static CollectionRepo buildCollectionRepo(ProcessorContext context) {
+    return AJRepoBuilder.buildCollectionRepo(context);
+  }
 
-    public static CourseRepo buildCourseRepo(ProcessorContext context) {
-        return AJRepoBuilder.buildCourseRepo(context);
-    }
+  public static CourseRepo buildCourseRepo(ProcessorContext context) {
+    return AJRepoBuilder.buildCourseRepo(context);
+  }
 
-    public static UnitRepo buildUnitRepo(ProcessorContext context) {
-        return AJRepoBuilder.buildUnitRepo(context);
-    }
+  public static UnitRepo buildUnitRepo(ProcessorContext context) {
+    return AJRepoBuilder.buildUnitRepo(context);
+  }
 
-    public static LessonRepo buildLessonRepo(ProcessorContext context) {
-        return AJRepoBuilder.buildLessonRepo(context);
-    }
+  public static LessonRepo buildLessonRepo(ProcessorContext context) {
+    return AJRepoBuilder.buildLessonRepo(context);
+  }
 
-    public static ClassRepo buildClassRepo(ProcessorContext context) {
-        return AJRepoBuilder.buildClassRepo(context);
-    }
+  public static ClassRepo buildClassRepo(ProcessorContext context) {
+    return AJRepoBuilder.buildClassRepo(context);
+  }
 
-    public static UsersRepo buildUserRepo(ProcessorContext context) {
-        return AJRepoBuilder.buildUserRepo(context);
-    }
+  public static UsersRepo buildUserRepo(ProcessorContext context) {
+    return AJRepoBuilder.buildUserRepo(context);
+  }
 
-    public static ProfileRepo buildProfileRepo(ProcessorContext context) {
-        return AJRepoBuilder.buildProfileRepo(context);
-    }
-    
-    public static RubricRepo buildRubricRepo(ProcessorContext context) {
-        return AJRepoBuilder.buildRubricRepo(context);
-    }
-    
-    public static BookmarkRepo buildBookmarkRepo(ProcessorContext context) {
-        return AJRepoBuilder.buildBookmarkRepo(context);
-    }
+  public static ProfileRepo buildProfileRepo(ProcessorContext context) {
+    return AJRepoBuilder.buildProfileRepo(context);
+  }
 
-    private RepoBuilder() {
-        throw new AssertionError();
-    }
+  public static RubricRepo buildRubricRepo(ProcessorContext context) {
+    return AJRepoBuilder.buildRubricRepo(context);
+  }
+
+  public static BookmarkRepo buildBookmarkRepo(ProcessorContext context) {
+    return AJRepoBuilder.buildBookmarkRepo(context);
+  }
+
+  private RepoBuilder() {
+    throw new AssertionError();
+  }
 }

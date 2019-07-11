@@ -1,7 +1,6 @@
 package org.gooru.nucleus.handlers.events.processors.partners;
 
 import org.gooru.nucleus.handlers.events.processors.ProcessorContext;
-
 import io.vertx.core.json.JsonObject;
 
 /**
@@ -9,9 +8,9 @@ import io.vertx.core.json.JsonObject;
  */
 public abstract class ContentEventProcessor {
 
-	public abstract void process();
-	
-	public ProcessorContext createContext(String eventName, JsonObject eventBody) {
-		return new ProcessorContext(eventName, eventBody);
-	}
+  public abstract void process();
+
+  public ProcessorContext createContext(String eventName, JsonObject eventBody) {
+    return new ProcessorContext(eventName, eventBody);
+  }
 }
