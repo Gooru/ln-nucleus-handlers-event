@@ -2,44 +2,43 @@ package org.gooru.nucleus.handlers.events.processors.responseobject;
 
 import org.gooru.nucleus.handlers.events.constants.EventRequestConstants;
 import org.gooru.nucleus.handlers.events.constants.EventResponseConstants;
-
 import io.vertx.core.json.JsonObject;
 
 /**
- * @author szgooru
- * Created On: 17-May-2017
+ * @author szgooru Created On: 17-May-2017
  */
 public class ClassArchiveResponseObject extends ResponseObject {
 
-    public ClassArchiveResponseObject(JsonObject body, JsonObject response) {
-        super(body, response);
-    }
-    
-    public JsonObject build() {
-        JsonObject eventStructure = createGenericStructure();
-        eventStructure.put(EventResponseConstants.METRICS, createMetricsStructure());
-        eventStructure.put(EventResponseConstants.SESSION, createSessionStructure());
-        eventStructure.put(EventResponseConstants.USER, createUserStructure());
-        eventStructure.put(EventResponseConstants.VERSION, createVersionStructure());
-        eventStructure.put(EventResponseConstants.CONTEXT, createContextStructure());
-        eventStructure.put(EventResponseConstants.PAYLOAD_OBJECT, createPayLoadObjectStructure());
-        return eventStructure;
-    }
+  public ClassArchiveResponseObject(JsonObject body, JsonObject response) {
+    super(body, response);
+  }
 
-    private JsonObject createContextStructure() {
-        JsonObject contextStructure = new JsonObject();
-        String contentId =
-            this.body.getJsonObject(EventRequestConstants.EVENT_BODY).getString(EventRequestConstants.ID);
-        contextStructure.put(EventResponseConstants.CONTENT_GOORU_ID, contentId);
-        contextStructure.put(EventResponseConstants.CLIENT_SOURCE, EventResponseConstants.CLIENT_SOURCE_CORE);
-        return contextStructure;
-    }
+  public JsonObject build() {
+    JsonObject eventStructure = createGenericStructure();
+    eventStructure.put(EventResponseConstants.METRICS, createMetricsStructure());
+    eventStructure.put(EventResponseConstants.SESSION, createSessionStructure());
+    eventStructure.put(EventResponseConstants.USER, createUserStructure());
+    eventStructure.put(EventResponseConstants.VERSION, createVersionStructure());
+    eventStructure.put(EventResponseConstants.CONTEXT, createContextStructure());
+    eventStructure.put(EventResponseConstants.PAYLOAD_OBJECT, createPayLoadObjectStructure());
+    return eventStructure;
+  }
 
-    private JsonObject createPayLoadObjectStructure() {
-        JsonObject payloadStructure = response;
-        payloadStructure.put(EventResponseConstants.CONTENT_FORMAT, getContentFormatFromResponse());
-        payloadStructure.put(EventResponseConstants.SUB_EVENT_NAME, getSubEventName());
-        return payloadStructure;
-    }
+  private JsonObject createContextStructure() {
+    JsonObject contextStructure = new JsonObject();
+    String contentId = this.body.getJsonObject(EventRequestConstants.EVENT_BODY)
+        .getString(EventRequestConstants.ID);
+    contextStructure.put(EventResponseConstants.CONTENT_GOORU_ID, contentId);
+    contextStructure.put(EventResponseConstants.CLIENT_SOURCE,
+        EventResponseConstants.CLIENT_SOURCE_CORE);
+    return contextStructure;
+  }
+
+  private JsonObject createPayLoadObjectStructure() {
+    JsonObject payloadStructure = response;
+    payloadStructure.put(EventResponseConstants.CONTENT_FORMAT, getContentFormatFromResponse());
+    payloadStructure.put(EventResponseConstants.SUB_EVENT_NAME, getSubEventName());
+    return payloadStructure;
+  }
 
 }

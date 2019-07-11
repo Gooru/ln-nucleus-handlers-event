@@ -1,9 +1,7 @@
 package org.gooru.nucleus.handlers.events.processors.repositories;
 
 import java.util.List;
-
 import org.gooru.nucleus.handlers.events.processors.repositories.activejdbc.entities.AJEntityCollection;
-
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 
@@ -11,51 +9,51 @@ import io.vertx.core.json.JsonObject;
  * Created by subbu on 12-Jan-2016.
  */
 public interface CollectionRepo {
-    JsonObject createUpdateCollectionEvent();
-    
-    JsonObject createExtCollectionEvent();
+  JsonObject createUpdateCollectionEvent();
 
-    JsonObject copyCollectionEvent();
+  JsonObject createExtCollectionEvent();
 
-    JsonObject deleteCollectionEvent();
+  JsonObject copyCollectionEvent();
 
-    JsonObject reorderCollectionContentEvent();
+  JsonObject deleteCollectionEvent();
 
-    JsonObject addContentToCollectionEvent();
+  JsonObject reorderCollectionContentEvent();
 
-    JsonObject updateCollectionCollaboratorEvent();
+  JsonObject addContentToCollectionEvent();
 
-    JsonObject moveCollectionEvent();
+  JsonObject updateCollectionCollaboratorEvent();
 
-    JsonObject createUpdateAssessmentEvent();
-    
-    JsonObject createExtAssessmentEvent();
+  JsonObject moveCollectionEvent();
 
-    JsonObject copyAssessmentEvent();
+  JsonObject createUpdateAssessmentEvent();
 
-    JsonObject deleteAssessmentEvent();
+  JsonObject createExtAssessmentEvent();
 
-    JsonObject addQuestionToAssessmentEvent();
+  JsonObject copyAssessmentEvent();
 
-    JsonObject reorderAssessmentContentEvent();
+  JsonObject deleteAssessmentEvent();
 
-    JsonObject updateAssessmentCollaboratorEvent();
+  JsonObject addQuestionToAssessmentEvent();
 
-    List<String> getOwnerAndCreatorIds(JsonArray refCollectionIds);
+  JsonObject reorderAssessmentContentEvent();
 
-    JsonObject getCollection(String id, String format);
+  JsonObject updateAssessmentCollaboratorEvent();
 
-    JsonObject removeCollection();
-    
-    List<AJEntityCollection> fetchCollectionsByCUL(String courseId, String unitId, String lessonId);
-    
-    JsonObject deleteExtAssessmentEvent();
-    
-    JsonObject deleteExtCollectionEvent();
-    
-    JsonObject createOfflineActivityEvent();
-    
-    JsonObject deleteOfflineActivityEvent();
+  List<String> getOwnerAndCreatorIds(JsonArray refCollectionIds);
 
-    JsonObject copyOfflineActivityEvent();
+  JsonObject getCollection(String id, String format);
+
+  JsonObject removeCollection();
+
+  List<AJEntityCollection> fetchCollectionsByCUL(String courseId, String unitId, String lessonId);
+
+  JsonObject deleteExtAssessmentEvent();
+
+  JsonObject deleteExtCollectionEvent();
+
+  JsonObject createOfflineActivityEvent();
+
+  JsonObject deleteOfflineActivityEvent();
+
+  JsonObject copyOfflineActivityEvent();
 }

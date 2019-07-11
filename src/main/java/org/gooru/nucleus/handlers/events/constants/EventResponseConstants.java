@@ -31,7 +31,8 @@ public final class EventResponseConstants {
   public static final String EVENT_USER_SIGNOUT = "event.user.signout";
   public static final String EVENT_USER_SIGNUP = "event.user.signup";
   public static final String EVENT_USER_UPDATE = "event.user.update";
-  public static final String EVENT_USER_PASSWORD_RESET_TRIGGER = "event.user.password.reset.trigger";
+  public static final String EVENT_USER_PASSWORD_RESET_TRIGGER =
+      "event.user.password.reset.trigger";
   public static final String EVENT_USER_PASSWORD_RESET = "event.user.password.reset";
   public static final String EVENT_USER_PASSWORD_CHANGE = "event.user.password.change";
   public static final String EVENT_QUESTION_RUBRIC_ASSOCIATION = "question.rubirc.association";
@@ -113,11 +114,11 @@ public final class EventResponseConstants {
   public static final String EVENT_TIMESTAMP = "event.timestamp";
   public static final String EVENT_DUMP = "event.dump";
   public static final String ID = "id";
-  
+
   public static final String CLIENT_SOURCE_CORE = "core";
   public static final String CLIENT_SOURCE_COREAUTH = "auth";
   public static final String CLIENT_SOURCE_ROSTER = "roster";
-  
+
   private EventResponseConstants() {
     throw new AssertionError();
   }
