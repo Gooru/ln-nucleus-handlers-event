@@ -37,17 +37,24 @@ public class AJBookmarkRepo implements BookmarkRepo {
   }
 
   private JsonObject getBookmark(String bookmarkId) {
-    Base.open(DataSourceRegistry.getInstance().getDefaultDataSource());
-    LOGGER.debug("getting bookmark for id {}", bookmarkId);
+    try {
+      Base.open(DataSourceRegistry.getInstance().getDefaultDataSource());
+      LOGGER.debug("getting bookmark for id {}", bookmarkId);
 
-    JsonObject result = null;
-    AJEntityBookmark bookmark = AJEntityBookmark.findById(UUID.fromString(bookmarkId));
-    if (bookmark != null) {
-      result = new JsonObject(new JsonFormatterBuilder()
-          .buildSimpleJsonFormatter(false, AJEntityBookmark.BOOKMARKS_FIELDS).toJson(bookmark));
+      JsonObject result = null;
+      AJEntityBookmark bookmark = AJEntityBookmark.findById(UUID.fromString(bookmarkId));
+      if (bookmark != null) {
+        result = new JsonObject(new JsonFormatterBuilder()
+            .buildSimpleJsonFormatter(false, AJEntityBookmark.BOOKMARKS_FIELDS).toJson(bookmark));
+      }
+
+      return result;
+    } catch (Throwable t) {
+      LOGGER.error("error while getting the data from database:", t);
+      return null;
+    } finally {
+      Base.close();
     }
-    Base.close();
-    return result;
   }
 
 }

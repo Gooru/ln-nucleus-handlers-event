@@ -72,19 +72,25 @@ public class AJCollectionRepo implements CollectionRepo {
 
   @Override
   public JsonObject updateCollectionCollaboratorEvent() {
-    Base.open(DataSourceRegistry.getInstance().getDefaultDataSource());
-    String contentId = context.eventBody().getString(EventRequestConstants.ID);
-    JsonObject result = context.eventBody();
-    LazyList<AJEntityCollection> collections =
-        AJEntityCollection.findBySQL(AJEntityCollection.SELECT_COLLABORATOR, contentId);
-    if (!collections.isEmpty()) {
-      String collaborators = collections.get(0).getString(AJEntityCollection.COLLABORATOR);
-      if (collaborators != null && !collaborators.isEmpty()) {
-        result.put(EventRequestConstants.COLLABORATORS, new JsonArray(collaborators));
+    try {
+      Base.open(DataSourceRegistry.getInstance().getDefaultDataSource());
+      String contentId = context.eventBody().getString(EventRequestConstants.ID);
+      JsonObject result = context.eventBody();
+      LazyList<AJEntityCollection> collections =
+          AJEntityCollection.findBySQL(AJEntityCollection.SELECT_COLLABORATOR, contentId);
+      if (!collections.isEmpty()) {
+        String collaborators = collections.get(0).getString(AJEntityCollection.COLLABORATOR);
+        if (collaborators != null && !collaborators.isEmpty()) {
+          result.put(EventRequestConstants.COLLABORATORS, new JsonArray(collaborators));
+        }
       }
+      return result;
+    } catch (Throwable t) {
+      LOGGER.error("error while getting the data from database:", t);
+      return null;
+    } finally {
+      Base.close();
     }
-    Base.close();
-    return result;
   }
 
   @Override
@@ -153,69 +159,93 @@ public class AJCollectionRepo implements CollectionRepo {
 
   @Override
   public JsonObject updateAssessmentCollaboratorEvent() {
-    Base.open(DataSourceRegistry.getInstance().getDefaultDataSource());
-    String contentId = context.eventBody().getString(EventRequestConstants.ID);
-    JsonObject result = context.eventBody();
-    LazyList<AJEntityCollection> collections =
-        AJEntityCollection.findBySQL(AJEntityCollection.SELECT_COLLABORATOR, contentId);
-    if (!collections.isEmpty()) {
-      result.put(EventRequestConstants.COLLABORATORS,
-          new JsonArray(collections.get(0).getString(AJEntityCollection.COLLABORATOR)));
+    try {
+      Base.open(DataSourceRegistry.getInstance().getDefaultDataSource());
+      String contentId = context.eventBody().getString(EventRequestConstants.ID);
+      JsonObject result = context.eventBody();
+      LazyList<AJEntityCollection> collections =
+          AJEntityCollection.findBySQL(AJEntityCollection.SELECT_COLLABORATOR, contentId);
+      if (!collections.isEmpty()) {
+        result.put(EventRequestConstants.COLLABORATORS,
+            new JsonArray(collections.get(0).getString(AJEntityCollection.COLLABORATOR)));
+      }
+      return result;
+    } catch (Throwable t) {
+      LOGGER.error("error while getting the data from database:", t);
+      return null;
+    } finally {
+      Base.close();
     }
-    Base.close();
-    return result;
   }
 
   @Override
   public JsonObject getCollection(String contentId, String format) {
-    Base.open(DataSourceRegistry.getInstance().getDefaultDataSource());
-    LOGGER.debug("getting collection for id {}", contentId);
+    try {
+      Base.open(DataSourceRegistry.getInstance().getDefaultDataSource());
+      LOGGER.debug("getting collection for id {}", contentId);
 
-    JsonObject result = null;
-    LazyList<AJEntityCollection> collections =
-        AJEntityCollection.findBySQL(AJEntityCollection.SELECT_COLLECTION, contentId, format);
-    LOGGER.debug("number of collections found {}", collections.size());
-    if (!collections.isEmpty()) {
-      result = new JsonObject(new JsonFormatterBuilder()
-          .buildSimpleJsonFormatter(false, AJEntityCollection.COLLECTION_FIELDS)
-          .toJson(collections.get(0)));
+      JsonObject result = null;
+      LazyList<AJEntityCollection> collections =
+          AJEntityCollection.findBySQL(AJEntityCollection.SELECT_COLLECTION, contentId, format);
+      LOGGER.debug("number of collections found {}", collections.size());
+      if (!collections.isEmpty()) {
+        result = new JsonObject(new JsonFormatterBuilder()
+            .buildSimpleJsonFormatter(false, AJEntityCollection.COLLECTION_FIELDS)
+            .toJson(collections.get(0)));
+      }
+      return result;
+    } catch (Throwable t) {
+      LOGGER.error("error while getting the data from database:", t);
+      return null;
+    } finally {
+      Base.close();
     }
-    Base.close();
-    return result;
   }
 
   private JsonObject getAssessment(String contentId, String format) {
-    Base.open(DataSourceRegistry.getInstance().getDefaultDataSource());
-    LOGGER.debug("getting assessment for id {}", contentId);
+    try {
+      Base.open(DataSourceRegistry.getInstance().getDefaultDataSource());
+      LOGGER.debug("getting assessment for id {}", contentId);
 
-    JsonObject result = null;
-    LazyList<AJEntityCollection> assessments =
-        AJEntityCollection.findBySQL(AJEntityCollection.SELECT_ASSESSMENT, contentId, format);
-    if (!assessments.isEmpty()) {
-      result = new JsonObject(new JsonFormatterBuilder()
-          .buildSimpleJsonFormatter(false, AJEntityCollection.ASSESSMENT_FIELDS)
-          .toJson(assessments.get(0)));
+      JsonObject result = null;
+      LazyList<AJEntityCollection> assessments =
+          AJEntityCollection.findBySQL(AJEntityCollection.SELECT_ASSESSMENT, contentId, format);
+      if (!assessments.isEmpty()) {
+        result = new JsonObject(new JsonFormatterBuilder()
+            .buildSimpleJsonFormatter(false, AJEntityCollection.ASSESSMENT_FIELDS)
+            .toJson(assessments.get(0)));
+      }
+
+      return result;
+    } catch (Throwable t) {
+      LOGGER.error("error while getting the data from database:", t);
+      return null;
+    } finally {
+      Base.close();
     }
-
-    Base.close();
-    return result;
   }
 
   @Override
   public List<String> getOwnerAndCreatorIds(JsonArray refCollectionIds) {
-    Base.open(DataSourceRegistry.getInstance().getDefaultDataSource());
-    Set<String> uniqueOwnerCreatorIds = new HashSet<>();
+    try {
+      Base.open(DataSourceRegistry.getInstance().getDefaultDataSource());
+      Set<String> uniqueOwnerCreatorIds = new HashSet<>();
 
-    LazyList<AJEntityCollection> ownerCreatorIdsFromDB = AJEntityCollection.findBySQL(
-        AJEntityCollection.SELECT_OWNER_CREATOR, toPostgresArrayString(refCollectionIds));
-    ownerCreatorIdsFromDB.stream().forEach(collection -> {
-      uniqueOwnerCreatorIds.add(collection.getString(AJEntityCollection.OWNER_ID));
-    });
+      LazyList<AJEntityCollection> ownerCreatorIdsFromDB = AJEntityCollection.findBySQL(
+          AJEntityCollection.SELECT_OWNER_CREATOR, toPostgresArrayString(refCollectionIds));
+      ownerCreatorIdsFromDB.stream().forEach(collection -> {
+        uniqueOwnerCreatorIds.add(collection.getString(AJEntityCollection.OWNER_ID));
+      });
 
-    List<String> ownerCreatorIds = new ArrayList<>();
-    ownerCreatorIds.addAll(uniqueOwnerCreatorIds);
-    Base.close();
-    return ownerCreatorIds;
+      List<String> ownerCreatorIds = new ArrayList<>();
+      ownerCreatorIds.addAll(uniqueOwnerCreatorIds);
+      return ownerCreatorIds;
+    } catch (Throwable t) {
+      LOGGER.error("error while getting the data from database:", t);
+      return null;
+    } finally {
+      Base.close();
+    }
   }
 
   private String toPostgresArrayString(JsonArray input) {
@@ -242,33 +272,44 @@ public class AJCollectionRepo implements CollectionRepo {
 
   @Override
   public JsonObject removeCollection() {
-    Base.open(DataSourceRegistry.getInstance().getDefaultDataSource());
-    String contentId = context.eventBody().getString(EventRequestConstants.ID);
-    LOGGER.debug("getting collection/assessment for id {}", contentId);
+    try {
+      Base.open(DataSourceRegistry.getInstance().getDefaultDataSource());
+      String contentId = context.eventBody().getString(EventRequestConstants.ID);
+      LOGGER.debug("getting collection/assessment for id {}", contentId);
 
-    JsonObject result = null;
-    LazyList<AJEntityCollection> assessments =
-        AJEntityCollection.findBySQL(AJEntityCollection.SELECT_QUERY, contentId);
-    if (!assessments.isEmpty()) {
-      result = new JsonObject(new JsonFormatterBuilder()
-          .buildSimpleJsonFormatter(false, AJEntityCollection.ASSESSMENT_FIELDS)
-          .toJson(assessments.get(0)));
+      JsonObject result = null;
+      LazyList<AJEntityCollection> assessments =
+          AJEntityCollection.findBySQL(AJEntityCollection.SELECT_QUERY, contentId);
+      if (!assessments.isEmpty()) {
+        result = new JsonObject(new JsonFormatterBuilder()
+            .buildSimpleJsonFormatter(false, AJEntityCollection.ASSESSMENT_FIELDS)
+            .toJson(assessments.get(0)));
+      }
+
+      return result;
+    } catch (Throwable t) {
+      LOGGER.error("error while getting the data from database:", t);
+      return null;
+    } finally {
+      Base.close();
     }
-
-    Base.close();
-    return result;
   }
 
   @Override
   public List<AJEntityCollection> fetchCollectionsByCUL(String courseId, String unitId,
       String lessonId) {
-    Base.open(DataSourceRegistry.getInstance().getDefaultDataSource());
-
-    LazyList<AJEntityCollection> collections = AJEntityCollection
-        .findBySQL(AJEntityCollection.SELECT_COLLECTION_BY_CUL, courseId, unitId, lessonId);
-    LOGGER.debug("collections:{}", collections.size());
-    Base.close();
-    return collections;
+    try {
+      Base.open(DataSourceRegistry.getInstance().getDefaultDataSource());
+      LazyList<AJEntityCollection> collections = AJEntityCollection
+          .findBySQL(AJEntityCollection.SELECT_COLLECTION_BY_CUL, courseId, unitId, lessonId);
+      LOGGER.debug("collections:{}", collections.size());
+      return collections;
+    } catch (Throwable t) {
+      LOGGER.error("error while getting the data from database:", t);
+      return null;
+    } finally {
+      Base.close();
+    }
   }
 
   @Override
@@ -308,20 +349,26 @@ public class AJCollectionRepo implements CollectionRepo {
   }
 
   private JsonObject getOfflineActivity(String contentId, String format) {
-    Base.open(DataSourceRegistry.getInstance().getDefaultDataSource());
-    LOGGER.debug("getting offline activity for id {}", contentId);
+    try {
+      Base.open(DataSourceRegistry.getInstance().getDefaultDataSource());
+      LOGGER.debug("getting offline activity for id {}", contentId);
 
-    JsonObject result = null;
-    LazyList<AJEntityCollection> assessments =
-        AJEntityCollection.findBySQL(AJEntityCollection.SELECT_OFFLINE_ACTIVITY, contentId, format);
-    if (!assessments.isEmpty()) {
-      result = new JsonObject(new JsonFormatterBuilder()
-          .buildSimpleJsonFormatter(false, AJEntityCollection.OFFLINE_ACTIVITY_FIELDS)
-          .toJson(assessments.get(0)));
+      JsonObject result = null;
+      LazyList<AJEntityCollection> assessments = AJEntityCollection
+          .findBySQL(AJEntityCollection.SELECT_OFFLINE_ACTIVITY, contentId, format);
+      if (!assessments.isEmpty()) {
+        result = new JsonObject(new JsonFormatterBuilder()
+            .buildSimpleJsonFormatter(false, AJEntityCollection.OFFLINE_ACTIVITY_FIELDS)
+            .toJson(assessments.get(0)));
+      }
+
+      return result;
+    } catch (Throwable t) {
+      LOGGER.error("error while getting the data from database:", t);
+      return null;
+    } finally {
+      Base.close();
     }
-
-    Base.close();
-    return result;
   }
 
   @Override

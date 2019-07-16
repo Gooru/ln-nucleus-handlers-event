@@ -82,77 +82,101 @@ public class AJContentRepo implements ContentRepo {
 
   @Override
   public JsonObject getReferenceResource(String contentId) {
-    Base.open(DataSourceRegistry.getInstance().getDefaultDataSource());
-    LOGGER.debug("getting resource for id {}", contentId);
+    try {
+      Base.open(DataSourceRegistry.getInstance().getDefaultDataSource());
+      LOGGER.debug("getting resource for id {}", contentId);
 
-    JsonObject result = null;
-    LazyList<AJEntityContent> resources =
-        AJEntityContent.findBySQL(AJEntityContent.SELECT_RESOURCE, contentId);
-    if (!resources.isEmpty()) {
-      result = new JsonObject(new JsonFormatterBuilder()
-          .buildSimpleJsonFormatter(false, AJEntityContent.RESOURCE_FIELDS)
-          .toJson(resources.get(0)));
+      JsonObject result = null;
+      LazyList<AJEntityContent> resources =
+          AJEntityContent.findBySQL(AJEntityContent.SELECT_RESOURCE, contentId);
+      if (!resources.isEmpty()) {
+        result = new JsonObject(new JsonFormatterBuilder()
+            .buildSimpleJsonFormatter(false, AJEntityContent.RESOURCE_FIELDS)
+            .toJson(resources.get(0)));
+      }
+
+      return result;
+    } catch (Throwable t) {
+      LOGGER.error("error while getting the data from database:", t);
+      return null;
+    } finally {
+      Base.close();
     }
-
-    Base.close();
-    return result;
   }
 
   @Override
   public JsonObject getQuestion(String contentId) {
-    Base.open(DataSourceRegistry.getInstance().getDefaultDataSource());
-    LOGGER.debug("getting question for id {}", contentId);
+    try {
+      Base.open(DataSourceRegistry.getInstance().getDefaultDataSource());
+      LOGGER.debug("getting question for id {}", contentId);
 
-    JsonObject result = null;
-    LazyList<AJEntityContent> questions =
-        AJEntityContent.findBySQL(AJEntityContent.SELECT_QUESTION, contentId);
-    if (!questions.isEmpty()) {
-      result = new JsonObject(new JsonFormatterBuilder()
-          .buildSimpleJsonFormatter(false, AJEntityContent.QUESTION_FIELDS)
-          .toJson(questions.get(0)));
+      JsonObject result = null;
+      LazyList<AJEntityContent> questions =
+          AJEntityContent.findBySQL(AJEntityContent.SELECT_QUESTION, contentId);
+      if (!questions.isEmpty()) {
+        result = new JsonObject(new JsonFormatterBuilder()
+            .buildSimpleJsonFormatter(false, AJEntityContent.QUESTION_FIELDS)
+            .toJson(questions.get(0)));
+      }
+
+      return result;
+    } catch (Throwable t) {
+      LOGGER.error("error while getting the data from database:", t);
+      return null;
+    } finally {
+      Base.close();
     }
-
-    Base.close();
-    return result;
   }
 
   @Override
   public String getContentFormatById(String contentId) {
-    Base.open(DataSourceRegistry.getInstance().getDefaultDataSource());
-    String contentFormat = null;
-    LazyList<AJEntityContent> contents =
-        AJEntityContent.findBySQL(AJEntityContent.SELECT_CONTENT_FORMAT, contentId);
-    if (!contents.isEmpty()) {
-      contentFormat = contents.get(0).getString(AJEntityContent.CONTENT_FORMAT);
+    try {
+      Base.open(DataSourceRegistry.getInstance().getDefaultDataSource());
+      String contentFormat = null;
+      LazyList<AJEntityContent> contents =
+          AJEntityContent.findBySQL(AJEntityContent.SELECT_CONTENT_FORMAT, contentId);
+      if (!contents.isEmpty()) {
+        contentFormat = contents.get(0).getString(AJEntityContent.CONTENT_FORMAT);
+      }
+      return contentFormat;
+    } catch (Throwable t) {
+      LOGGER.error("error while getting the data from database:", t);
+      return null;
+    } finally {
+      Base.close();
     }
-    Base.close();
-    return contentFormat;
   }
 
   @Override
   public JsonObject getOriginalResource(String resourceId) {
-    Base.open(DataSourceRegistry.getInstance().getDefaultDataSource());
-    LOGGER.debug("getting original resource for id {}", resourceId);
+    try {
+      Base.open(DataSourceRegistry.getInstance().getDefaultDataSource());
+      LOGGER.debug("getting original resource for id {}", resourceId);
 
-    JsonObject result = null;
-    LazyList<AJEntityOriginalResource> resources = AJEntityOriginalResource
-        .findBySQL(AJEntityOriginalResource.SELECT_ORIGINAL_RESOURCE, resourceId);
-    if (!resources.isEmpty()) {
-      result = new JsonObject(new JsonFormatterBuilder()
-          .buildSimpleJsonFormatter(false, AJEntityOriginalResource.ORIGINAL_RESOURCE_FIELDS)
-          .toJson(resources.get(0)));
-      result.putNull(AJEntityContent.ORIGINAL_CREATOR_ID);
-      result.putNull(AJEntityContent.ORIGINAL_CONTENT_ID);
-      result.putNull(AJEntityContent.PARENT_CONTENT_ID);
-      result.putNull(AJEntityContent.COURSE_ID);
-      result.putNull(AJEntityContent.UNIT_ID);
-      result.putNull(AJEntityContent.LESSON_ID);
-      result.putNull(AJEntityContent.COLLECTION_ID);
-      result.put(AJEntityContent.CONTENT_FORMAT, "resource");
+      JsonObject result = null;
+      LazyList<AJEntityOriginalResource> resources = AJEntityOriginalResource
+          .findBySQL(AJEntityOriginalResource.SELECT_ORIGINAL_RESOURCE, resourceId);
+      if (!resources.isEmpty()) {
+        result = new JsonObject(new JsonFormatterBuilder()
+            .buildSimpleJsonFormatter(false, AJEntityOriginalResource.ORIGINAL_RESOURCE_FIELDS)
+            .toJson(resources.get(0)));
+        result.putNull(AJEntityContent.ORIGINAL_CREATOR_ID);
+        result.putNull(AJEntityContent.ORIGINAL_CONTENT_ID);
+        result.putNull(AJEntityContent.PARENT_CONTENT_ID);
+        result.putNull(AJEntityContent.COURSE_ID);
+        result.putNull(AJEntityContent.UNIT_ID);
+        result.putNull(AJEntityContent.LESSON_ID);
+        result.putNull(AJEntityContent.COLLECTION_ID);
+        result.put(AJEntityContent.CONTENT_FORMAT, "resource");
+      }
+
+      return result;
+    } catch (Throwable t) {
+      LOGGER.error("error while getting the data from database:", t);
+      return null;
+    } finally {
+      Base.close();
     }
-
-    Base.close();
-    return result;
   }
 
   private JsonObject getResource(String id) {

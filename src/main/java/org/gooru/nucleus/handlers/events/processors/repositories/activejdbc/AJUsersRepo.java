@@ -29,26 +29,38 @@ public class AJUsersRepo implements UsersRepo {
 
   @Override
   public List<String> getMultipleEmailIds(List<String> userIds) {
-    Base.open(DataSourceRegistry.getInstance().getDefaultDataSource());
-    LazyList<AJEntityUsers> emailIdsFromDB = AJEntityUsers
-        .findBySQL(AJEntityUsers.SELECT_MULTIPLE_EMAILIDS, listToPostgresArrayString(userIds));
-    List<String> emailIds = new ArrayList<>();
-    emailIdsFromDB.forEach(email -> emailIds.add(email.getString(AJEntityUsers.EMAIL)));
-    Base.close();
-    return emailIds;
+    try {
+      Base.open(DataSourceRegistry.getInstance().getDefaultDataSource());
+      LazyList<AJEntityUsers> emailIdsFromDB = AJEntityUsers
+          .findBySQL(AJEntityUsers.SELECT_MULTIPLE_EMAILIDS, listToPostgresArrayString(userIds));
+      List<String> emailIds = new ArrayList<>();
+      emailIdsFromDB.forEach(email -> emailIds.add(email.getString(AJEntityUsers.EMAIL)));
+      return emailIds;
+    } catch (Throwable t) {
+      LOGGER.error("error while getting the data from database:", t);
+      return null;
+    } finally {
+      Base.close();
+    }
   }
 
   @Override
   public String getUsername(String userId) {
-    Base.open(DataSourceRegistry.getInstance().getDefaultDataSource());
-    String username = null;
-    LazyList<AJEntityUsers> usernames =
-        AJEntityUsers.findBySQL(AJEntityUsers.SELECT_USERNAME, userId);
-    if (!usernames.isEmpty()) {
-      username = usernames.get(0).getString(AJEntityUsers.USERNAME);
+    try {
+      Base.open(DataSourceRegistry.getInstance().getDefaultDataSource());
+      String username = null;
+      LazyList<AJEntityUsers> usernames =
+          AJEntityUsers.findBySQL(AJEntityUsers.SELECT_USERNAME, userId);
+      if (!usernames.isEmpty()) {
+        username = usernames.get(0).getString(AJEntityUsers.USERNAME);
+      }
+      return username;
+    } catch (Throwable t) {
+      LOGGER.error("error while getting the data from database:", t);
+      return null;
+    } finally {
+      Base.close();
     }
-    Base.close();
-    return username;
   }
 
   @Override

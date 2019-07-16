@@ -84,32 +84,44 @@ public class AJLessonRepo implements LessonRepo {
 
   @Override
   public JsonObject getLesson(String contentId) {
-    Base.open(DataSourceRegistry.getInstance().getDefaultDataSource());
+    try {
+      Base.open(DataSourceRegistry.getInstance().getDefaultDataSource());
 
-    LazyList<AJEntityLesson> lessons =
-        AJEntityLesson.findBySQL(AJEntityLesson.SELECT_LESSON, contentId);
-    JsonObject result = null;
-    if (!lessons.isEmpty()) {
-      LOGGER.info("found lesson for id {} : " + contentId);
-      result = new JsonObject(new JsonFormatterBuilder()
-          .buildSimpleJsonFormatter(false, AJEntityLesson.ALL_FIELDS).toJson(lessons.get(0)));
+      LazyList<AJEntityLesson> lessons =
+          AJEntityLesson.findBySQL(AJEntityLesson.SELECT_LESSON, contentId);
+      JsonObject result = null;
+      if (!lessons.isEmpty()) {
+        LOGGER.info("found lesson for id {} : " + contentId);
+        result = new JsonObject(new JsonFormatterBuilder()
+            .buildSimpleJsonFormatter(false, AJEntityLesson.ALL_FIELDS).toJson(lessons.get(0)));
+      }
+      return result;
+    } catch (Throwable t) {
+      LOGGER.error("error while getting the data from database:", t);
+      return null;
+    } finally {
+      Base.close();
     }
-    Base.close();
-    return result;
   }
 
   @Override
   public List<String> fetchLessonsByCU(String courseId, String unitId) {
-    Base.open(DataSourceRegistry.getInstance().getDefaultDataSource());
+    try {
+      Base.open(DataSourceRegistry.getInstance().getDefaultDataSource());
 
-    LazyList<AJEntityLesson> lessons =
-        AJEntityLesson.findBySQL(AJEntityLesson.SELECT_LESSON_BY_CU, courseId, unitId);
-    List<String> result = new ArrayList<>(lessons.size());
-    lessons.forEach(lesson -> {
-      result.add(lesson.getString(AJEntityLesson.LESSON_ID));
-    });
-    Base.close();
-    return result;
+      LazyList<AJEntityLesson> lessons =
+          AJEntityLesson.findBySQL(AJEntityLesson.SELECT_LESSON_BY_CU, courseId, unitId);
+      List<String> result = new ArrayList<>(lessons.size());
+      lessons.forEach(lesson -> {
+        result.add(lesson.getString(AJEntityLesson.LESSON_ID));
+      });
+      return result;
+    } catch (Throwable t) {
+      LOGGER.error("error while getting the data from database:", t);
+      return null;
+    } finally {
+      Base.close();
+    }
   }
 
 }

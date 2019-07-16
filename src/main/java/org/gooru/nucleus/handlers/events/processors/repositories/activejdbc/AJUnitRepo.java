@@ -84,29 +84,41 @@ public class AJUnitRepo implements UnitRepo {
 
   @Override
   public JsonObject getUnit(String contentId) {
-    Base.open(DataSourceRegistry.getInstance().getDefaultDataSource());
+    try {
+      Base.open(DataSourceRegistry.getInstance().getDefaultDataSource());
 
-    LazyList<AJEntityUnit> units = AJEntityUnit.findBySQL(AJEntityUnit.SELECT_UNIT, contentId);
-    JsonObject result = null;
-    if (!units.isEmpty()) {
-      LOGGER.info("found unit for id {} : " + contentId);
-      result = new JsonObject(new JsonFormatterBuilder()
-          .buildSimpleJsonFormatter(false, AJEntityUnit.ALL_FIELDS).toJson(units.get(0)));
+      LazyList<AJEntityUnit> units = AJEntityUnit.findBySQL(AJEntityUnit.SELECT_UNIT, contentId);
+      JsonObject result = null;
+      if (!units.isEmpty()) {
+        LOGGER.info("found unit for id {} : " + contentId);
+        result = new JsonObject(new JsonFormatterBuilder()
+            .buildSimpleJsonFormatter(false, AJEntityUnit.ALL_FIELDS).toJson(units.get(0)));
+      }
+      return result;
+    } catch (Throwable t) {
+      LOGGER.error("error while getting the data from database:", t);
+      return null;
+    } finally {
+      Base.close();
     }
-    Base.close();
-    return result;
   }
 
   @Override
   public List<String> fetchUnitsByCourse(String courseId) {
-    Base.open(DataSourceRegistry.getInstance().getDefaultDataSource());
-    LazyList<AJEntityUnit> units =
-        AJEntityUnit.findBySQL(AJEntityUnit.SELECT_UNITS_BY_COURSE, courseId);
-    List<String> result = new ArrayList<>();
-    units.forEach(unit -> {
-      result.add(unit.getString(AJEntityUnit.UNIT_ID));
-    });
-    Base.close();
-    return result;
+    try {
+      Base.open(DataSourceRegistry.getInstance().getDefaultDataSource());
+      LazyList<AJEntityUnit> units =
+          AJEntityUnit.findBySQL(AJEntityUnit.SELECT_UNITS_BY_COURSE, courseId);
+      List<String> result = new ArrayList<>();
+      units.forEach(unit -> {
+        result.add(unit.getString(AJEntityUnit.UNIT_ID));
+      });
+      return result;
+    } catch (Throwable t) {
+      LOGGER.error("error while getting the data from database:", t);
+      return null;
+    } finally {
+      Base.close();
+    }
   }
 }
