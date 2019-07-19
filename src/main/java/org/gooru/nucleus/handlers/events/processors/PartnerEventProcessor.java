@@ -7,7 +7,6 @@ import org.gooru.nucleus.handlers.events.processors.partners.ContentCreationEven
 import org.gooru.nucleus.handlers.events.processors.partners.ContentDeletionEventProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import io.vertx.core.json.JsonObject;
 
 /**
@@ -15,40 +14,40 @@ import io.vertx.core.json.JsonObject;
  */
 public class PartnerEventProcessor implements Processor {
 
-	private final static Logger LOGGER = LoggerFactory.getLogger(PartnerEventProcessor.class);
+  private final static Logger LOGGER = LoggerFactory.getLogger(PartnerEventProcessor.class);
 
-	private final JsonObject request;
+  private final JsonObject request;
 
-	public PartnerEventProcessor(JsonObject request) {
-		this.request = request;
-	}
+  public PartnerEventProcessor(JsonObject request) {
+    this.request = request;
+  }
 
-	@Override
-	public JsonObject process() {
-		final String msgOp = request.getString(EventRequestConstants.EVENT_NAME);
+  @Override
+  public JsonObject process() {
+    final String msgOp = request.getString(EventRequestConstants.EVENT_NAME);
 
-		switch (msgOp) {
-		case MessageConstants.MSG_OP_EVT_PARTNER_CONTENT_CREATE:
-			processContentCreationEvent();
-			break;
+    switch (msgOp) {
+      case MessageConstants.MSG_OP_EVT_PARTNER_CONTENT_CREATE:
+        processContentCreationEvent();
+        break;
 
-		case MessageConstants.MSG_OP_EVT_PARTNER_CONTENT_DELETE:
-			processContentDeletionEvent();
-			break;
+      case MessageConstants.MSG_OP_EVT_PARTNER_CONTENT_DELETE:
+        processContentDeletionEvent();
+        break;
 
-		default:
-			LOGGER.error("Invalid partner event, unable to handle");
-			throw new InvalidRequestException();
-		}
-		return null;
-	}
+      default:
+        LOGGER.error("Invalid partner event, unable to handle");
+        throw new InvalidRequestException();
+    }
+    return null;
+  }
 
-	private void processContentCreationEvent() {
-		new ContentCreationEventProcessor(this.request).process();
+  private void processContentCreationEvent() {
+    new ContentCreationEventProcessor(this.request).process();
 
-	}
+  }
 
-	private void processContentDeletionEvent() {
-		new ContentDeletionEventProcessor(request).process();
-	}
+  private void processContentDeletionEvent() {
+    new ContentDeletionEventProcessor(request).process();
+  }
 }

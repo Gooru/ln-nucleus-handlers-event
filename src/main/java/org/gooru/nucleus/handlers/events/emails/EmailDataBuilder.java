@@ -3,7 +3,6 @@ package org.gooru.nucleus.handlers.events.emails;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 import org.gooru.nucleus.handlers.events.constants.EmailConstants;
 import org.gooru.nucleus.handlers.events.constants.EventRequestConstants;
 import org.gooru.nucleus.handlers.events.constants.EventResponseConstants;
@@ -16,393 +15,398 @@ import org.gooru.nucleus.handlers.events.processors.repositories.activejdbc.enti
 import org.gooru.nucleus.handlers.events.processors.repositories.activejdbc.entities.AJEntityUsers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 
 public final class EmailDataBuilder {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(EmailDataBuilder.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(EmailDataBuilder.class);
 
-    private String emailTemplate = null;
-    private JsonObject result = null;
-    private JsonObject event = null;
+  private String emailTemplate = null;
+  private JsonObject result = null;
+  private JsonObject event = null;
 
-    public EmailDataBuilder() {
+  public EmailDataBuilder() {}
+
+  public EmailDataBuilder setEmailTemplate(String emailTemplate) {
+    this.emailTemplate = emailTemplate;
+    return this;
+  }
+
+  public EmailDataBuilder setResultData(JsonObject result) {
+    this.result = result.copy();
+    return this;
+  }
+
+  public EmailDataBuilder setEventData(JsonObject event) {
+    this.event = event.copy();
+    return this;
+  }
+
+  public JsonArray build() {
+    if ((this.emailTemplate == null) || (this.result == null) || (this.emailTemplate.isEmpty())
+        || (this.result.isEmpty())) {
+      LOGGER.error("invalid data provided to build email data. returning");
+      return new JsonArray();
     }
 
-    public EmailDataBuilder setEmailTemplate(String emailTemplate) {
-        this.emailTemplate = emailTemplate;
-        return this;
+    JsonArray emailData = null;
+    switch (emailTemplate) {
+
+      case EmailConstants.TEMPLATE_COLLECTION_COLLABORATOR_INVITE:
+        emailData = buildCollectionCollaboratorUpdateEmailData();
+        break;
+
+      case EmailConstants.TEMPLATE_CLASS_COTEACHER_INVITE:
+        emailData = buildClassCollaboratorUpdateEmailData();
+        break;
+
+      case EmailConstants.TEMPLATE_COURSE_COLLABORATOR_INVITE:
+        emailData = buildCourseCollaboratorUpdateEmailData();
+        break;
+
+      case EmailConstants.TEMPLATE_RESOURCE_DELETE:
+        emailData = buildResourceDeleteEmailData();
+        break;
+
+      case EmailConstants.TEMPLATE_USER_INVITE_CLASS:
+        emailData = buildUserInviteToClassEmailData();
+        break;
+
+      case EmailConstants.TEMPLATE_USER_INVITE_OPEN_CLASS:
+        emailData = buildUserInviteToOpenClassEmailData();
+        break;
+
+      case EmailConstants.TEMPLATE_PROFILE_FOLLOW:
+        emailData = buildProfileFollowEmailData();
+        break;
+
+      case EmailConstants.TEMPLATE_USER_SIGNUP_TEACHER:
+      case EmailConstants.TEMPLATE_USER_SIGNUP_STUDENT:
+      case EmailConstants.TEMPLATE_USER_SIGNUP_OTHER:
+        emailData = buildUserSignupEmailData();
+        break;
+
+      case EmailConstants.TEMPLATE_RESET_PASSWORD_TRG:
+        emailData = buildUserResetPasswordTriggerEmailData();
+        break;
+
+      case EmailConstants.TEMPLATE_RESET_PASSWORD:
+        emailData = buildUserResetPasswordEmailData();
+        break;
+
+      default:
+        LOGGER.warn("no matching email template found to build email data");
     }
 
-    public EmailDataBuilder setResultData(JsonObject result) {
-        this.result = result.copy();
-        return this;
-    }
-    
-    public EmailDataBuilder setEventData(JsonObject event) {
-        this.event = event.copy();
-        return this;
-    }
+    return emailData;
+  }
 
-    public JsonArray build() {
-        if ((this.emailTemplate == null) || (this.result == null) || (this.emailTemplate.isEmpty())
-            || (this.result.isEmpty())) {
-            LOGGER.error("invalid data provided to build email data. returning");
-            return new JsonArray();
-        }
+  private JsonArray buildUserResetPasswordEmailData() {
+    JsonArray emailDataArray = new JsonArray();
+    JsonObject data = getData();
+    JsonObject eventBody = getEventBody();
 
-        JsonArray emailData = null;
-        switch (emailTemplate) {
+    List<String> emailIds = new ArrayList<>(1);
+    emailIds.add(data.getString(AJEntityUsers.EMAIL));
 
-        case EmailConstants.TEMPLATE_COLLECTION_COLLABORATOR_INVITE:
-            emailData = buildCollectionCollaboratorUpdateEmailData();
-            break;
+    emailIds.stream().forEach(email -> {
+      JsonObject emailData = new JsonObject();
+      emailData.put(EmailConstants.MAIL_TEMPLATE_NAME, emailTemplate);
+      emailData.put(EmailConstants.TO_ADDRESSES, new JsonArray().add(email));
 
-        case EmailConstants.TEMPLATE_CLASS_COTEACHER_INVITE:
-            emailData = buildClassCollaboratorUpdateEmailData();
-            break;
+      JsonObject emailContextData = eventBody.getJsonObject(EmailConstants.EMAIL_CONTEXT)
+          .getJsonObject(EmailConstants.EMAIL_TEMPLATE_CONTEXT);
+      emailData.put(EmailConstants.MAIL_TEMPLATE_CONTEXT, emailContextData);
 
-        case EmailConstants.TEMPLATE_COURSE_COLLABORATOR_INVITE:
-            emailData = buildCourseCollaboratorUpdateEmailData();
-            break;
+      emailDataArray.add(emailData);
+    });
 
-        case EmailConstants.TEMPLATE_RESOURCE_DELETE:
-            emailData = buildResourceDeleteEmailData();
-            break;
+    return emailDataArray;
+  }
 
-        case EmailConstants.TEMPLATE_USER_INVITE_CLASS:
-            emailData = buildUserInviteToClassEmailData();
-            break;
+  private JsonArray buildUserResetPasswordTriggerEmailData() {
+    JsonArray emailDataArray = new JsonArray();
+    JsonObject data = getData();
+    JsonObject eventBody = getEventBody();
 
-        case EmailConstants.TEMPLATE_USER_INVITE_OPEN_CLASS:
-            emailData = buildUserInviteToOpenClassEmailData();
-            break;
+    List<String> emailIds = new ArrayList<>(1);
+    emailIds.add(data.getString(AJEntityUsers.EMAIL));
 
-        case EmailConstants.TEMPLATE_PROFILE_FOLLOW:
-            emailData = buildProfileFollowEmailData();
-            break;
-            
-        case EmailConstants.TEMPLATE_USER_SIGNUP_TEACHER:
-        case EmailConstants.TEMPLATE_USER_SIGNUP_STUDENT:
-        case EmailConstants.TEMPLATE_USER_SIGNUP_OTHER:
-            emailData = buildUserSignupEmailData();
-            break;
-            
-        case EmailConstants.TEMPLATE_RESET_PASSWORD_TRG:
-            emailData = buildUserResetPasswordTriggerEmailData();
-            break;
-            
-        case EmailConstants.TEMPLATE_RESET_PASSWORD:
-            emailData = buildUserResetPasswordEmailData();
-            break;
+    emailIds.stream().forEach(email -> {
+      JsonObject emailData = new JsonObject();
+      emailData.put(EmailConstants.MAIL_TEMPLATE_NAME, emailTemplate);
+      emailData.put(EmailConstants.TO_ADDRESSES, new JsonArray().add(email));
 
-        default:
-            LOGGER.warn("no matching email template found to build email data");
-        }
+      JsonObject emailContextData = eventBody.getJsonObject(EmailConstants.EMAIL_CONTEXT)
+          .getJsonObject(EmailConstants.EMAIL_TEMPLATE_CONTEXT);
+      emailData.put(EmailConstants.MAIL_TEMPLATE_CONTEXT, emailContextData);
 
-        return emailData;
-    }
+      emailDataArray.add(emailData);
+    });
 
-    private JsonArray buildUserResetPasswordEmailData() {
-        JsonArray emailDataArray = new JsonArray();
-        JsonObject data = getData();
-        JsonObject eventBody = getEventBody();
+    return emailDataArray;
+  }
 
-        List<String> emailIds = new ArrayList<>(1);
-        emailIds.add(data.getString(AJEntityUsers.EMAIL));
+  private JsonArray buildUserSignupEmailData() {
+    JsonArray emailDataArray = new JsonArray();
+    JsonObject data = getData();
 
-        emailIds.stream().forEach(email -> {
-            JsonObject emailData = new JsonObject();
-            emailData.put(EmailConstants.MAIL_TEMPLATE_NAME, emailTemplate);
-            emailData.put(EmailConstants.TO_ADDRESSES, new JsonArray().add(email));
+    List<String> emailIds = new ArrayList<>(1);
+    emailIds.add(data.getString(AJEntityUsers.EMAIL));
 
-            JsonObject emailContextData = eventBody.getJsonObject(EmailConstants.EMAIL_CONTEXT)
-                .getJsonObject(EmailConstants.EMAIL_TEMPLATE_CONTEXT);
-            emailData.put(EmailConstants.MAIL_TEMPLATE_CONTEXT, emailContextData);
+    emailIds.stream().forEach(email -> {
+      JsonObject emailData = new JsonObject();
+      emailData.put(EmailConstants.MAIL_TEMPLATE_NAME, emailTemplate);
+      emailData.put(EmailConstants.TO_ADDRESSES, new JsonArray().add(email));
 
-            emailDataArray.add(emailData);
-        });
+      JsonObject emailContextData = new JsonObject();
+      emailData.put(EmailConstants.MAIL_TEMPLATE_CONTEXT, emailContextData);
 
-        return emailDataArray;
-    }
+      emailDataArray.add(emailData);
+    });
 
-    private JsonArray buildUserResetPasswordTriggerEmailData() {
-        JsonArray emailDataArray = new JsonArray();
-        JsonObject data = getData();
-        JsonObject eventBody = getEventBody();
+    return emailDataArray;
+  }
 
-        List<String> emailIds = new ArrayList<>(1);
-        emailIds.add(data.getString(AJEntityUsers.EMAIL));
+  private JsonArray buildCollectionCollaboratorUpdateEmailData() {
+    JsonArray emailDataArray = new JsonArray();
+    JsonObject eventData = getEventBody();
+    String collectionId = eventData.getString(EventRequestConstants.ID);
+    JsonArray collaboratorsAdded =
+        eventData.getJsonArray(EventRequestConstants.COLLABORATORS_ADDED);
 
-        emailIds.stream().forEach(email -> {
-            JsonObject emailData = new JsonObject();
-            emailData.put(EmailConstants.MAIL_TEMPLATE_NAME, emailTemplate);
-            emailData.put(EmailConstants.TO_ADDRESSES, new JsonArray().add(email));
+    List<String> userIds = new ArrayList<>(collaboratorsAdded.size());
+    collaboratorsAdded.stream().forEach(collaborator -> userIds.add(collaborator.toString()));
 
-            JsonObject emailContextData = eventBody.getJsonObject(EmailConstants.EMAIL_CONTEXT)
-                .getJsonObject(EmailConstants.EMAIL_TEMPLATE_CONTEXT);
-            emailData.put(EmailConstants.MAIL_TEMPLATE_CONTEXT, emailContextData);
+    List<String> emailIds = RepoBuilder.buildUserRepo(null).getMultipleEmailIds(userIds);
+    LOGGER.debug("Preparing data for email ids:{}", Arrays.toString(emailIds.toArray()));
 
-            emailDataArray.add(emailData);
-        });
+    JsonObject collection = RepoBuilder.buildCollectionRepo(null).getCollection(collectionId,
+        AJEntityCollection.FORMAT_COLLECTION);
+    String username = RepoBuilder.buildUserRepo(null).getUsername(getUserId());
 
-        return emailDataArray;
-    }
+    emailIds.stream().forEach(email -> {
+      JsonObject emailData = new JsonObject();
+      emailData.put(EmailConstants.MAIL_TEMPLATE_NAME, emailTemplate);
+      emailData.put(EmailConstants.TO_ADDRESSES, new JsonArray().add(email));
 
-    private JsonArray buildUserSignupEmailData() {
-        JsonArray emailDataArray = new JsonArray();
-        JsonObject data = getData();
-        
-        List<String> emailIds = new ArrayList<>(1);
-        emailIds.add(data.getString(AJEntityUsers.EMAIL));
-        
-        emailIds.stream().forEach(email -> {
-            JsonObject emailData = new JsonObject();
-            emailData.put(EmailConstants.MAIL_TEMPLATE_NAME, emailTemplate);
-            emailData.put(EmailConstants.TO_ADDRESSES, new JsonArray().add(email));
+      JsonObject emailContextData = new JsonObject();
+      emailContextData.put(EmailConstants.USERNAME, username);
+      emailContextData.put(EmailConstants.COLLECTION_ID, collection.getString(AJEntityCourse.ID));
+      emailData.put(EmailConstants.MAIL_TEMPLATE_CONTEXT, emailContextData);
 
-            JsonObject emailContextData = new JsonObject();
-            emailData.put(EmailConstants.MAIL_TEMPLATE_CONTEXT, emailContextData);
+      emailDataArray.add(emailData);
+    });
 
-            emailDataArray.add(emailData);
-        });
-        
-        return emailDataArray;
-    }
+    return emailDataArray;
+  }
 
-    private JsonArray buildCollectionCollaboratorUpdateEmailData() {
-        JsonArray emailDataArray = new JsonArray();
-        JsonObject eventData = getEventBody();
-        String collectionId = eventData.getString(EventRequestConstants.ID);
-        JsonArray collaboratorsAdded = eventData.getJsonArray(EventRequestConstants.COLLABORATORS_ADDED);
+  private JsonArray buildClassCollaboratorUpdateEmailData() {
+    JsonArray emailDataArray = new JsonArray();
+    JsonObject eventData = getEventBody();
+    String classId = eventData.getString(EventRequestConstants.ID);
+    JsonArray collaboratorsAdded =
+        eventData.getJsonArray(EventRequestConstants.COLLABORATORS_ADDED);
+    List<String> userIds = new ArrayList<>(collaboratorsAdded.size());
+    collaboratorsAdded.stream().forEach(collaborator -> userIds.add(collaborator.toString()));
 
-        List<String> userIds = new ArrayList<>(collaboratorsAdded.size());
-        collaboratorsAdded.stream().forEach(collaborator -> userIds.add(collaborator.toString()));
+    List<String> emailIds = RepoBuilder.buildUserRepo(null).getMultipleEmailIds(userIds);
+    LOGGER.debug("Preparing data for email ids:{}", Arrays.toString(emailIds.toArray()));
 
-        List<String> emailIds = RepoBuilder.buildUserRepo(null).getMultipleEmailIds(userIds);
-        LOGGER.debug("Preparing data for email ids:{}", Arrays.toString(emailIds.toArray()));
+    JsonObject classObj = RepoBuilder.buildClassRepo(null).getClassById(classId);
+    String username = RepoBuilder.buildUserRepo(null).getUsername(getUserId());
+    String[] firstLastName = RepoBuilder.buildUserRepo(null).getFirstAndLastName(getUserId());
 
-        JsonObject collection = RepoBuilder.buildCollectionRepo(null).getCollection(collectionId, AJEntityCollection.FORMAT_COLLECTION);
-        String username = RepoBuilder.buildUserRepo(null).getUsername(getUserId());
+    emailIds.stream().forEach(email -> {
+      JsonObject emailData = new JsonObject();
+      emailData.put(EmailConstants.MAIL_TEMPLATE_NAME, emailTemplate);
+      emailData.put(EmailConstants.TO_ADDRESSES, new JsonArray().add(email));
 
-        emailIds.stream().forEach(email -> {
-            JsonObject emailData = new JsonObject();
-            emailData.put(EmailConstants.MAIL_TEMPLATE_NAME, emailTemplate);
-            emailData.put(EmailConstants.TO_ADDRESSES, new JsonArray().add(email));
+      JsonObject emailContextData = new JsonObject();
+      emailContextData.put(EmailConstants.USERNAME, username);
+      emailContextData.put(EmailConstants.CLASS_ID, classObj.getString(AJEntityClass.ID));
+      emailContextData.put(EmailConstants.FIRSTNAME, firstLastName[0]);
+      emailContextData.put(EmailConstants.LASTNAME, firstLastName[1]);
+      emailContextData.put(EmailConstants.CLASS_TITLE, classObj.getString(AJEntityClass.TITLE));
+      emailData.put(EmailConstants.MAIL_TEMPLATE_CONTEXT, emailContextData);
+      emailDataArray.add(emailData);
+    });
+    return emailDataArray;
+  }
 
-            JsonObject emailContextData = new JsonObject();
-            emailContextData.put(EmailConstants.USERNAME, username);
-            emailContextData.put(EmailConstants.COLLECTION_ID, collection.getString(AJEntityCourse.ID));
-            emailData.put(EmailConstants.MAIL_TEMPLATE_CONTEXT, emailContextData);
+  private JsonArray buildCourseCollaboratorUpdateEmailData() {
+    JsonArray emailDataArray = new JsonArray();
+    JsonObject eventData = getEventBody();
+    String courseId = eventData.getString(EventRequestConstants.ID);
+    JsonArray collaboratorsAdded =
+        eventData.getJsonArray(EventRequestConstants.COLLABORATORS_ADDED);
 
-            emailDataArray.add(emailData);
-        });
+    List<String> userIds = new ArrayList<>(collaboratorsAdded.size());
+    collaboratorsAdded.stream().forEach(collaborator -> userIds.add(collaborator.toString()));
 
-        return emailDataArray;
-    }
+    List<String> emailIds = RepoBuilder.buildUserRepo(null).getMultipleEmailIds(userIds);
+    LOGGER.debug("Preparing data for email ids:{}", Arrays.toString(emailIds.toArray()));
 
-    private JsonArray buildClassCollaboratorUpdateEmailData() {
-        JsonArray emailDataArray = new JsonArray();
-        JsonObject eventData = getEventBody();
-        String classId = eventData.getString(EventRequestConstants.ID);
-        JsonArray collaboratorsAdded = eventData.getJsonArray(EventRequestConstants.COLLABORATORS_ADDED);
-        List<String> userIds = new ArrayList<>(collaboratorsAdded.size());
-        collaboratorsAdded.stream().forEach(collaborator -> userIds.add(collaborator.toString()));
+    JsonObject course = RepoBuilder.buildCourseRepo(null).getCourse(courseId);
+    String username = RepoBuilder.buildUserRepo(null).getUsername(getUserId());
 
-        List<String> emailIds = RepoBuilder.buildUserRepo(null).getMultipleEmailIds(userIds);
-        LOGGER.debug("Preparing data for email ids:{}", Arrays.toString(emailIds.toArray()));
+    emailIds.stream().forEach(email -> {
+      JsonObject emailData = new JsonObject();
+      emailData.put(EmailConstants.MAIL_TEMPLATE_NAME, emailTemplate);
+      emailData.put(EmailConstants.TO_ADDRESSES, new JsonArray().add(email));
 
-        JsonObject classObj = RepoBuilder.buildClassRepo(null).getClassById(classId);
-        String username = RepoBuilder.buildUserRepo(null).getUsername(getUserId());
-        String[] firstLastName = RepoBuilder.buildUserRepo(null).getFirstAndLastName(getUserId());
+      JsonObject emailContextData = new JsonObject();
+      emailContextData.put(EmailConstants.USERNAME, username);
+      emailContextData.put(EmailConstants.COURSE_ID, course.getString(AJEntityCollection.ID));
+      emailData.put(EmailConstants.MAIL_TEMPLATE_CONTEXT, emailContextData);
 
-        emailIds.stream().forEach(email -> {
-            JsonObject emailData = new JsonObject();
-            emailData.put(EmailConstants.MAIL_TEMPLATE_NAME, emailTemplate);
-            emailData.put(EmailConstants.TO_ADDRESSES, new JsonArray().add(email));
+      emailDataArray.add(emailData);
+    });
 
-            JsonObject emailContextData = new JsonObject();
-            emailContextData.put(EmailConstants.USERNAME, username);
-            emailContextData.put(EmailConstants.CLASS_ID, classObj.getString(AJEntityClass.ID));
-            emailContextData.put(EmailConstants.FIRSTNAME, firstLastName[0]);
-            emailContextData.put(EmailConstants.LASTNAME, firstLastName[1]);
-            emailContextData.put(EmailConstants.CLASS_TITLE, classObj.getString(AJEntityClass.TITLE));
-            emailData.put(EmailConstants.MAIL_TEMPLATE_CONTEXT, emailContextData);
-            emailDataArray.add(emailData);
-        });
-        return emailDataArray;
-    }
+    return emailDataArray;
+  }
 
-    private JsonArray buildCourseCollaboratorUpdateEmailData() {
-        JsonArray emailDataArray = new JsonArray();
-        JsonObject eventData = getEventBody();
-        String courseId = eventData.getString(EventRequestConstants.ID);
-        JsonArray collaboratorsAdded = eventData.getJsonArray(EventRequestConstants.COLLABORATORS_ADDED);
+  private JsonArray buildResourceDeleteEmailData() {
+    JsonObject payloadObject = result.getJsonObject(EventResponseConstants.PAYLOAD_OBJECT);
+    JsonArray refCollectionIds =
+        payloadObject.getJsonArray(EventResponseConstants.REFERENCE_PARENT_GOORU_IDS);
+    if (refCollectionIds != null && !refCollectionIds.isEmpty()) {
+      List<String> ownerCreatorIds =
+          RepoBuilder.buildCollectionRepo(null).getOwnerAndCreatorIds(refCollectionIds);
+      List<String> emailIds = RepoBuilder.buildUserRepo(null).getMultipleEmailIds(ownerCreatorIds);
+      LOGGER.debug("Preparing data for email ids:{}", Arrays.toString(emailIds.toArray()));
 
-        List<String> userIds = new ArrayList<>(collaboratorsAdded.size());
-        collaboratorsAdded.stream().forEach(collaborator -> userIds.add(collaborator.toString()));
+      JsonObject data = getData();
+      String resourceId = data.getString(EventRequestConstants.ID);
 
-        List<String> emailIds = RepoBuilder.buildUserRepo(null).getMultipleEmailIds(userIds);
-        LOGGER.debug("Preparing data for email ids:{}", Arrays.toString(emailIds.toArray()));
+      JsonObject resource = RepoBuilder.buildContentRepo(null).getOriginalResource(resourceId);
+      String username = RepoBuilder.buildUserRepo(null).getUsername(getUserId());
+      JsonArray emailDataArray = new JsonArray();
 
-        JsonObject course = RepoBuilder.buildCourseRepo(null).getCourse(courseId);
-        String username = RepoBuilder.buildUserRepo(null).getUsername(getUserId());
+      emailIds.stream().forEach(email -> {
+        JsonObject emailData = new JsonObject();
+        emailData.put(EmailConstants.MAIL_TEMPLATE_NAME, emailTemplate);
+        emailData.put(EmailConstants.TO_ADDRESSES, new JsonArray().add(email));
 
-        emailIds.stream().forEach(email -> {
-            JsonObject emailData = new JsonObject();
-            emailData.put(EmailConstants.MAIL_TEMPLATE_NAME, emailTemplate);
-            emailData.put(EmailConstants.TO_ADDRESSES, new JsonArray().add(email));
-
-            JsonObject emailContextData = new JsonObject();
-            emailContextData.put(EmailConstants.USERNAME, username);
-            emailContextData.put(EmailConstants.COURSE_ID, course.getString(AJEntityCollection.ID));
-            emailData.put(EmailConstants.MAIL_TEMPLATE_CONTEXT, emailContextData);
-
-            emailDataArray.add(emailData);
-        });
-
-        return emailDataArray;
+        JsonObject emailContextData = new JsonObject();
+        emailContextData.put(EmailConstants.USERNAME, username);
+        emailContextData.put(EmailConstants.RESOURCE_TITLE,
+            resource.getString(AJEntityContent.TITLE));
+        emailData.put(EmailConstants.MAIL_TEMPLATE_CONTEXT, emailContextData);
+        emailDataArray.add(emailData);
+      });
+      return emailDataArray;
     }
 
-    private JsonArray buildResourceDeleteEmailData() {
-        JsonObject payloadObject = result.getJsonObject(EventResponseConstants.PAYLOAD_OBJECT);
-        JsonArray refCollectionIds = payloadObject.getJsonArray(EventResponseConstants.REFERENCE_PARENT_GOORU_IDS);
-        if (refCollectionIds != null && !refCollectionIds.isEmpty()) {
-            List<String> ownerCreatorIds = RepoBuilder.buildCollectionRepo(null).getOwnerAndCreatorIds(refCollectionIds);
-            List<String> emailIds = RepoBuilder.buildUserRepo(null).getMultipleEmailIds(ownerCreatorIds);
-            LOGGER.debug("Preparing data for email ids:{}", Arrays.toString(emailIds.toArray()));
-    
-            JsonObject data = getData();
-            String resourceId = data.getString(EventRequestConstants.ID);
-    
-            JsonObject resource = RepoBuilder.buildContentRepo(null).getOriginalResource(resourceId);
-            String username = RepoBuilder.buildUserRepo(null).getUsername(getUserId());
-            JsonArray emailDataArray = new JsonArray();
-    
-            emailIds.stream().forEach(email -> {
-                JsonObject emailData = new JsonObject();
-                emailData.put(EmailConstants.MAIL_TEMPLATE_NAME, emailTemplate);
-                emailData.put(EmailConstants.TO_ADDRESSES, new JsonArray().add(email));
-    
-                JsonObject emailContextData = new JsonObject();
-                emailContextData.put(EmailConstants.USERNAME, username);
-                emailContextData.put(EmailConstants.RESOURCE_TITLE, resource.getString(AJEntityContent.TITLE));
-                emailData.put(EmailConstants.MAIL_TEMPLATE_CONTEXT, emailContextData);
-                emailDataArray.add(emailData);
-            });
-            return emailDataArray;
-        }
+    return null;
+  }
 
-        return null;
+  private JsonArray buildUserInviteToClassEmailData() {
+    JsonObject data = getData();
+    JsonArray invitees = data.getJsonArray(EventRequestConstants.INVITEES);
+    List<String> inviteesList = new ArrayList<>(invitees.size());
+    invitees.stream().forEach(invitee -> inviteesList.add(invitee.toString()));
+
+    // List<String> emailIds = RepoBuilder.buildUserRepo(null).getMultipleEmailIds(inviteesList);
+    LOGGER.debug("Preparing data for email ids:{}", Arrays.toString(inviteesList.toArray()));
+    String classId = data.getString(EventRequestConstants.ID);
+    JsonObject classObj = RepoBuilder.buildClassRepo(null).getClassById(classId);
+    String teacherUsername =
+        RepoBuilder.buildUserRepo(null).getUsername(classObj.getString(AJEntityClass.CREATOR_ID));
+    JsonArray emailDataArray = new JsonArray();
+
+    inviteesList.stream().forEach(email -> {
+      JsonObject emailData = new JsonObject();
+      emailData.put(EmailConstants.MAIL_TEMPLATE_NAME, emailTemplate);
+      emailData.put(EmailConstants.TO_ADDRESSES, new JsonArray().add(email));
+
+      JsonObject emailContextData = new JsonObject();
+      emailContextData.put(EmailConstants.TEACHER_USERNAME, teacherUsername);
+      emailContextData.put(EmailConstants.CLASS_TITLE, classObj.getString(AJEntityClass.TITLE));
+      emailContextData.put(EmailConstants.CLASS_CODE, classObj.getString(AJEntityClass.CODE));
+      emailContextData.put(EmailConstants.CLASS_ID, classObj.getString(AJEntityClass.ID));
+      emailContextData.put(EmailConstants.EMAIL_ID, email);
+      emailData.put(EmailConstants.MAIL_TEMPLATE_CONTEXT, emailContextData);
+      emailDataArray.add(emailData);
+
+    });
+
+    return emailDataArray;
+  }
+
+  private JsonArray buildUserInviteToOpenClassEmailData() {
+    JsonObject data = getData();
+    JsonArray invitees = data.getJsonArray(EventRequestConstants.INVITEES);
+    List<String> inviteesList = new ArrayList<>(invitees.size());
+    invitees.stream().forEach(invitee -> inviteesList.add(invitee.toString()));
+
+    List<String> emailIds = RepoBuilder.buildUserRepo(null).getMultipleEmailIds(inviteesList);
+    LOGGER.debug("Preparing data for email ids:{}", Arrays.toString(emailIds.toArray()));
+    String classId = data.getString(EventRequestConstants.ID);
+    JsonObject classObj = RepoBuilder.buildClassRepo(null).getClassById(classId);
+    String teacherUsername =
+        RepoBuilder.buildUserRepo(null).getUsername(classObj.getString(AJEntityClass.CREATOR_ID));
+    JsonArray emailDataArray = new JsonArray();
+
+    emailIds.stream().forEach(email -> {
+      JsonObject emailData = new JsonObject();
+      emailData.put(EmailConstants.MAIL_TEMPLATE_NAME, emailTemplate);
+      emailData.put(EmailConstants.TO_ADDRESSES, new JsonArray().add(email));
+
+      JsonObject emailContextData = new JsonObject();
+      emailContextData.put(EmailConstants.TEACHER_USERNAME, teacherUsername);
+      emailContextData.put(EmailConstants.CLASS_TITLE, classObj.getString(AJEntityClass.TITLE));
+      emailContextData.put(EmailConstants.CLASS_CODE, classObj.getString(AJEntityClass.CODE));
+      emailContextData.put(EmailConstants.CLASS_ID, classObj.getString(AJEntityClass.ID));
+      emailContextData.put(EmailConstants.EMAIL_ID, email);
+      emailData.put(EmailConstants.MAIL_TEMPLATE_CONTEXT, emailContextData);
+      emailDataArray.add(emailData);
+
+    });
+
+    return emailDataArray;
+  }
+
+  private JsonArray buildProfileFollowEmailData() {
+    JsonObject data = getData();
+    String username = RepoBuilder.buildUserRepo(null).getUsername(getUserId());
+    List<String> userIds = new ArrayList<>(1);
+    userIds.add(data.getString(EventRequestConstants.FOLLOW_ON_USER_ID));
+    List<String> emailIds = RepoBuilder.buildUserRepo(null).getMultipleEmailIds(userIds);
+    LOGGER.debug("Preparing data for email ids:{}", Arrays.toString(emailIds.toArray()));
+    JsonArray emailDataArray = new JsonArray();
+    emailIds.stream().forEach(email -> {
+      JsonObject emailData = new JsonObject();
+      emailData.put(EmailConstants.MAIL_TEMPLATE_NAME, emailTemplate);
+      emailData.put(EmailConstants.TO_ADDRESSES, new JsonArray().add(email));
+
+      JsonObject emailContextData = new JsonObject();
+      emailContextData.put(EmailConstants.USERNAME, username);
+      emailData.put(EmailConstants.MAIL_TEMPLATE_CONTEXT, emailContextData);
+      emailDataArray.add(emailData);
+    });
+    return emailDataArray;
+  }
+
+  private JsonObject getData() {
+    JsonObject payloadObject = result.getJsonObject(EventResponseConstants.PAYLOAD_OBJECT);
+    JsonObject data = payloadObject.getJsonObject(EventResponseConstants.DATA);
+    if (data == null || data.isEmpty()) {
+      LOGGER.warn("no data found in payload object");
+      throw new InvalidRequestException();
     }
 
-    private JsonArray buildUserInviteToClassEmailData() {
-        JsonObject data = getData();
-        JsonArray invitees = data.getJsonArray(EventRequestConstants.INVITEES);
-        List<String> inviteesList = new ArrayList<>(invitees.size());
-        invitees.stream().forEach(invitee -> inviteesList.add(invitee.toString()));
+    return data;
+  }
 
-        //List<String> emailIds = RepoBuilder.buildUserRepo(null).getMultipleEmailIds(inviteesList);
-        LOGGER.debug("Preparing data for email ids:{}", Arrays.toString(inviteesList.toArray()));
-        String classId = data.getString(EventRequestConstants.ID);
-        JsonObject classObj = RepoBuilder.buildClassRepo(null).getClassById(classId);
-        String teacherUsername =
-            RepoBuilder.buildUserRepo(null).getUsername(classObj.getString(AJEntityClass.CREATOR_ID));
-        JsonArray emailDataArray = new JsonArray();
+  private JsonObject getEventBody() {
+    return this.event.getJsonObject(EventRequestConstants.EVENT_BODY);
+  }
 
-        inviteesList.stream().forEach(email -> {
-            JsonObject emailData = new JsonObject();
-            emailData.put(EmailConstants.MAIL_TEMPLATE_NAME, emailTemplate);
-            emailData.put(EmailConstants.TO_ADDRESSES, new JsonArray().add(email));
-
-            JsonObject emailContextData = new JsonObject();
-            emailContextData.put(EmailConstants.TEACHER_USERNAME, teacherUsername);
-            emailContextData.put(EmailConstants.CLASS_TITLE, classObj.getString(AJEntityClass.TITLE));
-            emailContextData.put(EmailConstants.CLASS_CODE, classObj.getString(AJEntityClass.CODE));
-            emailContextData.put(EmailConstants.CLASS_ID, classObj.getString(AJEntityClass.ID));
-            emailContextData.put(EmailConstants.EMAIL_ID, email);
-            emailData.put(EmailConstants.MAIL_TEMPLATE_CONTEXT, emailContextData);
-            emailDataArray.add(emailData);
-
-        });
-
-        return emailDataArray;
-    }
-
-    private JsonArray buildUserInviteToOpenClassEmailData() {
-        JsonObject data = getData();
-        JsonArray invitees = data.getJsonArray(EventRequestConstants.INVITEES);
-        List<String> inviteesList = new ArrayList<>(invitees.size());
-        invitees.stream().forEach(invitee -> inviteesList.add(invitee.toString()));
-
-        List<String> emailIds = RepoBuilder.buildUserRepo(null).getMultipleEmailIds(inviteesList);
-        LOGGER.debug("Preparing data for email ids:{}", Arrays.toString(emailIds.toArray()));
-        String classId = data.getString(EventRequestConstants.ID);
-        JsonObject classObj = RepoBuilder.buildClassRepo(null).getClassById(classId);
-        String teacherUsername =
-            RepoBuilder.buildUserRepo(null).getUsername(classObj.getString(AJEntityClass.CREATOR_ID));
-        JsonArray emailDataArray = new JsonArray();
-
-        emailIds.stream().forEach(email -> {
-            JsonObject emailData = new JsonObject();
-            emailData.put(EmailConstants.MAIL_TEMPLATE_NAME, emailTemplate);
-            emailData.put(EmailConstants.TO_ADDRESSES, new JsonArray().add(email));
-
-            JsonObject emailContextData = new JsonObject();
-            emailContextData.put(EmailConstants.TEACHER_USERNAME, teacherUsername);
-            emailContextData.put(EmailConstants.CLASS_TITLE, classObj.getString(AJEntityClass.TITLE));
-            emailContextData.put(EmailConstants.CLASS_CODE, classObj.getString(AJEntityClass.CODE));
-            emailContextData.put(EmailConstants.CLASS_ID, classObj.getString(AJEntityClass.ID));
-            emailContextData.put(EmailConstants.EMAIL_ID, email);
-            emailData.put(EmailConstants.MAIL_TEMPLATE_CONTEXT, emailContextData);
-            emailDataArray.add(emailData);
-
-        });
-
-        return emailDataArray;
-    }
-
-    private JsonArray buildProfileFollowEmailData() {
-        JsonObject data = getData();
-        String username = RepoBuilder.buildUserRepo(null).getUsername(getUserId());
-        List<String> userIds = new ArrayList<>(1);
-        userIds.add(data.getString(EventRequestConstants.FOLLOW_ON_USER_ID));
-        List<String> emailIds = RepoBuilder.buildUserRepo(null).getMultipleEmailIds(userIds);
-        LOGGER.debug("Preparing data for email ids:{}", Arrays.toString(emailIds.toArray()));
-        JsonArray emailDataArray = new JsonArray();
-        emailIds.stream().forEach(email -> {
-            JsonObject emailData = new JsonObject();
-            emailData.put(EmailConstants.MAIL_TEMPLATE_NAME, emailTemplate);
-            emailData.put(EmailConstants.TO_ADDRESSES, new JsonArray().add(email));
-
-            JsonObject emailContextData = new JsonObject();
-            emailContextData.put(EmailConstants.USERNAME, username);
-            emailData.put(EmailConstants.MAIL_TEMPLATE_CONTEXT, emailContextData);
-            emailDataArray.add(emailData);
-        });
-        return emailDataArray;
-    }
-
-    private JsonObject getData() {
-        JsonObject payloadObject = result.getJsonObject(EventResponseConstants.PAYLOAD_OBJECT);
-        JsonObject data = payloadObject.getJsonObject(EventResponseConstants.DATA);
-        if (data == null || data.isEmpty()) {
-            LOGGER.warn("no data found in payload object");
-            throw new InvalidRequestException();
-        }
-
-        return data;
-    }
-    
-    private JsonObject getEventBody() {
-        return this.event.getJsonObject(EventRequestConstants.EVENT_BODY);
-    }
-
-    private String getUserId() {
-        JsonObject user = result.getJsonObject(EventResponseConstants.USER);
-        return user.getString(EventResponseConstants.GOORU_UID);
-    }
+  private String getUserId() {
+    JsonObject user = result.getJsonObject(EventResponseConstants.USER);
+    return user.getString(EventResponseConstants.GOORU_UID);
+  }
 
 }

@@ -7,11 +7,11 @@ import io.vertx.core.json.JsonObject;
  */
 public interface RubricRepo {
 
-    JsonObject createUpdateRubricEvent();
+  JsonObject createUpdateRubricEvent();
 
-    JsonObject copyRubricEvent();
+  JsonObject copyRubricEvent();
 
-    JsonObject deleteRubricEvent();
+  JsonObject deleteRubricEvent();
 
-    JsonObject associateRubricToQuestionEvent();
+  JsonObject associateRubricToQuestionEvent();
 }

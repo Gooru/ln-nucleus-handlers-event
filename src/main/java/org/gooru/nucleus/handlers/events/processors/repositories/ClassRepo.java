@@ -4,25 +4,25 @@ import io.vertx.core.json.JsonObject;
 
 public interface ClassRepo {
 
-    JsonObject craeteUpdateClassEvent();
+  JsonObject craeteUpdateClassEvent();
 
-    JsonObject deleteClassEvent();
+  JsonObject deleteClassEvent();
 
-    JsonObject updateClassCollaboratorEvent();
+  JsonObject updateClassCollaboratorEvent();
 
-    JsonObject joinClassEvent();
+  JsonObject joinClassEvent();
 
-    JsonObject inviteStudentToClassEvent();
+  JsonObject inviteStudentToClassEvent();
 
-    JsonObject assignClassToCourseEvent();
+  JsonObject assignClassToCourseEvent();
 
-    JsonObject classContentVisibleEvent();
+  JsonObject classContentVisibleEvent();
 
-    JsonObject getClassById(String classId);
+  JsonObject getClassById(String classId);
 
-    String getClassIdsForCourse(String courseId);
+  String getClassIdsForCourse(String courseId);
 
-    JsonObject classRemoveStudentEvent();
-    
-    JsonObject archiveClass();
+  JsonObject classRemoveStudentEvent();
+
+  JsonObject archiveClass();
 }
