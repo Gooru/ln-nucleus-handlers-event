@@ -5,7 +5,6 @@ import org.gooru.nucleus.handlers.events.constants.EventRequestConstants;
 import org.gooru.nucleus.handlers.events.constants.EventResponseConstants;
 import org.gooru.nucleus.handlers.events.processors.ProcessorContext;
 import org.gooru.nucleus.handlers.events.processors.repositories.RubricRepo;
-import org.gooru.nucleus.handlers.events.processors.repositories.activejdbc.entities.AJEntityContent;
 import org.gooru.nucleus.handlers.events.processors.repositories.activejdbc.entities.AJEntityRubric;
 import org.gooru.nucleus.handlers.events.processors.repositories.activejdbc.formatter.JsonFormatterBuilder;
 import org.javalite.activejdbc.Base;
@@ -59,20 +58,26 @@ public class AJRubricRepo implements RubricRepo {
   }
 
   private JsonObject getRubric(String rubricId) {
-    Base.open(DataSourceRegistry.getInstance().getDefaultDataSource());
-    LOGGER.debug("getting rubric for id {}", rubricId);
+    try {
+      Base.open(DataSourceRegistry.getInstance().getDefaultDataSource());
+      LOGGER.debug("getting rubric for id {}", rubricId);
 
-    JsonObject result = null;
-    LazyList<AJEntityRubric> rubrics =
-        AJEntityRubric.findBySQL(AJEntityRubric.FETCH_RUBRIC, rubricId);
-    if (!rubrics.isEmpty()) {
-      result = new JsonObject(new JsonFormatterBuilder()
-          .buildSimpleJsonFormatter(false, AJEntityRubric.FETCH_RUBRIC_FIELDS)
-          .toJson(rubrics.get(0)));
+      JsonObject result = null;
+      LazyList<AJEntityRubric> rubrics =
+          AJEntityRubric.findBySQL(AJEntityRubric.FETCH_RUBRIC, rubricId);
+      if (!rubrics.isEmpty()) {
+        result = new JsonObject(new JsonFormatterBuilder()
+            .buildSimpleJsonFormatter(false, AJEntityRubric.FETCH_RUBRIC_FIELDS)
+            .toJson(rubrics.get(0)));
+      }
+
+      return result;
+    } catch (Throwable t) {
+      LOGGER.error("error while getting the data from database:", t);
+      return null;
+    } finally {
+      Base.close();
     }
-
-    Base.close();
-    return result;
   }
 
 }

@@ -54,17 +54,23 @@ public class AJCourseRepo implements CourseRepo {
 
   @Override
   public JsonObject updateCourseCollaboratorEvent() {
-    Base.open(DataSourceRegistry.getInstance().getDefaultDataSource());
-    String contentId = context.eventBody().getString(EventRequestConstants.ID);
-    JsonObject result = context.eventBody();
-    LazyList<AJEntityCourse> courses =
-        AJEntityCourse.findBySQL(AJEntityCourse.SELECT_COLLABORATOR, contentId);
-    if (!courses.isEmpty()) {
-      result.put(EventRequestConstants.COLLABORATORS,
-          new JsonArray(courses.get(0).getString(AJEntityCourse.COLLABORATOR)));
+    try {
+      Base.open(DataSourceRegistry.getInstance().getDefaultDataSource());
+      String contentId = context.eventBody().getString(EventRequestConstants.ID);
+      JsonObject result = context.eventBody();
+      LazyList<AJEntityCourse> courses =
+          AJEntityCourse.findBySQL(AJEntityCourse.SELECT_COLLABORATOR, contentId);
+      if (!courses.isEmpty()) {
+        result.put(EventRequestConstants.COLLABORATORS,
+            new JsonArray(courses.get(0).getString(AJEntityCourse.COLLABORATOR)));
+      }
+      return result;
+    } catch (Throwable t) {
+      LOGGER.error("error while getting the data from database:", t);
+      return null;
+    } finally {
+      Base.close();
     }
-    Base.close();
-    return result;
   }
 
   @Override
@@ -79,16 +85,22 @@ public class AJCourseRepo implements CourseRepo {
 
   @Override
   public JsonObject getCourse(String courseId) {
-    Base.open(DataSourceRegistry.getInstance().getDefaultDataSource());
-    LazyList<AJEntityCourse> courses =
-        AJEntityCourse.findBySQL(AJEntityCourse.SELECT_COURSE, courseId);
-    JsonObject result = null;
-    if (!courses.isEmpty()) {
-      LOGGER.info("found course for id {} : " + courseId);
-      result = new JsonObject(new JsonFormatterBuilder()
-          .buildSimpleJsonFormatter(false, AJEntityCourse.ALL_FIELDS).toJson(courses.get(0)));
+    try {
+      Base.open(DataSourceRegistry.getInstance().getDefaultDataSource());
+      LazyList<AJEntityCourse> courses =
+          AJEntityCourse.findBySQL(AJEntityCourse.SELECT_COURSE, courseId);
+      JsonObject result = null;
+      if (!courses.isEmpty()) {
+        LOGGER.info("found course for id {} : " + courseId);
+        result = new JsonObject(new JsonFormatterBuilder()
+            .buildSimpleJsonFormatter(false, AJEntityCourse.ALL_FIELDS).toJson(courses.get(0)));
+      }
+      return result;
+    } catch (Throwable t) {
+      LOGGER.error("error while getting the data from database:", t);
+      return null;
+    } finally {
+      Base.close();
     }
-    Base.close();
-    return result;
   }
 }
